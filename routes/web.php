@@ -17,6 +17,8 @@ use Inertia\Inertia;
 
 Route::get('/', function () { return Inertia::render('Homepage'); })->name('homepage');
 
+Route::get('/prenota', function () { return Inertia::render('Prenotazione'); })->middleware('register')->name('prenota');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

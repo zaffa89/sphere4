@@ -71,9 +71,9 @@
           <div class="grid grid-cols-3 gap-8 items-center">
             <div class="col-span-2">
               <nav class="flex space-x-4">
-                <a v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'text-white' : 'text-blue-100', 'text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10']" :aria-current="item.current ? 'page' : undefined">
+                <Link v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'text-white' : 'text-blue-100', 'text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10']" :aria-current="item.current ? 'page' : undefined">
                   {{ item.name }}
-                </a>
+                </Link>
               </nav>
             </div>
             <div>
@@ -113,7 +113,7 @@
                     </div>
                   </div>
                   <div class="mt-3 px-2 space-y-1">
-                    <a v-for="item in navigation" :key="item.name" :href="item.href" class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800">{{ item.name }}</a>
+                    <Link v-for="item in navigation" :key="item.name" :href="item.href" class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800">{{ item.name }}</Link>
                   </div>
                 </div>
                 <div class="pt-4 pb-2">
@@ -149,13 +149,13 @@
         <!-- Main 3 column grid -->
         <div class="grid grid-cols-1 gap-4 items-start lg:grid-cols-3 lg:gap-8">
           <!-- Left column -->
-          <div class="grid grid-cols-1 gap-4 lg:col-span-2 order-2 lg:order-1">
+          <div class="grid grid-cols-1 gap-4" :class="[fullWidth ? 'lg:col-span-3' : 'lg:col-span-2' , rightColumnFirst ? 'order-2 lg:order-1' : 'order-1']">
             <!-- Your content -->
             <slot name="main" />
           </div>
 
           <!-- Right column -->
-          <div class="grid grid-cols-1 gap-4 order-1 lg:order-2">                                 
+          <div class="grid grid-cols-1 gap-4" :class="[rightColumnFirst ? 'order-1 lg:order-2' : 'order-2']" v-if="!fullWidth">                                 
             <!-- Your content -->
             <slot name="side" />            
           </div>
@@ -199,17 +199,39 @@ const user = {
   imageUrl:
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
-const navigation = [
-  { name: 'Prenota', href: '#', current: true , visible: true },
-  { name: 'Le tue prenotazioni', href: '#', current: false , visible: true },
-  { name: 'Modulistica', href: '#', current: false , visible: true },
-  { name: 'Le tue anagrafiche', href: '#', current: false , visible: true },
-  { name: 'Impostazioni', href: '#', current: false , visible: true },
-]
 
 
-const guestNavigation = [
-  { name: 'Entra', href: '/login' },
-  { name: 'Registrati', href: '/register' },
-]
+
+
+</script>
+
+<script>
+	export default {
+		props: {
+			fullWidth: {
+				type: Boolean,
+				default: false
+			},
+			rightColumnFirst: {
+				type: Boolean,
+				default: false
+			}
+		},
+		data()
+		{
+			return {
+				guestNavigation : [
+				{ name: 'Entra', href: '/login' },
+				{ name: 'Registrati', href: '/register' },
+				],
+				navigation : [
+				{ name: 'Homepage', href: '/', current: route().current('homepage') , visible: true },				
+				{ name: 'Le tue prenotazioni', href: '#', current: false , visible: true },
+				{ name: 'Modulistica', href: '#', current: false , visible: true },
+				{ name: 'Le tue anagrafiche', href: '#', current: false , visible: true },
+				{ name: 'Impostazioni', href: '#', current: false , visible: true },
+				]
+			}
+		}
+	}
 </script>

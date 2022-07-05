@@ -1,40 +1,62 @@
 <template>
     <AppLayout>
         <template #main>
-            <div class="rounded-lg bg-white overflow-hidden shadow">
-                <div class="p-6">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut a aliquam tortor, vel tristique mauris. Maecenas eu ipsum porta, rutrum urna eget, eleifend nunc. Mauris euismod, enim nec posuere gravida, sem massa ornare velit, sed facilisis sem ex eget sapien. Maecenas vehicula urna sed condimentum aliquam. In feugiat semper tortor quis ultrices. Aliquam nisl tortor, malesuada ac fermentum sed, congue vitae neque.
-                </div>
+            <div class="rounded-lg bg-white overflow-hidden shadow p-6">
+                <h4 class="text-xl mb-4">Benvenuti nella prenotazione online di Solution Med Srl</h4>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut a aliquam tortor, vel tristique mauris. Maecenas eu ipsum porta, rutrum urna eget, eleifend nunc. Mauris euismod, enim nec posuere gravida, sem massa ornare velit, sed facilisis sem ex eget sapien. Maecenas vehicula urna sed condimentum aliquam. In feugiat semper tortor quis ultrices. Aliquam nisl tortor, malesuada ac fermentum sed, congue vitae neque.</p>
             </div>
-            <div class="rounded-lg bg-gray-200 overflow-hidden shadow divide-y divide-gray-200 sm:divide-y-0 sm:grid sm:grid-cols-2 sm:gap-px">
-                <div v-for="(action, actionIdx) in actions" :key="action.title" :class="[actionIdx === 0 ? 'rounded-tl-lg rounded-tr-lg sm:rounded-tr-none' : '', actionIdx === 1 ? 'sm:rounded-tr-lg' : '', actionIdx === actions.length - 2 ? 'sm:rounded-bl-lg' : '', actionIdx === actions.length - 1 ? 'rounded-bl-lg rounded-br-lg sm:rounded-bl-none' : '', 'relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500']">
-                    <div>
-                        <span :class="[action.iconBackground, action.iconForeground, 'rounded-lg inline-flex p-3 ring-4 ring-white']">
-                        <component :is="action.icon" class="h-6 w-6" aria-hidden="true" />
-                        </span>
-                    </div>
-                    <div class="mt-8">
-                        <h3 class="text-xl font-medium">
-                        <a :href="action.href" class="focus:outline-none">
-                            <!-- Extend touch target to entire panel -->
-                            <span class="absolute inset-0" aria-hidden="true" />
-                            {{ action.title }}
-                        </a>
-                        </h3>
-                        <p class="mt-2 text-sm text-gray-500">{{ action.description }}</p>
-                    </div>
-                    <span class="pointer-events-none absolute top-6 right-6 text-gray-300 group-hover:text-gray-400" aria-hidden="true">
-                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M20 4h1a1 1 0 00-1-1v1zm-1 12a1 1 0 102 0h-2zM8 3a1 1 0 000 2V3zM3.293 19.293a1 1 0 101.414 1.414l-1.414-1.414zM19 4v12h2V4h-2zm1-1H8v2h12V3zm-.707.293l-16 16 1.414 1.414 16-16-1.414-1.414z" />
-                        </svg>
-                    </span>
-                </div>
+
+            <div class="rounded-lg bg-white overflow-hidden shadow p-6" v-if="!$page.props.user">
+                <h2 class="text-lg font-medium text-gray-900">Processo di prenotazione</h2>
+                <p class="mt-1 text-sm text-gray-500">Per rendere il processo di prenotazione il più semplice possibile, è consigliato entrare o registrarsi subito.</p>
+                <ul role="list" class="mt-6 border-t border-b border-gray-200 py-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <li v-for="(item, itemIdx) in not_logged_items" :key="itemIdx" class="flow-root">
+                        <div class="relative -m-2 p-2 flex items-center space-x-4 rounded-xl hover:bg-gray-50 focus-within:ring-2 focus-within:ring-indigo-500">
+                            <div :class="[item.background, 'flex-shrink-0 flex items-center justify-center h-16 w-16 rounded-lg']">
+                                <component :is="item.icon" class="h-6 w-6 text-white" aria-hidden="true" />
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-900">
+                                    <a :href="item.href" class="focus:outline-none">
+                                        <span class="absolute inset-0" aria-hidden="true" />
+                                        {{ item.title }}<span aria-hidden="true"> &rarr;</span>
+                                    </a>
+                                </h3>
+                                <p class="mt-1 text-sm text-gray-500">{{ item.description }}</p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>                                   
             </div>
+
+            <div class="rounded-lg bg-white overflow-hidden shadow p-6" v-if="$page.props.user">
+                <h2 class="text-lg font-medium text-gray-900">Prenota ora una visita</h2>
+                <!-- <p class="mt-1 text-sm text-gray-500">Per rendere il processo di prenotazione il più semplice possibile, è consigliato entrare o registrarsi subito.</p> -->
+                <ul role="list" class="mt-6 border-t border-b border-gray-200 py-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <li v-for="(item, itemIdx) in logged_items" :key="itemIdx" class="flow-root">
+                        <div class="relative -m-2 p-2 flex items-center space-x-4 rounded-xl hover:bg-gray-50 focus-within:ring-2 focus-within:ring-indigo-500">
+                            <div :class="[item.background, 'flex-shrink-0 flex items-center justify-center h-16 w-16 rounded-lg']">
+                                <component :is="item.icon" class="h-6 w-6 text-white" aria-hidden="true" />
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-900">
+                                    <a :href="item.href" class="focus:outline-none">
+                                        <span class="absolute inset-0" aria-hidden="true" />
+                                        {{ item.title }}<span aria-hidden="true"> &rarr;</span>
+                                    </a>
+                                </h3>
+                                <p class="mt-1 text-sm text-gray-500">{{ item.description }}</p>
+                            </div>
+                        </div>
+                    </li>
+                </ul> 
+            </div>
+            
         </template>
         <template #side>
             <div class="rounded-lg bg-white overflow-hidden shadow">
-                <div class="p-6">
-                    sidebar
+                <div class="p-6">                                           
+                    Modulistica
                 </div>
             </div>
         </template>
@@ -45,39 +67,44 @@
     import AppLayout from '../Layouts/AppLayout.vue';
 
     import {
-        AcademicCapIcon,
-        BadgeCheckIcon,
-        CashIcon,
-        ClockIcon,
-        ReceiptRefundIcon,
-        UsersIcon,
-        BookmarkIcon
-    } from '@heroicons/vue/outline'
+        LoginIcon,
+        PencilAltIcon,
+        ArrowCircleRightIcon,
+        PlusCircleIcon
+    } from '@heroicons/vue/outline';
 
-    const actions = [
-        {
-            title: 'Attività agonistica',
-            description: 'Visite per attività agonistiche categorie A1 e B1',
-            href: '#',
-            icon: BookmarkIcon,
-            iconForeground: 'text-teal-700',
-            iconBackground: 'bg-teal-50',
-        },
-        {
-            title: 'Attività non agonistica',
-            description: 'Visite per attività sportive non agonistiche',
-            href: '#',
-            icon: BookmarkIcon,
-            iconForeground: 'text-purple-700',
-            iconBackground: 'bg-purple-50',
-        },
-        {
-            title: 'Altre attività',
-            href: '#',
-            description: null,
-            icon: BookmarkIcon,
-            iconForeground: 'text-sky-700',
-            iconBackground: 'bg-sky-50',
-        }
-    ]
+const not_logged_items = [
+  {
+    title: 'Entra',
+    description: 'Se hai già prenotato da noi, entra con il tuo profilo utente.',
+    icon: LoginIcon,
+    background: 'bg-pink-500',
+    href: route('login')
+  },
+  {
+    title: 'Registrati',
+    description: 'Se è la prima volta che prenoti, registrati ora.',
+    icon: PencilAltIcon,
+    background: 'bg-yellow-500',
+    href: route('register')
+  },
+  {
+    title: 'Continua senza registrarti',
+    description: 'Dovrai registrarti dopo aver scelto data e ora della visita.',
+    icon: ArrowCircleRightIcon,
+    background: 'bg-green-500',
+    href: route('prenota')
+  }
+]
+
+const logged_items = [
+  {
+    title: 'Prenota una visita',
+    description: 'Clicca qui per procedere con una nuova prenotazione.',
+    icon: PlusCircleIcon,
+    background: 'bg-blue-600',
+    href: route('prenota')
+  },
+  
+]
 </script>
