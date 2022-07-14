@@ -3,7 +3,7 @@
         <template #main>
             <div class="rounded-lg bg-white overflow-hidden shadow p-6">
                 <h4 class="text-xl mb-4">Benvenuti nella prenotazione online di Solution Med Srl</h4>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut a aliquam tortor, vel tristique mauris. Maecenas eu ipsum porta, rutrum urna eget, eleifend nunc. Mauris euismod, enim nec posuere gravida, sem massa ornare velit, sed facilisis sem ex eget sapien. Maecenas vehicula urna sed condimentum aliquam. In feugiat semper tortor quis ultrices. Aliquam nisl tortor, malesuada ac fermentum sed, congue vitae neque.</p>
+                <p class="text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut a aliquam tortor, vel tristique mauris. Maecenas eu ipsum porta, rutrum urna eget, eleifend nunc. Mauris euismod, enim nec posuere gravida, sem massa ornare velit, sed facilisis sem ex eget sapien. Maecenas vehicula urna sed condimentum aliquam. In feugiat semper tortor quis ultrices. Aliquam nisl tortor, malesuada ac fermentum sed, congue vitae neque.</p>
             </div>
 
             <div class="rounded-lg bg-white overflow-hidden shadow p-6" v-if="!$page.props.user">
@@ -17,10 +17,10 @@
                             </div>
                             <div>
                                 <h3 class="text-lg font-medium text-gray-900">
-                                    <a :href="item.href" class="focus:outline-none">
+                                    <Link :href="item.route" class="focus:outline-none">
                                         <span class="absolute inset-0" aria-hidden="true" />
                                         {{ item.title }}<span aria-hidden="true"> &rarr;</span>
-                                    </a>
+                                    </Link>
                                 </h3>
                                 <p class="mt-1 text-sm text-gray-500">{{ item.description }}</p>
                             </div>
@@ -40,10 +40,10 @@
                             </div>
                             <div>
                                 <h3 class="text-lg font-medium text-gray-900">
-                                    <a :href="item.href" class="focus:outline-none">
+                                    <Link :href="item.route" class="focus:outline-none">
                                         <span class="absolute inset-0" aria-hidden="true" />
                                         {{ item.title }}<span aria-hidden="true"> &rarr;</span>
-                                    </a>
+                                    </Link>
                                 </h3>
                                 <p class="mt-1 text-sm text-gray-500">{{ item.description }}</p>
                             </div>
@@ -65,6 +65,8 @@
 
 <script setup>
     import AppLayout from '../Layouts/AppLayout.vue';
+    import { Inertia } from '@inertiajs/inertia';
+    import { Link } from '@inertiajs/inertia-vue3';
 
     import {
         LoginIcon,
@@ -79,21 +81,21 @@ const not_logged_items = [
     description: 'Se hai già prenotato da noi, entra con il tuo profilo utente.',
     icon: LoginIcon,
     background: 'bg-pink-500',
-    href: route('login')
+    route: route('login')
   },
   {
     title: 'Registrati',
     description: 'Se è la prima volta che prenoti, registrati ora.',
     icon: PencilAltIcon,
     background: 'bg-yellow-500',
-    href: route('register')
+    route: route('register')
   },
   {
     title: 'Continua senza registrarti',
     description: 'Dovrai registrarti dopo aver scelto data e ora della visita.',
     icon: ArrowCircleRightIcon,
     background: 'bg-green-500',
-    href: route('prenota')
+    route: route('prenotazione.selezione.categoria')
   }
 ]
 
@@ -103,7 +105,7 @@ const logged_items = [
     description: 'Clicca qui per procedere con una nuova prenotazione.',
     icon: PlusCircleIcon,
     background: 'bg-blue-600',
-    href: route('prenota')
+    route: route('prenotazione.selezione.categoria')
   },
   
 ]

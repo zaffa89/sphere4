@@ -149,13 +149,13 @@
         <!-- Main 3 column grid -->
         <div class="grid grid-cols-1 gap-4 items-start lg:grid-cols-3 lg:gap-8">
           <!-- Left column -->
-          <div class="grid grid-cols-1 gap-4" :class="[fullWidth ? 'lg:col-span-3' : 'lg:col-span-2' , rightColumnFirst ? 'order-2 lg:order-1' : 'order-1']">
+          <div class="grid grid-cols-1 gap-4" :class="[hideSidebar ? 'lg:col-span-3' : 'lg:col-span-2' , rightColumnFirst ? 'order-2 lg:order-1' : switchColumns ? 'order-2' : 'order-1']">
             <!-- Your content -->
             <slot name="main" />
           </div>
 
           <!-- Right column -->
-          <div class="grid grid-cols-1 gap-4" :class="[rightColumnFirst ? 'order-1 lg:order-2' : 'order-2']" v-if="!fullWidth">                                 
+          <div class="grid grid-cols-1 gap-4" :class="[rightColumnFirst ? 'order-1 lg:order-2' : switchColumns ? 'order-1' : 'order-2']" v-if="!hideSidebar">                                 
             <!-- Your content -->
             <slot name="side" />            
           </div>
@@ -208,14 +208,18 @@ const user = {
 <script>
 	export default {
 		props: {
-			fullWidth: {
+			hideSidebar: {
 				type: Boolean,
 				default: false
 			},
 			rightColumnFirst: {
 				type: Boolean,
 				default: false
-			}
+			},
+      switchColumns: {
+        type: Boolean,
+        default: false
+      }
 		},
 		data()
 		{

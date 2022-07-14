@@ -1,5 +1,5 @@
 <template>
-    <AppLayout :fullWidth="true">
+    <AppLayout :hideSidebar="false">
         <template #main>
             <div class="rounded-lg bg-white overflow-hidden shadow p-6">              
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut a aliquam tortor, vel tristique mauris. Maecenas eu ipsum porta, rutrum urna eget, eleifend nunc. Mauris euismod, enim nec posuere gravida, sem massa ornare velit, sed facilisis sem ex eget sapien. Maecenas vehicula urna sed condimentum aliquam. In feugiat semper tortor quis ultrices. Aliquam nisl tortor, malesuada ac fermentum sed, congue vitae neque.               
@@ -17,10 +17,10 @@
                                 </div>
                                 <div>
                                     <h3 class="text-xl font-medium text-gray-900">
-                                        <a href="#" class="focus:outline-none">
+                                        <Link :href="item.route" class="focus:outline-none">
                                             <span class="absolute inset-0" aria-hidden="true" />
                                             {{ item.title }}<span aria-hidden="true"> &rarr;</span>
-                                        </a>
+                                        </Link>
                                     </h3>
                                     <p class="mt-1 text-sm text-gray-500">{{ item.description }}</p>
                                 </div>
@@ -40,10 +40,10 @@
                             </div>
                             <div>
                                 <h3 class="text-xl font-medium text-gray-900">
-                                <a href="#" class="focus:outline-none">
-                                    <span class="absolute inset-0" aria-hidden="true" />
-                                    {{ item.title }}<span aria-hidden="true"> &rarr;</span>
-                                </a>
+                                    <Link :href="item.route" class="focus:outline-none">
+                                        <span class="absolute inset-0" aria-hidden="true" />
+                                        {{ item.title }}<span aria-hidden="true"> &rarr;</span>
+                                    </Link>
                                 </h3>
                                 <p class="mt-1 text-sm text-gray-500">{{ item.description }}</p>
                             </div>
@@ -60,7 +60,7 @@
         <template #side>
             <div class="rounded-lg bg-white overflow-hidden shadow">
                 <div class="p-6">
-                    sidebar
+                    
                 </div>
             </div>
         </template>
@@ -68,22 +68,11 @@
 </template>
 
 <script setup>
-    import AppLayout from '../Layouts/AppLayout.vue';
+    import AppLayout from '../../Layouts/AppLayout.vue';
    
-    import {
-        AcademicCapIcon,
-        BadgeCheckIcon,
-        CashIcon,
-        ClockIcon,
-        ReceiptRefundIcon,
-        UsersIcon,
-        BookmarkIcon,
-        CalendarIcon,
-        PhotographIcon,
-        TableIcon,
-        ViewBoardsIcon,
-        ViewListIcon,
-    } from '@heroicons/vue/outline'
+    import { BookmarkIcon } from '@heroicons/vue/outline'
+    import { Link } from '@inertiajs/inertia-vue3';
+    import { Inertia } from '@inertiajs/inertia';
 
     const sezione_1 = [
         {
@@ -91,6 +80,7 @@
             description: 'Visite per il rilascio del certificato di idoneità alla pratica agonistica.',
             icon: BookmarkIcon,
             background: 'bg-pink-500',
+            route: route('prenotazione.selezione.anagrafica')
         },
         {
             title: 'Pratica non agonistica',
@@ -134,30 +124,5 @@
         
     ]
 
-    const actions = [
-        {
-            title: 'Attività agonistica',
-            description: 'Visite per attività agonistiche categorie A1 e B1',
-            href: '#',
-            icon: BookmarkIcon,
-            iconForeground: 'text-teal-700',
-            iconBackground: 'bg-teal-50',
-        },
-        {
-            title: 'Attività non agonistica',
-            description: 'Visite per attività sportive non agonistiche',
-            href: '#',
-            icon: BookmarkIcon,
-            iconForeground: 'text-purple-700',
-            iconBackground: 'bg-purple-50',
-        },
-        {
-            title: 'Altre attività',
-            href: '#',
-            description: null,
-            icon: BookmarkIcon,
-            iconForeground: 'text-sky-700',
-            iconBackground: 'bg-sky-50',
-        }
-    ]
+    
 </script>

@@ -17,7 +17,9 @@ use Inertia\Inertia;
 
 Route::get('/', function () { return Inertia::render('Homepage'); })->name('homepage');
 
-Route::get('/prenota', function () { return Inertia::render('Prenotazione'); })->middleware('register')->name('prenota');
+Route::get('/prenota', function () { return Inertia::render('PrenotazioneUtenti/Prenota'); })->name('prenotazione.nuova');
+Route::get('/selezione-categoria', function () { return Inertia::render('PrenotazioneUtenti/SelezioneCategoria'); })->name('prenotazione.selezione.categoria');
+Route::get('/selezione-anagrafica', function () { return Inertia::render('PrenotazioneUtenti/SelezioneAnagrafica'); })->name('prenotazione.selezione.anagrafica');
 
 Route::middleware([
     'auth:sanctum',
