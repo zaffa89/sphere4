@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('cognome');
             $table->string('codice_fiscale');
             
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
+
             $table->timestamps();
         });
     }

@@ -56,7 +56,7 @@
         <template #side>
             <div class="rounded-lg bg-white overflow-hidden shadow">
                 <div class="p-6">                                           
-                    Modulistica
+                    Modulistica asdasdasd
                 </div>
             </div>
         </template>

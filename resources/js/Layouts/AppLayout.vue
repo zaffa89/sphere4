@@ -233,7 +233,7 @@ const user = {
 				{ name: 'Le tue prenotazioni', href: '#', current: false , visible: true },
 				{ name: 'Modulistica', href: '#', current: false , visible: true },
 				{ name: 'Le tue anagrafiche', href: '#', current: false , visible: true },
-				{ name: 'Impostazioni', href: '#', current: false , visible: true },
+				{ name: 'Impostazioni', href: route('admin'), current: route().current('admin') , visible: true },
 				]
 			}
 		}

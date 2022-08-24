@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class ServizioAmbulatoriale extends Model
 {
     use HasFactory;
+
+    protected $table = 'servizi_ambulatoriali';
+    
+    protected $guarded = [];
+    
+    public function visita()
+    {
+        return $this->hasMany(VisitaAmbulatoriale::class);
+    }
 }

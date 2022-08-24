@@ -4,18 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\PersonalAccessToken;
 
-class ServizioCardiologico extends Model
+class SphereUser extends Model
 {
     use HasFactory;
 
-    protected $table = 'servizi_cardiologici';
-    
+    protected $hidden = ['password'];
     protected $guarded = [];
     
-    public function visita()
+    public function user()
     {
-        return $this->hasMany(VisitaCardiologica::class);
+        return $this->belongsTo(User::class);
     }
-
 }

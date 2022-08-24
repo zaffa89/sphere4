@@ -15,6 +15,14 @@ return new class extends Migration
     {
         Schema::create('visita_ambulatoriale_voce_fattura', function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedBigInteger('visita_ambulatoriale_id')->nullable();
+            $table->unsignedBigInteger('voce_fattura_id')->nullable();
+            $table->unique(['visita_ambulatoriale_id' , 'voce_fattura_id']);
+
+            $table->foreign('visita_ambulatoriale_id')->references('id')->on('visite_ambulatoriali')->onDelete('cascade');
+            $table->foreign('voce_fattura_id')->references('id')->on('voci_fattura')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class VisitaMedsport extends Model
 {
     use HasFactory;
+
+    protected $table = 'visite_medsport';
+    
+    protected $guarded = [];
+    
+    public function servizio()
+    {
+        return $this->belongsTo(ServizioMedsport::class);
+    }
 }

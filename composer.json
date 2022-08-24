@@ -9,13 +9,15 @@
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.5.2",
         "laravel-lang/lang": "10.0",
-        "laravel/framework": "^9.30",
+        "laravel/framework": "^9.21",
         "laravel/jetstream": "^2.9",
         "laravel/sanctum": "^2.14.1",
+        "laravel/telescope": "^4.9",
         "laravel/tinker": "^2.7",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.7",
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.0.1",

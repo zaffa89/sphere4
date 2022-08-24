@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -24,6 +26,12 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('solutionmed' , function(User $user) {
+            return $user->id === 1;
+        });
+
+        Gate::define('sphere-client' , function(User $user){
+            return $user->tokenCan('admin');
+        });
     }
 }

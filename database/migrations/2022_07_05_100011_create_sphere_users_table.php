@@ -13,15 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('sphere_users', function (Blueprint $table) {
             $table->id();
-            
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('telefono');            
+            $table->unsignedBigInteger('user_id')->default(1);
+            $table->foreign('user_id')->references('id')->on('users');
+
+            $table->string('username')->unique();
             $table->string('password');
-            $table->rememberToken();            
-            $table->boolean('admin')->default(false);
+
+            $table->unsignedBigInteger('token_id')->nullable();
+            $table->foreign('token_id')->references('id')->on('personal_access_tokens')->onDelete('set null');
+
             $table->timestamps();
         });
     }
@@ -31,9 +33,8 @@ return new class extends Migration
      *
      * @return void
      */
-    
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('sphere_users');
     }
 };

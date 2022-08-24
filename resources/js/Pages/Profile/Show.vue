@@ -1,5 +1,5 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
+import AppLayoutJetstream from '@/Layouts/AppLayoutJetstream.vue';
 import DeleteUserForm from '@/Pages/Profile/Partials/DeleteUserForm.vue';
 import JetSectionBorder from '@/Jetstream/SectionBorder.vue';
 import LogoutOtherBrowserSessionsForm from '@/Pages/Profile/Partials/LogoutOtherBrowserSessionsForm.vue';
@@ -14,7 +14,7 @@ defineProps({
 </script>
 
 <template>
-    <AppLayout title="Profile">
+    <AppLayoutJetstream title="Profile">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Profile
@@ -53,5 +53,5 @@ defineProps({
                 </template>
             </div>
         </div>
-    </AppLayout>
+    </AppLayoutJetstream>
 </template>
