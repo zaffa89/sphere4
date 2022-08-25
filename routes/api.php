@@ -26,3 +26,7 @@ Route::post('sphere/auth' , [SphereUserController::class , 'authenticate']);
 Route::middleware(['auth:sanctum'])->group(function() {
     Route::get('sphere/check-auth' , [SphereUserController::class , 'checkAuth']);
 });
+
+Route::middleware('solutionmed')->group(function() {
+    Route::post('sphere/user/create' , [SphereUserController::class , 'store']);
+});

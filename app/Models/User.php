@@ -17,23 +17,11 @@ class User extends Authenticatable
     use TwoFactorAuthenticatable;
     use HasApiTokens;
 
-    public function utentiSphere()
+    public function sphereUser()
     {
-        return $this->hasMany(SphereUser::class);
+        return $this->hasOne(SphereUser::class);
     }
-
-    public function utenteSphere()
-    {
-        return $this->hasOne(SphereUser::class)->where('token_id' , $this->currentAccessToken()->id);
-    }
-
-    public function getUsernameAttribute()
-    {
-        return SphereUser::where('token_id' , $this->currentAccessToken()->id)->value('username');
-    }
-
-   
-
+    
     public function pazienti()
     {
         return $this->hasMany(Paziente::class);

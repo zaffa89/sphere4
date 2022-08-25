@@ -13,12 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('uber_users', function (Blueprint $table) {
+        Schema::create('sphere_users', function (Blueprint $table) {
             $table->id();
-            
-            $table->string('username')->unique();          
-            $table->string('password');
-            $table->rememberToken();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            $table->string('username')->unique();
+            $table->boolean('admin')->default(false);
+            $table->boolean('attivo')->default(true);
+                        
+            //id ruolo
+
             $table->timestamps();
         });
     }
@@ -30,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('uber_users');
+        Schema::dropIfExists('sphere_users');
     }
 };

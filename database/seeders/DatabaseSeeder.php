@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Medico;
+use App\Models\SphereUser;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -15,14 +17,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
+        //utenti di default e relativi utenti sphere
         $this->call(UserSeeder::class);
-        $this->call(SphereUserSeeder::class);
+
+        //medici di default
+        $this->call(MedicoSeeder::class);
+
+        //associazione utenti sphere e medici di default
+        $sphereUser = SphereUser::find(1);
+        $medico = Medico::find(1);
+        $medico->sphereUser()->associate($sphereUser);
+        $medico->save();
+
+        $sphereUser = SphereUser::find(2);
+        $medico = Medico::find(2);
+        $medico->sphereUser()->associate($sphereUser);
+        $medico->save();
     }
 }

@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Medico;
 use App\Models\SphereUser;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 use Laravel\Sanctum\PersonalAccessToken;
+use Illuminate\Validation\ValidationException;
 
 class SphereUserController extends Controller
 {
 
+    /*
     public function authenticate(Request $request)
     {
         $request->validate([
@@ -38,7 +41,7 @@ class SphereUserController extends Controller
         return $token->plainTextToken;
         //return $sphereUser;
     }
-
+    */
     public function checkAuth(Request $request)
     {
         return auth()->user()->username;
@@ -73,7 +76,43 @@ class SphereUserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'username' => 'string|required',
+            'password' => 'string|required|confirmed', //password_confirmation 
+            'email' => 'nullable|email|max:255',
+            'telefono' => 'nullable|string',
+            'admin' => 'required|boolean',
+            'attivo' => 'required|boolean',
+            'medico_id' => 'nullable|exists:medici,id'      
+        ]);
+
+        //genera mail e/o telefono come placeholder
+        $request->email = $request->email ?: 'temp' . Str::random(5) . '@solutionmed.it';
+        $request->telefono = $request->telefono ?: '0000000000';
+
+        $user = User::firstOrCreate(
+            [
+                'email' => $request->email
+            ],
+            [
+                'password' => Hash::make($request->password),
+                'telefono' => $request->telefono
+            ]);
+        
+        if( $user->sphereUser()->exists() ) {
+            return response('Questo utente è già associato ad un profilo Sphere' , 422);
+        }
+        else {
+            $user->sphereUser()->create($request->only(['username' , 'admin' , 'attivo']));
+            
+            if( $request->medico_id ) {
+                $medico = Medico::find($request->medico_id);
+                $medico->sphereUser()->associate($user);
+                $medico->save();
+            }
+            
+            return $user;
+        }
     }
 
     /**

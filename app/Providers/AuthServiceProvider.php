@@ -33,5 +33,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('sphere-client' , function(User $user){
             return $user->tokenCan('admin');
         });
+
+        
     }
 }

@@ -17,4 +17,9 @@ class Medico extends Model
     {
         return $this->hasMany(Prenotazione::class);
     }
+
+    public function sphereUser()
+    {
+        return $this->belongsTo(SphereUser::class);
+    }
 }

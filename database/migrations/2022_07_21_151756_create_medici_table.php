@@ -17,7 +17,10 @@ return new class extends Migration
             $table->id();
 
             $table->string('nome');
-            
+
+            $table->unsignedBigInteger('sphere_user_id')->nullable();
+            $table->foreign('sphere_user_id')->references('id')->on('sphere_users')->onDelete('set null');
+
             $table->timestamps();
         });
     }

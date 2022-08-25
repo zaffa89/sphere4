@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Inertia\Inertia;
+use App\Models\Medico;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -19,7 +20,10 @@ class AdminController extends Controller
     {
         $this->authorize('solutionmed');
 
-        return Inertia::render('Admin/Utenti');
+        return Inertia::render('Admin/Utenti' , [
+            'utenti' => User::has('sphereUser')->with('sphereUser.medico')->get(),
+            'medici_senza_utente' => Medico::doesntHave('sphereUser')->get()
+        ]);
     }
 
     public function impostazioni()
