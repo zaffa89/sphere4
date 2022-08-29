@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Events\PazienteAperto;
 use App\Models\Paziente;
-use App\Models\SphereUser;
 use Illuminate\Http\Request;
 
 class PazienteController extends Controller
@@ -80,8 +79,6 @@ class PazienteController extends Controller
      */
     public function update(Request $request, Paziente $paziente)
     {
-        
-
         return $paziente;
     }
 

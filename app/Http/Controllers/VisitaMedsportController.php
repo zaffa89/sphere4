@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\VisitaMedsportAperta;
 use App\Models\VisitaMedsport;
 use Illuminate\Http\Request;
 
@@ -46,7 +47,9 @@ class VisitaMedsportController extends Controller
      */
     public function show(VisitaMedsport $visitaMedsport)
     {
-        //
+        VisitaMedsportAperta::dispatchIf($visitaMedsport , $visitaMedsport , auth()->user()->sphereUser);
+
+        return $visitaMedsport;
     }
 
     /**

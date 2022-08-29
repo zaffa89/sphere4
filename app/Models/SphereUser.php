@@ -21,8 +21,38 @@ class SphereUser extends Model
         return $this->hasOne(Medico::class);
     }
 
-    public function pazientiAperti()
+    public function visualizzazioniPazienti()
     {
         return $this->morphedByMany(Paziente::class , 'viewable' , 'gdpr_log_views')->withTimestamps();
+    }
+
+    public function visualizzazioniPrenotazioni()
+    {
+        return $this->morphedByMany(Prenotazione::class , 'viewable' , 'gdpr_log_views')->withTimestamps();
+    }
+
+    public function visualizzazioniVisiteMedsport()
+    {
+        return $this->morphedByMany(VisitaMedsport::class , 'viewable' , 'gdpr_log_views')->withTimestamps();
+    }
+
+    public function visualizzazioniVisiteAmbulatoriali()
+    {
+        return $this->morphedByMany(VisitaAmbulatoriale::class , 'viewable' , 'gdpr_log_views')->withTimestamps();
+    }
+
+    public function visualizzazioniVisiteCardiologiche()
+    {
+        return $this->morphedByMany(VisitaCardiologica::class , 'viewable' , 'gdpr_log_views')->withTimestamps();
+    }
+
+    public function visualizzazioniVisiteFisioterapiche()
+    {
+        return $this->morphedByMany(VisitaFisioterapica::class , 'viewable' , 'gdpr_log_views')->withTimestamps();
+    }
+
+    public function visualizzazioniFatture()
+    {
+        return $this->morphedByMany(Fattura::class , 'viewable' , 'gdpr_log_views')->withTimestamps();
     }
 }

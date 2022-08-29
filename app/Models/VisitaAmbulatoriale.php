@@ -17,4 +17,9 @@ class VisitaAmbulatoriale extends Model
     {
         return $this->belongsTo(ServizioAmbulatoriale::class);
     }
+
+    public function visualizzazioni()
+    {
+        return $this->morphToMany(SphereUser::class , 'viewable' , 'gdpr_log_views')->withTimestamps();
+    }
 }

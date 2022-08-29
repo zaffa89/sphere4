@@ -18,4 +18,8 @@ class Fattura extends Model
         return $this->hasMany(VoceFattura::class);
     }
     
+    public function visualizzazioni()
+    {
+        return $this->morphToMany(SphereUser::class , 'viewable' , 'gdpr_log_views')->withTimestamps();
+    }
 }

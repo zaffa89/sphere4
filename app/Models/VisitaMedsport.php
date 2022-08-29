@@ -17,4 +17,9 @@ class VisitaMedsport extends Model
     {
         return $this->belongsTo(ServizioMedsport::class);
     }
+
+    public function visualizzazioni()
+    {
+        return $this->morphToMany(SphereUser::class , 'viewable' , 'gdpr_log_views')->withTimestamps();
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PrenotazioneAperta;
 use App\Models\Prenotazione;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -48,7 +49,9 @@ class PrenotazioneController extends Controller
      */
     public function show(Prenotazione $prenotazione)
     {
-        //
+        PrenotazioneAperta::dispatchIf($prenotazione , $prenotazione , auth()->user()->sphereUser);
+
+        return $prenotazione;
     }
 
     /**
@@ -72,7 +75,6 @@ class PrenotazioneController extends Controller
     public function update(Request $request, Prenotazione $prenotazione)
     {
         
-
         DB::transaction(function () use ($request , $prenotazione) {
             $prenotazione->data_visita = $request->data_visita;
 

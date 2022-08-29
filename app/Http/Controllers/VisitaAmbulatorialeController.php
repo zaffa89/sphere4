@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\VisitaAmbulatorialeAperta;
 use App\Models\VisitaAmbulatoriale;
 use Illuminate\Http\Request;
 
@@ -46,7 +47,9 @@ class VisitaAmbulatorialeController extends Controller
      */
     public function show(VisitaAmbulatoriale $visitaAmbulatoriale)
     {
-        //
+        VisitaAmbulatorialeAperta::dispatchIf($visitaAmbulatoriale , $visitaAmbulatoriale , auth()->user()->sphereUser);
+
+        return $visitaAmbulatoriale;
     }
 
     /**

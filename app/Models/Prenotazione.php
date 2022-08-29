@@ -55,4 +55,8 @@ class Prenotazione extends Model
         return $this->hasMany(VisitaFisioterapica::class); //has many ???
     }
     
+    public function visualizzazioni()
+    {
+        return $this->morphToMany(SphereUser::class , 'viewable' , 'gdpr_log_views')->withTimestamps();
+    }
 }

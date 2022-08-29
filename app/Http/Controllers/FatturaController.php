@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\FatturaAperta;
 use App\Models\Fattura;
 use Illuminate\Http\Request;
 
@@ -46,7 +47,9 @@ class FatturaController extends Controller
      */
     public function show(Fattura $fattura)
     {
-        //
+        FatturaAperta::dispatchIf($fattura , $fattura , auth()->user()->sphereUser);
+
+        return $fattura;
     }
 
     /**
