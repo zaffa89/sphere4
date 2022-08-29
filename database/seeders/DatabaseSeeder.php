@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Ambulatorio;
 use App\Models\Medico;
 use App\Models\Paziente;
+use App\Models\Prenotazione;
 use App\Models\SphereUser;
 use App\Models\Struttura;
 use App\Models\User;
@@ -26,7 +27,8 @@ class DatabaseSeeder extends Seeder
         Struttura::factory(2)
             ->has(Ambulatorio::factory()->count(3) , 'ambulatori')
             ->has(Medico::factory()->count(5) , 'medici')
-            ->has(Paziente::factory()->count(500) , 'pazienti')
+            ->has(Paziente::factory()->count(100) , 'pazienti')
+            ->has(Prenotazione::factory()->count(50) , 'prenotazioni')
             ->create();
 
         //assegna gli utenti di default ai primi 2 medici

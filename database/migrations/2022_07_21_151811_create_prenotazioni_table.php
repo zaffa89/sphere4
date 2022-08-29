@@ -16,6 +16,12 @@ return new class extends Migration
         Schema::create('prenotazioni', function (Blueprint $table) {
             $table->id();
 
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
+
+            $table->unsignedBigInteger('sphere_user_id')->nullable();
+            $table->foreign('sphere_user_id')->references('id')->on('sphere_users');
+            
             $table->timestamp('data_prenotazione');
             $table->timestamp('data_visita');
             

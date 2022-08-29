@@ -20,15 +20,15 @@ use Inertia\Inertia;
 Route::get('/', [IndexController::class , 'index'])->name('homepage');
 
 Route::get('/prenota', function () {
-return Inertia::render('PrenotazioneUtenti/Prenota');
+return Inertia::render('PrenotazioneOnline/Prenota');
 })->name('prenotazione.nuova');
 
 Route::get('/selezione-categoria', function () {
-return Inertia::render('PrenotazioneUtenti/SelezioneCategoria');
+return Inertia::render('PrenotazioneOnline/SelezioneCategoria');
 })->name('prenotazione.selezione.categoria');
 
 Route::get('/selezione-anagrafica', function () {
-return Inertia::render('PrenotazioneUtenti/SelezioneAnagrafica');
+return Inertia::render('PrenotazioneOnline/SelezioneAnagrafica');
 })->name('prenotazione.selezione.anagrafica');
 
 Route::middleware(['auth' , 'solutionmed'])->group(function () {

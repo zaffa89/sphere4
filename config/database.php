@@ -78,6 +78,20 @@ return [
             'sslmode' => 'prefer',
         ],
 
+        'gdpr' => [
+            'driver' => 'pgsql',
+            'url' => env('GDPR_DATABASE_URL'),
+            'host' => env('GDPR_DB_HOST', '127.0.0.1'),
+            'port' => env('GDPR_DB_PORT', '5432'),
+            'database' => env('GDPR_DB_DATABASE', 'forge'),
+            'username' => env('GDPR_DB_USERNAME', 'forge'),
+            'password' => env('GDPR_DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'prefer',
+        ],
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),

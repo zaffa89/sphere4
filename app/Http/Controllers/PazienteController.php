@@ -2,11 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PazienteAperto;
 use App\Models\Paziente;
+use App\Models\SphereUser;
 use Illuminate\Http\Request;
 
 class PazienteController extends Controller
 {
+
+    public function provaMorph()
+    {
+        
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -46,6 +54,9 @@ class PazienteController extends Controller
      */
     public function show(Paziente $paziente)
     {
+
+        PazienteAperto::dispatchIf($paziente , $paziente , auth()->user()->sphereUser);
+
         return $paziente;
     }
 
@@ -69,7 +80,8 @@ class PazienteController extends Controller
      */
     public function update(Request $request, Paziente $paziente)
     {
-        $paziente->update($request->all());
+        
+
         return $paziente;
     }
 

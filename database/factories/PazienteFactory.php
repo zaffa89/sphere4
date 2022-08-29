@@ -20,8 +20,16 @@ class PazienteFactory extends Factory
             'nome' => $this->faker->firstName(),
             'cognome' => $this->faker->lastName(),
             'codice_fiscale' => $this->faker->unique()->taxId(),
+            'sesso' => $this->faker->randomElement(['M' , 'F']),
+            'data_nascita' => $this->faker->date(),
+            
+            'indirizzo' => $this->faker->address(),
+            'civico' => $this->faker->numberBetween(1 , 100),
 
-            'sphere_user_id' => 1
+            'telefono' => $this->faker->phoneNumber(),
+            'email' => $this->faker->safeEmail(),
+            
+            'note' => $this->faker->text(50),
         ];
     }
 }

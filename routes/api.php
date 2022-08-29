@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AmbulatorioController;
 use App\Http\Controllers\MedicoController;
 use App\Http\Controllers\PazienteController;
+use App\Http\Controllers\PrenotazioneController;
 use App\Http\Controllers\SphereUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,10 +20,6 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-//API PANNELLO AMMINISTRAZIONE WEB
-Route::middleware([ 'auth:sanctum' , 'solutionmed' ])->group(function() {
-    Route::post('sphere/user/create' , [SphereUserController::class , 'store']);
-});
 
 //API PRENOTAZIONE ONLINE
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -31,21 +28,42 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 
-// API PER CLIENT SPHERE 
-Route::post('sphere/auth' , [SphereUserController::class , 'authenticate']); //LOGIN CLIENT SPHERE
-Route::middleware([ 'auth:sanctum' , 'sphere-client' ])->group(function() {
-    //AUTENTICAZIONE
-    Route::get('sphere/check-auth' , [SphereUserController::class , 'checkAuth']);
+// API SPHERE
+Route::prefix('sphere')->group(function() {
 
-    //AMBULATORI
-    Route::resource('ambulatorio' , AmbulatorioController::class);
+    Route::get('prova' , [PazienteController::class , 'provaMorph']);
 
-    //MEDICI
-    Route::resource('medico' , MedicoController::class);
+    Route::post('login' , [SphereUserController::class , 'authenticate']);
 
-    //PAZIENTI
-    Route::resource('paziente' , PazienteController::class);
+
+    Route::middleware([ 'auth:sanctum' , 'sphere-client' ])->group(function() {
+        
+        Route::get('check-auth' , [SphereUserController::class , 'checkAuth']);
     
+        //AMBULATORI
+        Route::resource('ambulatorio' , AmbulatorioController::class);
+    
+        //MEDICI
+        Route::resource('medico' , MedicoController::class);
+    
+        //PAZIENTI
+        Route::resource('paziente' , PazienteController::class);
+
+        //PRENOTAZIONI
+        Route::resource('prenotazione' , PrenotazioneController::class);
+        
+    });
+
+    //API PANNELLO AMMINISTRAZIONE WEB
+    Route::middleware([ 'auth:sanctum' , 'solutionmed' ])->group(function() {
+        Route::post('user/create' , [SphereUserController::class , 'store']);
+    });
+
 });
+
+Route::prefix('test')->group(function() {
+
+});
+
 
 

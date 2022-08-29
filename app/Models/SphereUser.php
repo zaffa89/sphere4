@@ -20,4 +20,9 @@ class SphereUser extends Model
     {
         return $this->hasOne(Medico::class);
     }
+
+    public function pazientiAperti()
+    {
+        return $this->morphedByMany(Paziente::class , 'viewable' , 'gdpr_log_views')->withTimestamps();
+    }
 }

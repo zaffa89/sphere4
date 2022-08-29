@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Prenotazione;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Events\PrenotazioneModificata;
 
 class PrenotazioneController extends Controller
 {
@@ -69,7 +71,19 @@ class PrenotazioneController extends Controller
      */
     public function update(Request $request, Prenotazione $prenotazione)
     {
-        //
+        
+
+        DB::transaction(function () use ($request , $prenotazione) {
+            $prenotazione->data_visita = $request->data_visita;
+
+            PrenotazioneModificata::dispatchIf($prenotazione->isDirty() , $prenotazione , auth()->user()->sphereUser);
+            $prenotazione->save();
+
+            return $prenotazione;
+        });
+        
+
+        return $prenotazione;
     }
 
     /**
