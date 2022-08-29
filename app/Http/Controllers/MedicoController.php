@@ -14,7 +14,7 @@ class MedicoController extends Controller
      */
     public function index()
     {
-        //
+        return Medico::all();
     }
 
     /**
@@ -35,7 +35,8 @@ class MedicoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $medico = Medico::create($request->all());
+        return $medico;
     }
 
     /**
@@ -46,7 +47,7 @@ class MedicoController extends Controller
      */
     public function show(Medico $medico)
     {
-        //
+        return $medico;
     }
 
     /**
@@ -69,7 +70,8 @@ class MedicoController extends Controller
      */
     public function update(Request $request, Medico $medico)
     {
-        //
+        $medico->update($request->all());
+        return $medico;
     }
 
     /**
@@ -80,6 +82,6 @@ class MedicoController extends Controller
      */
     public function destroy(Medico $medico)
     {
-        //
+        $medico->delete();
     }
 }

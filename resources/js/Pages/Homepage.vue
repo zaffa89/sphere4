@@ -56,12 +56,28 @@
         <template #side>
             <div class="rounded-lg bg-white overflow-hidden shadow">
                 <div class="p-6">                                           
-                    Modulistica asdasdasd
+                    Modulistica
+                </div>
+                <div>
+                    <button @click="provaApiProtetta()">API protetta</button>
                 </div>
             </div>
         </template>
     </AppLayout>
 </template>
+
+<script>
+export default {
+    methods: {
+        provaApiProtetta()
+        {
+            axios.get('/api/sphere/check-auth' , {
+                headers: { Authorization : 'Bearer 3|RBeBzsRHxj6DubsuJU2b3XK0HxjB2pls7Tt8IvGG' }
+            });
+        }
+    }    
+}
+</script>
 
 <script setup>
     import AppLayout from '../Layouts/AppLayout.vue';

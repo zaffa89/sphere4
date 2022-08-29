@@ -29,6 +29,9 @@ return new class extends Migration
             $table->unsignedBigInteger('ambulatorio_id');
             $table->foreign('ambulatorio_id')->references('id')->on('ambulatori');
 
+            $table->unsignedBigInteger('struttura_id');
+            $table->foreign('struttura_id')->references('id')->on('strutture');
+
             $table->timestamps();
         });
     }

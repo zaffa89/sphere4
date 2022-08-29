@@ -66,9 +66,9 @@ class Kernel extends HttpKernel
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,        
 
-        'sphere-client' => \App\Http\Middleware\SphereTokenMiddleware::class,
-        'solutionmed' => \App\Http\Middleware\SolutionmedMiddleware::class
+        'sphere-client' => \App\Http\Middleware\SphereClient::class,
+        'solutionmed' => \App\Http\Middleware\Solutionmed::class
     ];
 }

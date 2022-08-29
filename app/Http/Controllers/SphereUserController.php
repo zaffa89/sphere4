@@ -7,6 +7,7 @@ use App\Models\Medico;
 use App\Models\SphereUser;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Validation\ValidationException;
@@ -14,7 +15,6 @@ use Illuminate\Validation\ValidationException;
 class SphereUserController extends Controller
 {
 
-    /*
     public function authenticate(Request $request)
     {
         $request->validate([
@@ -22,31 +22,26 @@ class SphereUserController extends Controller
             'password' => 'required'
         ]);
 
-        $sphereUser = SphereUser::where('username', $request->username)->first();
- 
-        if (! $sphereUser || ! Hash::check($request->password, $sphereUser->password)) {
-            return response([
-                'username' => 'Login non abilitato.'
-            ], 403);            
+        $user = User::whereRelation('sphereUser' , 'attivo' , true)->whereRelation('sphereUser' , 'username' , $request->username)->first();
+
+        if( $user )
+        {
+            if( Auth::attempt( ['email' => $user->email , 'password' => $request->password] ) )
+            {
+                $user->tokens()->delete();
+                $token = $user->createToken($request->username , ['sphere-client']);
+                return response()->json( [ 'token' => $token->plainTextToken ] , 200 );
+            }
+            
         }
-
-        $mainUser = User::find(1); //utenza sphere
+        return response()->json( ['message' => 'Login non abilitato'] , 401 );
         
-        $mainUser->tokens()->where('name' , $sphereUser->username)->delete();
-        
-        $token = $mainUser->createToken($request->username , ['admin']);
-        $sphereUser->token_id = $token->accessToken->id;
-        $sphereUser->save();
-
-        return $token->plainTextToken;
-        //return $sphereUser;
     }
-    */
+
     public function checkAuth(Request $request)
     {
-        return auth()->user()->username;
+        return response()->json( ['utente' => User::with('sphereUser')->find(Auth::user()->id)] , 200 );
     }
-
 
     /**
      * Display a listing of the resource.

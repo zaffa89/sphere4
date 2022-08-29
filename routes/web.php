@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Online\Prenotazione\IndexController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -16,9 +17,7 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-return Inertia::render('Homepage');
-})->name('homepage');
+Route::get('/', [IndexController::class , 'index'])->name('homepage');
 
 Route::get('/prenota', function () {
 return Inertia::render('PrenotazioneUtenti/Prenota');

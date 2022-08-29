@@ -2,8 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Ambulatorio;
 use App\Models\Medico;
+use App\Models\Paziente;
 use App\Models\SphereUser;
+use App\Models\Struttura;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -20,10 +23,13 @@ class DatabaseSeeder extends Seeder
         //utenti di default e relativi utenti sphere
         $this->call(UserSeeder::class);
 
-        //medici di default
-        $this->call(MedicoSeeder::class);
+        Struttura::factory(2)
+            ->has(Ambulatorio::factory()->count(3) , 'ambulatori')
+            ->has(Medico::factory()->count(5) , 'medici')
+            ->has(Paziente::factory()->count(500) , 'pazienti')
+            ->create();
 
-        //associazione utenti sphere e medici di default
+        //assegna gli utenti di default ai primi 2 medici
         $sphereUser = SphereUser::find(1);
         $medico = Medico::find(1);
         $medico->sphereUser()->associate($sphereUser);

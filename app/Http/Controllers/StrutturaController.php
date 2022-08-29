@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ambulatorio;
+use App\Models\Struttura;
 use Illuminate\Http\Request;
 
-class AmbulatorioController extends Controller
+class StrutturaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class AmbulatorioController extends Controller
      */
     public function index()
     {
-        return Ambulatorio::all();
+        //
     }
 
     /**
@@ -35,28 +35,27 @@ class AmbulatorioController extends Controller
      */
     public function store(Request $request)
     {
-        $ambulatorio = Ambulatorio::create($request->all());
-        return $ambulatorio;
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Ambulatorio  $ambulatorio
+     * @param  \App\Models\Struttura  $struttura
      * @return \Illuminate\Http\Response
      */
-    public function show(Ambulatorio $ambulatorio)
+    public function show(Struttura $struttura)
     {
-        return $ambulatorio;
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Ambulatorio  $ambulatorio
+     * @param  \App\Models\Struttura  $struttura
      * @return \Illuminate\Http\Response
      */
-    public function edit(Ambulatorio $ambulatorio)
+    public function edit(Struttura $struttura)
     {
         //
     }
@@ -65,23 +64,22 @@ class AmbulatorioController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Ambulatorio  $ambulatorio
+     * @param  \App\Models\Struttura  $struttura
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Ambulatorio $ambulatorio)
+    public function update(Request $request, Struttura $struttura)
     {
-        $ambulatorio->update($request->all());
-        return $ambulatorio;
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Ambulatorio  $ambulatorio
+     * @param  \App\Models\Struttura  $struttura
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Ambulatorio $ambulatorio)
+    public function destroy(Struttura $struttura)
     {
-        $ambulatorio->delete();
+        //
     }
 }

@@ -13,6 +13,11 @@ class Prenotazione extends Model
     
     protected $guarded = [];
     
+    public function struttura()
+    {
+        return $this->belongsTo(Struttura::class);
+    }
+    
     public function paziente()
     {
         return $this->belongsTo(Paziente::class);

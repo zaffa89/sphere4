@@ -14,7 +14,7 @@ class PazienteController extends Controller
      */
     public function index()
     {
-        //
+        return Paziente::all();
     }
 
     /**
@@ -35,7 +35,7 @@ class PazienteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $paziente = Paziente::create($request->all());
     }
 
     /**
@@ -46,7 +46,7 @@ class PazienteController extends Controller
      */
     public function show(Paziente $paziente)
     {
-        //
+        return $paziente;
     }
 
     /**
@@ -69,7 +69,8 @@ class PazienteController extends Controller
      */
     public function update(Request $request, Paziente $paziente)
     {
-        //
+        $paziente->update($request->all());
+        return $paziente;
     }
 
     /**
@@ -80,6 +81,6 @@ class PazienteController extends Controller
      */
     public function destroy(Paziente $paziente)
     {
-        //
+        $paziente->delete();
     }
 }

@@ -13,6 +13,11 @@ class Paziente extends Model
     
     protected $guarded = [];
     
+    public function struttura()
+    {
+        return $this->belongsTo(Struttura::class);
+    }
+    
     public function prenotazioni()
     {
         return $this->hasMany(Prenotazione::class);

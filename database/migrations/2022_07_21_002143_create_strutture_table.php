@@ -13,16 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('ambulatori', function (Blueprint $table) {
+        Schema::create('strutture', function (Blueprint $table) {
             $table->id();
-            
+
             $table->string('nome');
-
-            $table->integer('ordine')->default(1);
-
-            $table->unsignedBigInteger('struttura_id');
-            $table->foreign('struttura_id')->references('id')->on('strutture');
-
+            $table->string('colore')->default('FFFFFF');
             $table->timestamps();
         });
     }
@@ -34,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ambulatori');
+        Schema::dropIfExists('strutture');
     }
 };

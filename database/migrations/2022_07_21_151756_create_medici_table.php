@@ -21,6 +21,9 @@ return new class extends Migration
             $table->unsignedBigInteger('sphere_user_id')->nullable();
             $table->foreign('sphere_user_id')->references('id')->on('sphere_users')->onDelete('set null');
 
+            $table->unsignedBigInteger('struttura_id');
+            $table->foreign('struttura_id')->references('id')->on('strutture');
+
             $table->timestamps();
         });
     }

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 
-class SphereTokenMiddleware
+class Solutionmed
 {
     /**
      * Handle an incoming request.
@@ -18,7 +18,14 @@ class SphereTokenMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        Gate::authorize('sphere-client');
-        return $next($request);
+        $inspection = Gate::inspect('solutionmed');
+
+        if( $inspection->allowed() ) {
+            return $next($request);
+        }
+        else
+        {
+            return response()->json(['message' => 'Non sei autorizzato'] , 401);
+        }  
     }
 }
