@@ -2,6 +2,8 @@
 
 namespace App\Events;
 
+use App\Models\Paziente;
+use App\Models\SphereUser;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -10,18 +12,22 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class FatturaAperta
+class PazienteVisualizzato
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    public $sphereUser;
+    public $paziente;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Paziente $paziente , SphereUser $sphereUser)
     {
-        //
+        $this->sphereUser = $sphereUser;
+        $this->paziente = $paziente;
     }
 
     /**

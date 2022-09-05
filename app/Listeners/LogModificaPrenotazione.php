@@ -25,7 +25,7 @@ class LogModificaPrenotazione implements ShouldQueue
      * @return void
      */
     public function handle(PrenotazioneModificata $event)
-    {
-        //
+    {        
+        
     }
 }

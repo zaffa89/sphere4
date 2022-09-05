@@ -26,6 +26,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::prefix('test')->group(function() {
+    Route::get('pazienti-e-prenotazioni' , [PazienteController::class , 'tutto']);
+});
 
 
 // API SPHERE
@@ -61,9 +64,7 @@ Route::prefix('sphere')->group(function() {
 
 });
 
-Route::prefix('test')->group(function() {
 
-});
 
 
 

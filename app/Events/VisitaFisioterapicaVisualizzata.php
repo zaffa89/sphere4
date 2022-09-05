@@ -2,26 +2,32 @@
 
 namespace App\Events;
 
+use App\Models\SphereUser;
+use App\Models\VisitaFisioterapica;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class PrenotazioneAperta
+class VisitaFisioterapicaVisualizzata
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    public $visitaFisioterapica;
+    public $sphereUser;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(VisitaFisioterapica $visitaFisioterapica , SphereUser $sphereUser)
     {
-        //
+        $this->visitaFisioterapica = $visitaFisioterapica;
+        $this->sphereUser = $sphereUser;
     }
 
     /**

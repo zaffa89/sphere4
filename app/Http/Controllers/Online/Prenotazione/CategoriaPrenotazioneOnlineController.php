@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Online\Prenotazione;
 
-use App\Events\FatturaVisualizzata;
-use App\Models\Fattura;
+use App\Http\Controllers\Controller;
+use App\Models\Online\Prenotazione\CategoriaPrenotazioneOnline;
 use Illuminate\Http\Request;
 
-class FatturaController extends Controller
+class CategoriaPrenotazioneOnlineController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -42,23 +42,21 @@ class FatturaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Fattura  $fattura
+     * @param  int  CategoriaPrenotazioneOnline $categoriaPrenotazioneOnline
      * @return \Illuminate\Http\Response
      */
-    public function show(Fattura $fattura)
+    public function show(CategoriaPrenotazioneOnline $categoriaPrenotazioneOnline)
     {
-        FatturaVisualizzata::dispatchIf($fattura , $fattura , auth()->user()->sphereUser);
-
-        return $fattura;
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Fattura  $fattura
+     * @param  int  CategoriaPrenotazioneOnline $categoriaPrenotazioneOnline
      * @return \Illuminate\Http\Response
      */
-    public function edit(Fattura $fattura)
+    public function edit(CategoriaPrenotazioneOnline $categoriaPrenotazioneOnline)
     {
         //
     }
@@ -67,10 +65,10 @@ class FatturaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Fattura  $fattura
+     * @param  int  CategoriaPrenotazioneOnline $categoriaPrenotazioneOnline
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Fattura $fattura)
+    public function update(Request $request, CategoriaPrenotazioneOnline $categoriaPrenotazioneOnline)
     {
         //
     }
@@ -78,10 +76,10 @@ class FatturaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Fattura  $fattura
+     * @param  int  CategoriaPrenotazioneOnline $categoriaPrenotazioneOnline
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Fattura $fattura)
+    public function destroy(CategoriaPrenotazioneOnline $categoriaPrenotazioneOnline)
     {
         //
     }

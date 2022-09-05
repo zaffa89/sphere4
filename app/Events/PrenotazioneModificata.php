@@ -2,6 +2,8 @@
 
 namespace App\Events;
 
+use App\Models\Prenotazione;
+use App\Models\SphereUser;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -14,14 +16,17 @@ class PrenotazioneModificata
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $prenotazione;
+    public $sphereUser;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Prenotazione $prenotazione , SphereUser $sphereUser)
     {
-        //
+        $this->prenotazione = $prenotazione;
+        $this->sphereUser = $sphereUser;
     }
 
     /**

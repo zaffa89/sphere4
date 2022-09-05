@@ -2,12 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Events\PazienteAperto;
-use App\Models\SphereUser;
+use App\Events\VisitaMedsportVisualizzata;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class LogPazienteAperto
+class LogVisualizzazioneVisitaMedsport implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -22,11 +21,11 @@ class LogPazienteAperto
     /**
      * Handle the event.
      *
-     * @param  \App\Events\PazienteAperto  $event
+     * @param  \App\Events\VisitaMedsportVisualizzata  $event
      * @return void
      */
-    public function handle(PazienteAperto $event)
+    public function handle(VisitaMedsportVisualizzata $event)
     {
-        return $event->sphereUser->pazientiAperti()->attach($event->paziente->id);
+        return $event->sphereUser->visualizzazioniVisiteMedsport()->attach($event->visitaMedsport->id);
     }
 }

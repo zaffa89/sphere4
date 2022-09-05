@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\VisitaCardiologicaAperta;
-use App\Models\VisitaCardiologica;
 use Illuminate\Http\Request;
+use App\Models\VisitaCardiologica;
+use Illuminate\Support\Facades\DB;
+use App\Events\VisitaCardiologicaVisualizzata;
+use App\Events\VisitaCardiologicaModificata;
 
 class VisitaCardiologicaController extends Controller
 {
@@ -47,7 +49,7 @@ class VisitaCardiologicaController extends Controller
      */
     public function show(VisitaCardiologica $visitaCardiologica)
     {
-        VisitaCardiologicaAperta::dispatchIf($visitaCardiologica , $visitaCardiologica , auth()->user()->sphereUser);
+        VisitaCardiologicaVisualizzata::dispatchIf($visitaCardiologica , $visitaCardiologica , auth()->user()->sphereUser);
 
         return $visitaCardiologica;
     }
@@ -72,7 +74,18 @@ class VisitaCardiologicaController extends Controller
      */
     public function update(Request $request, VisitaCardiologica $visitaCardiologica)
     {
-        //
+        //aggiungere validazione
+
+        DB::transaction(function () use ($request , $visitaCardiologica) {
+            
+            //$prenotazione->data_visita = $request->data_visita;
+            
+            VisitaCardiologicaModificata::dispatchIf($visitaCardiologica->isDirty() , $visitaCardiologica , auth()->user()->sphereUser);
+            $visitaCardiologica->save();
+        });
+        
+
+        return $visitaCardiologica;
     }
 
     /**

@@ -38,6 +38,7 @@ return new class extends Migration
             $table->unsignedBigInteger('struttura_id');
             $table->foreign('struttura_id')->references('id')->on('strutture');
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

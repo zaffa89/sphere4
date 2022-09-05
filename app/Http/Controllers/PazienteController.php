@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\PazienteAperto;
 use App\Models\Paziente;
 use Illuminate\Http\Request;
+use App\Events\PazienteVisualizzato;
+use Illuminate\Support\Facades\DB;
 
 class PazienteController extends Controller
 {
 
-    public function provaMorph()
+    public function tutto()
     {
-        
+        return response()->json(Paziente::with(['prenotazioni' , 'prenotazioni.medico' , 'prenotazioni.ambulatorio'])->toSql() , 200);
     }
 
     /**
@@ -54,7 +55,7 @@ class PazienteController extends Controller
     public function show(Paziente $paziente)
     {
 
-        PazienteAperto::dispatchIf($paziente , $paziente , auth()->user()->sphereUser);
+        PazienteVisualizzato::dispatchIf($paziente , $paziente , auth()->user()->sphereUser);
 
         return $paziente;
     }
@@ -79,6 +80,17 @@ class PazienteController extends Controller
      */
     public function update(Request $request, Paziente $paziente)
     {
+        //aggiungere validazione
+
+        DB::transaction(function () use ($request , $paziente) {
+            
+            //$prenotazione->data_visita = $request->data_visita;
+            
+            
+            $paziente->save();
+        });
+        
+
         return $paziente;
     }
 

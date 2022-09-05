@@ -24,7 +24,7 @@ class PazienteFactory extends Factory
             'data_nascita' => $this->faker->date(),
             
             'indirizzo' => $this->faker->address(),
-            'civico' => $this->faker->numberBetween(1 , 100),
+            'civico' => $this->faker->numberBetween(1 , 10000),
 
             'telefono' => $this->faker->phoneNumber(),
             'email' => $this->faker->safeEmail(),

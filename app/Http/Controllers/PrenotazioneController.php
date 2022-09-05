@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\PrenotazioneAperta;
+use App\Events\PrenotazioneVisualizzata;
+use App\Events\PrenotazioneEliminata;
 use App\Models\Prenotazione;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -49,7 +50,7 @@ class PrenotazioneController extends Controller
      */
     public function show(Prenotazione $prenotazione)
     {
-        PrenotazioneAperta::dispatchIf($prenotazione , $prenotazione , auth()->user()->sphereUser);
+        PrenotazioneVisualizzata::dispatchIf($prenotazione , $prenotazione , auth()->user()->sphereUser);
 
         return $prenotazione;
     }
@@ -74,14 +75,14 @@ class PrenotazioneController extends Controller
      */
     public function update(Request $request, Prenotazione $prenotazione)
     {
-        
-        DB::transaction(function () use ($request , $prenotazione) {
-            $prenotazione->data_visita = $request->data_visita;
+        //aggiungere validazione
 
+        DB::transaction(function () use ($request , $prenotazione) {
+            
+            //$prenotazione->data_visita = $request->data_visita;
+            
             PrenotazioneModificata::dispatchIf($prenotazione->isDirty() , $prenotazione , auth()->user()->sphereUser);
             $prenotazione->save();
-
-            return $prenotazione;
         });
         
 
@@ -96,6 +97,12 @@ class PrenotazioneController extends Controller
      */
     public function destroy(Prenotazione $prenotazione)
     {
-        //
+        
+        DB::transaction(function() use ($prenotazione) {
+            PrenotazioneEliminata::dispatchIf($prenotazione , $prenotazione , auth()->user()->sphereUser);
+            $prenotazione->delete();
+        });
+        
+        return $prenotazione->trashed();
     }
 }

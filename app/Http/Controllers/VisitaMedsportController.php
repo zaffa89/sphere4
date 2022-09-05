@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\VisitaMedsportAperta;
-use App\Models\VisitaMedsport;
 use Illuminate\Http\Request;
+use App\Models\VisitaMedsport;
+use Illuminate\Support\Facades\DB;
+use App\Events\VisitaMedsportVisualizzata;
+use App\Events\VisitaMedsportModificata;
 
 class VisitaMedsportController extends Controller
 {
@@ -47,7 +49,7 @@ class VisitaMedsportController extends Controller
      */
     public function show(VisitaMedsport $visitaMedsport)
     {
-        VisitaMedsportAperta::dispatchIf($visitaMedsport , $visitaMedsport , auth()->user()->sphereUser);
+        VisitaMedsportVisualizzata::dispatchIf($visitaMedsport , $visitaMedsport , auth()->user()->sphereUser);
 
         return $visitaMedsport;
     }
@@ -72,7 +74,18 @@ class VisitaMedsportController extends Controller
      */
     public function update(Request $request, VisitaMedsport $visitaMedsport)
     {
-        //
+        //aggiungere validazione
+
+        DB::transaction(function () use ($request , $visitaMedsport) {
+            
+            //$prenotazione->data_visita = $request->data_visita;
+            
+            VisitaMedsportModificata::dispatchIf($visitaMedsport->isDirty() , $visitaMedsport , auth()->user()->sphereUser);
+            $visitaMedsport->save();
+        });
+        
+
+        return $visitaMedsport;
     }
 
     /**

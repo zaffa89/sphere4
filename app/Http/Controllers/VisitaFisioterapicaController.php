@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\VisitaFisioterapicaAperta;
-use App\Models\VisitaFisioterapica;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\VisitaFisioterapica;
+use App\Events\VisitaFisioterapicaVisualizzata;
+use App\Events\VisitaFisioterapicaModificata;
 
 class VisitaFisioterapicaController extends Controller
 {
@@ -47,7 +49,7 @@ class VisitaFisioterapicaController extends Controller
      */
     public function show(VisitaFisioterapica $visitaFisioterapica)
     {
-        VisitaFisioterapicaAperta::dispatchIf($visitaFisioterapica , $visitaFisioterapica , auth()->user()->sphereUser);
+        VisitaFisioterapicaVisualizzata::dispatchIf($visitaFisioterapica , $visitaFisioterapica , auth()->user()->sphereUser);
 
         return $visitaFisioterapica;
     }
@@ -72,7 +74,18 @@ class VisitaFisioterapicaController extends Controller
      */
     public function update(Request $request, VisitaFisioterapica $visitaFisioterapica)
     {
-        //
+        //aggiungere validazione
+
+        DB::transaction(function () use ($request , $visitaFisioterapica) {
+            
+            //$prenotazione->data_visita = $request->data_visita;
+            
+            VisitaFisioterapicaModificata::dispatchIf($visitaFisioterapica->isDirty() , $visitaFisioterapica , auth()->user()->sphereUser);
+            $visitaFisioterapica->save();
+        });
+        
+
+        return $visitaFisioterapica;
     }
 
     /**

@@ -2,26 +2,31 @@
 
 namespace App\Events;
 
+use App\Models\Fattura;
+use App\Models\SphereUser;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class VisitaMedsportAperta
+class FatturaVisualizzata
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $fattura;
+    public $sphereUser;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Fattura $fattura , SphereUser $sphereUser)
     {
-        //
+        $this->fattura = $fattura;
+        $this->sphereUser = $sphereUser;
     }
 
     /**

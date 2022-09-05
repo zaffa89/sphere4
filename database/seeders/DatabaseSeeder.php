@@ -27,8 +27,8 @@ class DatabaseSeeder extends Seeder
         Struttura::factory(2)
             ->has(Ambulatorio::factory()->count(3) , 'ambulatori')
             ->has(Medico::factory()->count(5) , 'medici')
-            ->has(Paziente::factory()->count(100) , 'pazienti')
-            ->has(Prenotazione::factory()->count(50) , 'prenotazioni')
+            ->has(Paziente::factory()->count(10000) , 'pazienti')
+            ->has(Prenotazione::factory()->count(20000) , 'prenotazioni')
             ->create();
 
         //assegna gli utenti di default ai primi 2 medici

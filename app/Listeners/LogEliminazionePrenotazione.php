@@ -6,7 +6,7 @@ use App\Events\PrenotazioneEliminata;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class LogEliminazionePrenotazione
+class LogEliminazionePrenotazione implements ShouldQueue
 {
     /**
      * Create the event listener.

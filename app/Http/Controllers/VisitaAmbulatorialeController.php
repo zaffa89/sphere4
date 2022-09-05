@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\VisitaAmbulatorialeAperta;
-use App\Models\VisitaAmbulatoriale;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\VisitaAmbulatoriale;
+use App\Events\VisitaAmbulatorialeModificata;
+use App\Events\VisitaAmbulatorialeVisualizzata;
 
 class VisitaAmbulatorialeController extends Controller
 {
@@ -47,7 +49,7 @@ class VisitaAmbulatorialeController extends Controller
      */
     public function show(VisitaAmbulatoriale $visitaAmbulatoriale)
     {
-        VisitaAmbulatorialeAperta::dispatchIf($visitaAmbulatoriale , $visitaAmbulatoriale , auth()->user()->sphereUser);
+        VisitaAmbulatorialeVisualizzata::dispatchIf($visitaAmbulatoriale , $visitaAmbulatoriale , auth()->user()->sphereUser);
 
         return $visitaAmbulatoriale;
     }
@@ -72,7 +74,18 @@ class VisitaAmbulatorialeController extends Controller
      */
     public function update(Request $request, VisitaAmbulatoriale $visitaAmbulatoriale)
     {
-        //
+        //aggiungere validazione
+
+        DB::transaction(function () use ($request , $visitaAmbulatoriale) {
+            
+            //$prenotazione->data_visita = $request->data_visita;
+            
+            VisitaAmbulatorialeModificata::dispatchIf($visitaAmbulatoriale->isDirty() , $visitaAmbulatoriale , auth()->user()->sphereUser);
+            $visitaAmbulatoriale->save();
+        });
+        
+
+        return $visitaAmbulatoriale;
     }
 
     /**

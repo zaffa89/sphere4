@@ -6,7 +6,7 @@ use App\Events\VisitaCardiologicaModificata;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class LogModificaVisitaCardiologica
+class LogModificaVisitaCardiologica implements ShouldQueue
 {
     /**
      * Create the event listener.

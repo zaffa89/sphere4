@@ -2,11 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Events\VisitaAmbulatorialeAperta;
+use App\Events\PrenotazioneVisualizzata;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class LogVisitaAmbulatorialeAperta
+class LogVisualizzazionePrenotazione implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -21,11 +21,11 @@ class LogVisitaAmbulatorialeAperta
     /**
      * Handle the event.
      *
-     * @param  \App\Events\VisitaAmbulatorialeAperta  $event
+     * @param  \App\Events\PrenotazioneVisualizzata  $event
      * @return void
      */
-    public function handle(VisitaAmbulatorialeAperta $event)
+    public function handle(PrenotazioneVisualizzata $event)
     {
-        //
+        return $event->sphereUser->visualizzazioniPrenotazioni()->attach($event->prenotazione->id);
     }
 }
