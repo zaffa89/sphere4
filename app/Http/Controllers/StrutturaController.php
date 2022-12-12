@@ -14,7 +14,7 @@ class StrutturaController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Struttura::with('ambulatori.mediciDisponibili')->get() , 200);
     }
 
     /**
@@ -46,7 +46,7 @@ class StrutturaController extends Controller
      */
     public function show(Struttura $struttura)
     {
-        //
+        
     }
 
     /**

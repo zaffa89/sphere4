@@ -18,7 +18,8 @@ class MedicoFactory extends Factory
     public function definition()
     {
         return [
-            'nome' => 'Medico-' . Str::random(4)
+            'nome' => 'Medico-' . Str::random(4),
+            'codice_fiscale' => $this->faker->taxId()
         ];
     }
 }

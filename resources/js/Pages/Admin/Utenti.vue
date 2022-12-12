@@ -49,7 +49,7 @@
                         </table>
                     </div>
                 </div>
-                <ModalNuovoUtente :open="modalNuovoUtenteOpen" v-on:chiudi-modal="modalNuovoUtenteOpen = false" v-on:utente-creato="utenteCreato" :medici="this.$page.props.medici_senza_utente" />
+                <ModalNuovoUtente :open="modalNuovoUtenteOpen" v-on:chiudi-modal="modalNuovoUtenteOpen = false" v-on:utente-creato="utenteCreato" :medici="$page.props.medici_senza_utente" />
             </AdminLayout>   
         </template>
     </AppLayout>

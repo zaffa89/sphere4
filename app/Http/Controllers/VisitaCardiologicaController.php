@@ -78,7 +78,7 @@ class VisitaCardiologicaController extends Controller
 
         DB::transaction(function () use ($request , $visitaCardiologica) {
             
-            //$prenotazione->data_visita = $request->data_visita;
+       
             
             VisitaCardiologicaModificata::dispatchIf($visitaCardiologica->isDirty() , $visitaCardiologica , auth()->user()->sphereUser);
             $visitaCardiologica->save();

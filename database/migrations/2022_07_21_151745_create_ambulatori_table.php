@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('nome');
 
             $table->integer('ordine')->default(1);
-
+            $table->boolean('attivo')->default(true);
             $table->unsignedBigInteger('struttura_id');
             $table->foreign('struttura_id')->references('id')->on('strutture');
 

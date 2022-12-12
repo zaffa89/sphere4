@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Online\Prenotazione\IndexController;
+use App\Http\Controllers\SphereUserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -38,5 +39,13 @@ Route::middleware(['auth' , 'solutionmed'])->group(function () {
     Route::get('admin/notifiche' , [AdminController::class , 'notifiche'])->name('admin.notifiche');
     Route::get('admin/pagamenti' , [AdminController::class , 'pagamenti'])->name('admin.pagamenti');
     Route::get('admin/integrazioni' , [AdminController::class , 'integrazioni'])->name('admin.integrazioni');    
+});
+
+Route::get('/certificato' , function () {
+    return view('certificato' , ['nome' => 'Zaffanelli Nicholas' , 'sport' => 'Kayak']);
+});
+
+Route::prefix('sphere')->group(function() {
+    Route::get('client/login' , [SphereUserController::class , 'loginWindow'])->name('sphere.client.login');
 });
 

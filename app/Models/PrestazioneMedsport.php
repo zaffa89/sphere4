@@ -13,8 +13,13 @@ class PrestazioneMedsport extends Model
     
     protected $guarded = [];
     
-    public function servizioMedsport()
+    public function sottoprestazioni()
     {
-        return $this->belongsToMany(ServizioMedsport::class);
+        return $this->belongsToMany(SottoprestazioneMedsport::class , 'prestazione_sottoprestazione_medsport' , 'prestazione_medsport_id' , 'sottoprestazione_medsport_id');
+    }
+
+    public function visita()
+    {
+        return $this->hasMany(VisitaMedsport::class);
     }
 }

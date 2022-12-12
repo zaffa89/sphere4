@@ -16,14 +16,29 @@ return new class extends Migration
         Schema::create('medici', function (Blueprint $table) {
             $table->id();
 
-            $table->string('nome');
-
             $table->unsignedBigInteger('sphere_user_id')->nullable();
             $table->foreign('sphere_user_id')->references('id')->on('sphere_users')->onDelete('set null');
 
-            $table->unsignedBigInteger('struttura_id');
-            $table->foreign('struttura_id')->references('id')->on('strutture');
+            $table->string('ragione_sociale');
+            $table->string('codice_fiscale')->nullable();
+            $table->string('telefono')->nullable();
+            $table->string('telefono_fisso')->nullable();
+            $table->string('email')->nullable();
+            $table->string('colore')->nullable();
 
+            $table->string('partita_iva')->nullable();
+            $table->string('identificativo_fmsi')->nullable();
+            $table->string('codice_tracciato')->nullable();
+
+            $table->text('timbro')->nullable();
+
+            $table->boolean('abilitazione_medsport')->default(false);
+            $table->boolean('abilitazione_ambulatoriale')->default(false);
+            $table->boolean('abilitazione_cardiologia')->default(false);
+            $table->boolean('abilitazione_fisioterapia')->default(false);
+
+            $table->boolean('attivo')->default(true);
+            
             $table->timestamps();
         });
     }

@@ -16,9 +16,19 @@ class SphereUser extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function struttura()
+    {
+        return $this->belongsTo(Struttura::class);
+    }
+    
     public function medico()
     {
         return $this->hasOne(Medico::class);
+    }
+
+    public function prenotazioni()
+    {
+        return $this->hasMany(Prenotazione::class);
     }
 
     public function visualizzazioniPazienti()

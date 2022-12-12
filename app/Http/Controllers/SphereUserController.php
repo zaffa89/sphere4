@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Inertia\Inertia;
 use App\Models\Medico;
 use App\Models\SphereUser;
 use Illuminate\Support\Str;
@@ -14,6 +15,11 @@ use Illuminate\Validation\ValidationException;
 
 class SphereUserController extends Controller
 {
+    public function loginWindow()
+    {
+
+        return Inertia::render('SphereClientLogin');
+    }
 
     public function authenticate(Request $request)
     {
@@ -22,25 +28,35 @@ class SphereUserController extends Controller
             'password' => 'required'
         ]);
 
-        $user = User::whereRelation('sphereUser' , 'attivo' , true)->whereRelation('sphereUser' , 'username' , $request->username)->first();
+        
+        $user = User::whereRelation('sphereUser' , 'username' , $request->username)->first();
 
-        if( $user )
+        if( $user && $user->sphereUser->attivo )
         {
             if( Auth::attempt( ['email' => $user->email , 'password' => $request->password] ) )
             {
-                $user->tokens()->delete();
+                //$user->tokens()->delete();
                 $token = $user->createToken($request->username , ['sphere-client']);
-                return response()->json( [ 'token' => $token->plainTextToken ] , 200 );
+                return response()->json( [ 'token' => $token->plainTextToken , 'client_uuid' => Str::uuid() , 'permessi' => [
+                    'calendario' => true,
+                    'anagrafiche_pazienti' => true,
+                    'anagrafiche_medici' => false
+                ] ] , 200 );
             }
             
         }
-        return response()->json( ['message' => 'Login non abilitato'] , 401 );
+        if( $user && !$user->sphereUser->attivo)
+        {
+            return response()->json( ['message' => 'Questo utente è stato disabilitato'] , 401 );
+        }
+        return response()->json( ['message' => 'Nome utente o password sbagliati'] , 401 );
         
     }
 
     public function checkAuth(Request $request)
     {
-        return response()->json( ['utente' => User::with('sphereUser')->find(Auth::user()->id)] , 200 );
+        
+        return response()->json( Auth::user()->sphereUser->id , 200 );
     }
 
     /**

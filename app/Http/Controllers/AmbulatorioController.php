@@ -3,10 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ambulatorio;
+use App\Models\Struttura;
 use Illuminate\Http\Request;
 
 class AmbulatorioController extends Controller
 {
+
+    public function ricercaAmbulatorio(Request $request)
+    {
+        $request->validate([
+            'ricerca' => 'nullable|string'
+        ]);
+        
+        return Ambulatorio::where('nome' , 'like' , '%'.strtolower(trim($request->ricerca)).'%')->orderBy('nome')->get();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -24,7 +35,10 @@ class AmbulatorioController extends Controller
      */
     public function create()
     {
-        //
+        return [
+            'ambulatorio' => new Ambulatorio(),
+            'strutture' => Struttura::all()
+        ];
     }
 
     /**
@@ -58,7 +72,10 @@ class AmbulatorioController extends Controller
      */
     public function edit(Ambulatorio $ambulatorio)
     {
-        //
+        return [
+            'ambulatorio' => $ambulatorio,
+            'strutture' => Struttura::all()
+        ];
     }
 
     /**

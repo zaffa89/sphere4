@@ -78,7 +78,7 @@ class VisitaAmbulatorialeController extends Controller
 
         DB::transaction(function () use ($request , $visitaAmbulatoriale) {
             
-            //$prenotazione->data_visita = $request->data_visita;
+     
             
             VisitaAmbulatorialeModificata::dispatchIf($visitaAmbulatoriale->isDirty() , $visitaAmbulatoriale , auth()->user()->sphereUser);
             $visitaAmbulatoriale->save();

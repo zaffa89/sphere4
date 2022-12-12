@@ -18,7 +18,7 @@ class AmbulatorioFactory extends Factory
     public function definition()
     {
         return [
-            'nome' => 'Ambulatorio-' . Str::random(3),            
+            'nome' => 'Ambulatorio-' . Str::random(3),                    
         ];
     }
 }

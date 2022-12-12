@@ -13,13 +13,22 @@ class VisitaAmbulatoriale extends Model
     
     protected $guarded = [];
     
-    public function servizio()
+    protected $attributes = [
+        'prestazione_id' => null,      
+    ];
+    
+    public function prestazione()
     {
-        return $this->belongsTo(ServizioAmbulatoriale::class);
+        return $this->belongsTo(PrestazioneAmbulatoriale::class , 'prestazione_id');
     }
 
     public function visualizzazioni()
     {
         return $this->morphToMany(SphereUser::class , 'viewable' , 'gdpr_log_views')->withTimestamps();
+    }
+
+    public function prenotazione() 
+    {
+        return $this->morphOne(Prenotazione::class , 'visita');
     }
 }

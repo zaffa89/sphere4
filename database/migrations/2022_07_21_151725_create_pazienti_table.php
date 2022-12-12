@@ -25,21 +25,43 @@ return new class extends Migration
             $table->unsignedBigInteger('struttura_id');
             $table->foreign('struttura_id')->references('id')->on('strutture');
 
-            $table->string('nome');
-            $table->string('cognome');
-            $table->string('sesso' , 1);
-            $table->timestamp('data_nascita');
+            $table->string('codice')->nullable();
+            $table->string('nome')->nullable();
+            $table->string('cognome')->nullable();
+            $table->string('ragione_sociale')->nullable();
+            $table->string('sesso' , 1)->nullable();
+            $table->date('data_nascita')->nullable();
             
-            $table->string('codice_fiscale');
-            
-            $table->string('indirizzo');
-            $table->string('civico');
+            $table->unsignedBigInteger('localita_nascita_id')->nullable();
+            $table->foreign('localita_nascita_id')->references('id')->on('tabella_localita');
 
-            $table->string('telefono');
-            $table->string('email');
+            $table->string('codice_fiscale')->nullable();                        
+
+            $table->string('indirizzo')->nullable();
+            $table->string('civico')->nullable();
+            $table->unsignedBigInteger('localita_residenza_id')->nullable();
+            $table->foreign('localita_residenza_id')->references('id')->on('tabella_localita');
+
+            $table->string('telefono')->nullable();
+            $table->string('telefono_fisso')->nullable();
+            $table->string('email')->nullable();
             
-            $table->text('note');
-            
+            $table->text('note')->nullable();
+
+            $table->integer('documento')->nullable();
+            $table->string('documento_numero')->nullable();
+            $table->date('documento_data_rilascio')->nullable();
+            $table->unsignedBigInteger('documento_localita_rilascio_id')->nullable();
+            $table->foreign('documento_localita_rilascio_id')->references('id')->on('tabella_localita');
+
+            $table->string('gruppo_sanguigno')->nullable();
+
+            $table->boolean('consenso_privacy')->nullable();
+            $table->boolean('consenso_730')->nullable();
+
+            $table->boolean('consenso_sms')->nullable();
+            $table->boolean('consenso_email')->nullable();
+                       
             $table->timestamps();
         });
     }

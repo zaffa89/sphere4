@@ -13,14 +13,19 @@ class Struttura extends Model
 
     protected $guarded = [];
 
+    public function sphereUser()
+    {
+        return $this->hasMany(SphereUser::class , 'struttura_id');
+    }
+    
     public function ambulatori()
     {
         return $this->hasMany(Ambulatorio::class , 'struttura_id');
     }
 
-    public function medici()
+    public function orariMedici()
     {
-        return $this->hasMany(Medico::class , 'struttura_id');
+        return $this->hasManyThrough(OrarioMedico::class , Ambulatorio::class , 'struttura_id');
     }
 
     public function pazienti()
@@ -30,6 +35,6 @@ class Struttura extends Model
 
     public function prenotazioni()
     {
-        return $this->hasMany(Prenotazione::class);
+        return $this->hasMany(Prenotazione::class , 'struttura_id');
     }
 }

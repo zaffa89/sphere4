@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        JsonResource::withoutWrapping();
+        
+        // map polymorphic relationship
+        Relation::enforceMorphMap([
+            'users' => 'App\Models\User',
+            'medsport' => 'App\Models\VisitaMedsport',
+            'ambulatoriale' => 'App\Models\VisitaAmbulatoriale',
+            'cardiologica' => 'App\Models\VisitaCardiologica',
+            'fisioterapica' => 'App\Models\VisitaFisioterapica',
+        ]);
     }
 }

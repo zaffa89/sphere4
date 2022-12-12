@@ -13,11 +13,25 @@ class Medico extends Model
     
     protected $guarded = [];
     
+    protected $attributes = [
+        'sphere_user_id' => null,
+        'attivo' =>  true,
+        'abilitazione_medsport' => true,
+        'abilitazione_ambulatoriale' => true,
+        'abilitazione_cardiologia' => true,
+        'abilitazione_fisioterapia' => true,
+    ];
+
     public function struttura()
     {
         return $this->belongsTo(Struttura::class);
     }
     
+    public function orariMedico()
+    {
+        return $this->hasMany(OrarioMedico::class);
+    }
+
     public function prenotazioni()
     {
         return $this->hasMany(Prenotazione::class);

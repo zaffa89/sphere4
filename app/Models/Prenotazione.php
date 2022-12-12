@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+use DateTimeInterface;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Prenotazione extends Model
 {
@@ -15,6 +18,19 @@ class Prenotazione extends Model
     
     protected $guarded = [];
     
+    /*
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return Carbon::parse($date)->format('Y-m-d H:i:s');
+    }
+    */
+    
+    /* attributi di default */
+    protected $attributes = [
+        'blocco' => false,
+        'accettata' => false,
+    ];
+
     public function struttura()
     {
         return $this->belongsTo(Struttura::class);
@@ -23,6 +39,11 @@ class Prenotazione extends Model
     public function paziente()
     {
         return $this->belongsTo(Paziente::class);
+    }
+
+    public function societaSportiva()
+    {
+        return $this->belongsTo(SocietaSportiva::class);
     }
 
     //prenotazioni di gruppo ???
@@ -37,28 +58,15 @@ class Prenotazione extends Model
         return $this->belongsTo(Ambulatorio::class);
     }
 
-    public function visiteMedsport()
+    public function visita()
     {
-        return $this->hasMany(VisitaMedsport::class); //has many ???
+        return $this->morphTo(__FUNCTION__ , 'visita_type' , 'visita_id');
     }
 
-    public function visiteAmbulatoriali()
-    {
-        return $this->hasMany(VisitaAmbulatoriale::class); //has many ???
-    }
-
-    public function visiteCardiologiche()
-    {
-        return $this->hasMany(VisitaCardiologica::class); //has many ???
-    }
-
-    public function visiteFisioterapiche()
-    {
-        return $this->hasMany(VisitaFisioterapica::class); //has many ???
-    }
-    
     public function visualizzazioni()
     {
         return $this->morphToMany(SphereUser::class , 'viewable' , 'gdpr_log_views')->withTimestamps();
     }
 }
+
+/* 379 218 50 41 */

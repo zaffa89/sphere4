@@ -78,7 +78,7 @@ class VisitaFisioterapicaController extends Controller
 
         DB::transaction(function () use ($request , $visitaFisioterapica) {
             
-            //$prenotazione->data_visita = $request->data_visita;
+        
             
             VisitaFisioterapicaModificata::dispatchIf($visitaFisioterapica->isDirty() , $visitaFisioterapica , auth()->user()->sphereUser);
             $visitaFisioterapica->save();

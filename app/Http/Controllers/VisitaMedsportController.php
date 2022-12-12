@@ -38,7 +38,7 @@ class VisitaMedsportController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //90000630195 cod fiscale interfulmina
     }
 
     /**
@@ -78,7 +78,7 @@ class VisitaMedsportController extends Controller
 
         DB::transaction(function () use ($request , $visitaMedsport) {
             
-            //$prenotazione->data_visita = $request->data_visita;
+         
             
             VisitaMedsportModificata::dispatchIf($visitaMedsport->isDirty() , $visitaMedsport , auth()->user()->sphereUser);
             $visitaMedsport->save();

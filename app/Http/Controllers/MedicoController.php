@@ -4,9 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\Medico;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class MedicoController extends Controller
 {
+
+    public function ricercaMedico(Request $request)
+    {
+        $request->validate([
+            'ricerca' => 'nullable|string'
+        ]);
+        
+        return Medico::where('ragione_sociale' , 'like' , '%'.strtolower(trim($request->ricerca)).'%')->orderBy('ragione_sociale')->get();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -24,7 +36,7 @@ class MedicoController extends Controller
      */
     public function create()
     {
-        //
+        return new Medico();
     }
 
     /**
@@ -35,7 +47,29 @@ class MedicoController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'ragione_sociale' => 'required',
+            'codice_fiscale' => 'nullable',
+            'telefono' => 'nullable|string|max:15',
+            'telefono_fisso' => 'nullable|string|max:15',
+            'email' => 'nullable|email',
+
+            'colore' => 'nullable',
+            'partita_iva' => 'nullable',
+            'identificativo_fmsi' => 'nullable',
+            'codice_tracciato' => 'nullable',
+            'timbro' => 'nullable',
+            
+            'abilitazione_medsport' => 'boolean',
+            'abilitazione_ambulatoriale' => 'boolean',
+            'abilitazione_cardiologia' => 'boolean',
+            'abilitazione_fisioterapia' => 'boolean',
+
+            'attivo' => 'boolean'            
+        ]);
+        
         $medico = Medico::create($request->all());
+        
         return $medico;
     }
 
@@ -58,7 +92,7 @@ class MedicoController extends Controller
      */
     public function edit(Medico $medico)
     {
-        //
+        return $medico;
     }
 
     /**
@@ -70,8 +104,33 @@ class MedicoController extends Controller
      */
     public function update(Request $request, Medico $medico)
     {
+        //aggiungere validazione
+        $request->validate([
+            'ragione_sociale' => 'required',
+            'codice_fiscale' => 'nullable',
+            'telefono' => 'nullable|string|max:15',
+            'telefono_fisso' => 'nullable|string|max:15',
+            'email' => 'nullable|email',
+
+            'colore' => 'nullable',
+            'partita_iva' => 'nullable',
+            'identificativo_fmsi' => 'nullable',
+            'codice_tracciato' => 'nullable',
+            'timbro' => 'nullable',
+            
+            'abilitazione_medsport' => 'boolean',
+            'abilitazione_ambulatoriale' => 'boolean',
+            'abilitazione_cardiologia' => 'boolean',
+            'abilitazione_fisioterapia' => 'boolean',
+
+            'attivo' => 'boolean'            
+        ]);
+
+    DB::transaction(function () use ($request , $medico) {            
         $medico->update($request->all());
-        return $medico;
+    });
+            
+    return $medico;
     }
 
     /**
