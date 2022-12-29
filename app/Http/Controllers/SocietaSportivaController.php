@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ValidateSocietaSportivaRequest;
 use App\Models\SocietaSportiva;
 use Illuminate\Http\Request;
 
 class SocietaSportivaController extends Controller
 {
-
-    public function search(Request $request)
+    /* POST
+    public function ricercaSocieta(Request $request)
     {
         $request->validate([
             'ricerca' => 'nullable|string'
         ]);
 
         return response()->json(SocietaSportiva::where('ragione_sociale' , 'like' , '%'.$request->ricerca.'%')->orderBy('ragione_sociale')->limit(20)->get() , 200);
+    }
+    */
+    public function ricercaSocieta($queryRicerca)
+    {       
+        return $queryRicerca ? response()->json(SocietaSportiva::where('ragione_sociale' , 'like' , '%'.$queryRicerca.'%')->orderBy('ragione_sociale')->limit(20)->get() , 200) : [];
     }
 
     /**
@@ -24,7 +30,7 @@ class SocietaSportivaController extends Controller
      */
     public function index()
     {
-        //
+        return SocietaSportiva::with('localita')->get();
     }
 
     /**
@@ -34,7 +40,7 @@ class SocietaSportivaController extends Controller
      */
     public function create()
     {
-        //
+        return new SocietaSportiva();
     }
 
     /**
@@ -43,9 +49,11 @@ class SocietaSportivaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ValidateSocietaSportivaRequest $request)
     {
-        //
+        $societaSportiva = SocietaSportiva::create($request->safe()->all());
+
+        return $societaSportiva;
     }
 
     /**
@@ -56,7 +64,7 @@ class SocietaSportivaController extends Controller
      */
     public function show(SocietaSportiva $societaSportiva)
     {
-        //
+        
     }
 
     /**
@@ -67,7 +75,7 @@ class SocietaSportivaController extends Controller
      */
     public function edit(SocietaSportiva $societaSportiva)
     {
-        //
+        return $societaSportiva;
     }
 
     /**
@@ -77,9 +85,11 @@ class SocietaSportivaController extends Controller
      * @param  \App\Models\SocietaSportiva  $societaSportiva
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, SocietaSportiva $societaSportiva)
+    public function update(ValidateSocietaSportivaRequest $request, SocietaSportiva $societaSportiva)
     {
-        //
+        $societaSportiva->update($request->safe()->all());
+
+        return $societaSportiva;
     }
 
     /**

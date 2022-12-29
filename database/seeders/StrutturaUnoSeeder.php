@@ -42,11 +42,15 @@ class StrutturaUnoSeeder extends Seeder
         Medico::create( [ 'ragione_sociale' => 'Medico-2', 'codice_fiscale' => $faker->taxId() ] );
         Medico::create( [ 'ragione_sociale' => 'Medico-3', 'codice_fiscale' => $faker->taxId() ] );
         
-        for($i=0; $i < 500; $i++) {
+        for($i=0; $i < 2000; $i++) {
+            $nome = strtolower($faker->firstName());
+            $cognome = strtolower($faker->lastName());
+            $ragione_sociale = $cognome.' '.$nome;
+            
             $struttura->pazienti()->create([            
-                'nome' => strtolower($faker->firstName()),
-                'cognome' => strtolower($faker->lastName()),
-                'ragione_sociale' => strtolower($faker->lastName().' '.$faker->firstName()),
+                'nome' => $nome,
+                'cognome' => $cognome,
+                'ragione_sociale' => $ragione_sociale,
                 'codice_fiscale' => strtoupper($faker->unique()->taxId()),
                 'sesso' => $faker->randomElement(['M' , 'F']),
                 'data_nascita' => $faker->date(),
@@ -60,16 +64,20 @@ class StrutturaUnoSeeder extends Seeder
                 'note' => $faker->text(50),
                 'localita_nascita_id' => rand(1 , 8000),
                 'localita_residenza_id' => rand(1 , 8000),
-                'documento_localita_rilascio_id' => rand(1 , 8000)
+                'documento_localita_rilascio_id' => rand(1 , 8000),
+                
+                'disabile' => rand(0 , 1) == 1
             ]);
         }
 
-        for($i=0; $i < 500; $i++) {
+        for($i=0; $i < 2000; $i++) {
 
             $visita_type = rand(0 , 3);
             switch($visita_type) {
                 case 0:
-                    $visita = VisitaMedsport::create(['prestazione_id' => rand(1,2) , 'sport_id' => 1364]);
+                    $visita = VisitaMedsport::create(['prestazione_id' => rand(1,3) , 'sport_id' => rand(1204 , 1457)]);
+                    $visita->preAnamnesi()->create(['diabete' => rand(0,1) == 1]);
+                    $visita->datiClinici()->create(['capacita_vitale' => rand(1, 50)]);
                 break;
                 case 1:
                     $visita = VisitaAmbulatoriale::create(['prestazione_id' => rand(1,2)]);
@@ -95,7 +103,7 @@ class StrutturaUnoSeeder extends Seeder
                 'data_fine' => Carbon::parse($datetime)->addMinutes(10)->format('Y-m-d H:i:s'),
                 
                 //chiavi esterne
-                'paziente_id' => $faker->numberBetween(1 , 500),
+                'paziente_id' => $faker->numberBetween(1 , 2000),
                 
                 'medico_id' => $rand_id_med_ambu,
                 

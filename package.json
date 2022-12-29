@@ -21,8 +21,8 @@
         "vue": "^3.2.31"
     },
     "dependencies": {
-        "@headlessui/vue": "^1.7.3",
-        "@heroicons/vue": "^2.0.11",
+        "@headlessui/vue": "^1.7.7",
+        "@heroicons/vue": "^2.0.13",
         "pinia": "^2.0.14"
     }
 }

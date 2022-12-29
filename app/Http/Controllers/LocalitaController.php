@@ -7,11 +7,11 @@ use Illuminate\Http\Request;
 
 class LocalitaController extends Controller
 {
-
-    public function ricerca(Request $request)
+    public function ricerca($queryRicerca)
     {
-        return Localita::where('nome' , 'like' , '%'.$request->ricerca.'%')->orderBy('nome')->get();
+        return $queryRicerca ? Localita::where('nome' , 'like' , '%'.$queryRicerca.'%')->orderBy('nome')->limit(10)->get() : [];
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +19,7 @@ class LocalitaController extends Controller
      */
     public function index()
     {
-        return Localita::orderBy('nome')->get();
+        //
     }
 
     /**
@@ -46,21 +46,21 @@ class LocalitaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Localita  $localita
+     * @param  \App\Models\Localita  $localitum
      * @return \Illuminate\Http\Response
      */
-    public function show(Localita $localita)
+    public function show(Localita $localitum)
     {
-        //
+        return $localitum;
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Localita  $localita
+     * @param  \App\Models\Localita  $localitum
      * @return \Illuminate\Http\Response
      */
-    public function edit(Localita $localita)
+    public function edit(Localita $localitum)
     {
         //
     }
@@ -69,10 +69,10 @@ class LocalitaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Localita  $localita
+     * @param  \App\Models\Localita  $localitum
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Localita $localita)
+    public function update(Request $request, Localita $localitum)
     {
         //
     }
@@ -80,10 +80,10 @@ class LocalitaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Localita  $localita
+     * @param  \App\Models\Localita  $localitum
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Localita $localita)
+    public function destroy(Localita $localitum)
     {
         //
     }

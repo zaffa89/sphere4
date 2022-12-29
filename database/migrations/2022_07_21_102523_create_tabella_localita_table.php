@@ -16,9 +16,11 @@ return new class extends Migration
         Schema::create('tabella_localita', function (Blueprint $table) {
             $table->id();
             $table->integer('vecchio_id');
-            $table->string('nome');            
+            $table->string('nome');
+            $table->unsignedBigInteger('provincia_id');    
             $table->string('provincia');
             $table->string('sigla_provincia');
+            $table->unsignedBigInteger('regione_id');
             $table->string('regione');
             $table->string('nazione');
             $table->string('cap')->nullable();

@@ -50,7 +50,7 @@
               <label for="desktop-search" class="sr-only">Search</label>
               <div class="relative text-white focus-within:text-gray-600">
                 <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
-                  <SearchIcon class="h-5 w-5" aria-hidden="true" />
+                  <MagnifyingGlassIcon  class="h-5 w-5" aria-hidden="true" />
                 </div>
                 <input id="desktop-search" class="block w-full bg-white bg-opacity-20 py-2 pl-10 pr-3 border border-transparent rounded-md leading-5 text-gray-900 placeholder-white focus:outline-none focus:bg-opacity-100 focus:border-transparent focus:placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="Search" type="search" name="search" />
               </div>
@@ -62,18 +62,21 @@
             <!-- Mobile menu button -->
             <PopoverButton class="bg-transparent p-2 rounded-md inline-flex items-center justify-center text-blue-200 hover:text-white hover:bg-white hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-white">
               <span class="sr-only">Open main menu</span>
-              <MenuIcon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
-              <XIcon v-else class="block h-6 w-6" aria-hidden="true" />
+              <Bars3Icon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
+              <XMarkIcon v-else class="block h-6 w-6" aria-hidden="true" />
             </PopoverButton>
           </div>
         </div>
         <div class="hidden lg:block border-t border-white border-opacity-20 py-5">
           <div class="grid grid-cols-3 gap-8 items-center">
             <div class="col-span-2">
-              <nav class="flex space-x-4">
-                <Link v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'text-white' : 'text-blue-100', 'text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10']" :aria-current="item.current ? 'page' : undefined">
-                  {{ item.name }}
-                </Link>
+              <nav class="flex space-x-4">                
+                <Link href="/" :class="[route().current('homepage') ? 'text-white bg-opacity-10' : 'text-blue-100', 'text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10']">Homepage</Link>
+                <Link href="/" :class="[route().current('modulistica') ? 'text-white' : 'text-blue-100', 'text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10']">Modulistica</Link>
+                <Link v-if="$page.props.user" href="#" :class="[route().current('prenotazioni')  ? 'text-white' : 'text-blue-100', 'text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10']">Le tue prenotazioni</Link>
+                <Link v-if="$page.props.user" href="#" :class="[route().current('anagrafiche')  ? 'text-white' : 'text-blue-100', 'text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10']">Le tue anagrafiche</Link>
+                <Link v-if="$page.props.user?.admin" :href="route('admin')" :class="[route().current('admin') ? 'text-white' : 'text-blue-100', 'text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10']">Impostazioni</Link>
+               
               </nav>
             </div>
             <div>
@@ -81,7 +84,7 @@
                 <label for="mobile-search" class="sr-only">Search</label>
                 <div class="relative text-white focus-within:text-gray-600">
                   <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
-                    <SearchIcon class="h-5 w-5" aria-hidden="true" />
+                    <MagnifyingGlassIcon  class="h-5 w-5" aria-hidden="true" />
                   </div>
                   <input id="mobile-search" class="block w-full bg-white bg-opacity-20 py-2 pl-10 pr-3 border border-transparent rounded-md leading-5 text-gray-900 placeholder-white focus:outline-none focus:bg-opacity-100 focus:border-transparent focus:placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="Search" type="search" name="search" />
                 </div>
@@ -108,12 +111,16 @@
                     <div class="-mr-2">
                       <PopoverButton class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
                         <span class="sr-only">Close menu</span>
-                        <XIcon class="h-6 w-6" aria-hidden="true" />
+                        <XMarkIcon class="h-6 w-6" aria-hidden="true" />
                       </PopoverButton>
                     </div>
                   </div>
-                  <div class="mt-3 px-2 space-y-1">
-                    <Link v-for="item in navigation" :key="item.name" :href="item.href" class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800">{{ item.name }}</Link>
+                  <div class="mt-3 px-2 space-y-1">                    
+                    <Link href="/"  :class="[ route().current('homepage') ? 'bg-gray-200' : 'bg-white' , 'block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800']">Homepage</Link>
+                    <Link href="/" :class="[ route().current('modulistica') ? 'bg-gray-200' : 'bg-white' , 'block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800']">Modulistica</Link> 
+                    <Link v-if="$page.props.user" href="#" :class="[ route().current('prenotazioni') ? 'bg-gray-200' : 'bg-white' , 'block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800']">Le tue prenotazioni</Link> 
+                    <Link v-if="$page.props.user" href="#" :class="[ route().current('anagrafiche') ? 'bg-gray-200' : 'bg-white' , 'block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800']">Le tue anagrafiche</Link> 
+                    <Link v-if="$page.props.user?.admin" :href="route('admin')" :class="[ route().current('admin') ? 'bg-gray-200' : 'bg-white' , 'block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800']">Impostazioni</Link>                                        
                   </div>
                 </div>
                 <div class="pt-4 pb-2">
@@ -122,8 +129,7 @@
                       <UserCircleIcon class="h-10 w-10 rounded-full text-gray-400" /> 
                     </div>
                     <div class="ml-3 min-w-0 flex-1">
-                      <div class="text-base font-medium text-gray-800 truncate">{{ user.name }}</div>
-                      <div class="text-sm font-medium text-gray-500 truncate">{{ user.email }}</div>
+                      <div class="text-base font-medium text-gray-800 truncate">{{ $page.props.user.email }}</div>                      
                     </div>
                     <button type="button" class="ml-auto flex-shrink-0 bg-white p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                       <span class="sr-only">View notifications</span>
@@ -146,20 +152,7 @@
     </Popover>
     <main class="-mt-24 pb-8">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <!-- Main 3 column grid -->
-        <div class="grid grid-cols-1 gap-4 items-start lg:grid-cols-3 lg:gap-8">
-          <!-- Left column -->
-          <div class="grid grid-cols-1 gap-4" :class="[hideSidebar ? 'lg:col-span-3' : 'lg:col-span-2' , rightColumnFirst ? 'order-2 lg:order-1' : switchColumns ? 'order-2' : 'order-1']">
-            <!-- Your content -->
-            <slot name="main" />
-          </div>
-
-          <!-- Right column -->
-          <div class="grid grid-cols-1 gap-4" :class="[rightColumnFirst ? 'order-1 lg:order-2' : switchColumns ? 'order-1' : 'order-2']" v-if="!hideSidebar">                                 
-            <!-- Your content -->
-            <slot name="side" />            
-          </div>
-        </div>
+        <slot />
       </div>
     </main>
     <footer>
@@ -186,55 +179,24 @@ import {
   TransitionChild,
   TransitionRoot,
 } from '@headlessui/vue'
-import { BellIcon, MenuIcon, XIcon , UserCircleIcon} from '@heroicons/vue/outline'
-import { SearchIcon } from '@heroicons/vue/solid'
+import { BellIcon, Bars3Icon, XMarkIcon , UserCircleIcon} from '@heroicons/vue/20/solid'
+import { MagnifyingGlassIcon  } from '@heroicons/vue/20/solid'
 
 const logout = () => {
     Inertia.post(route('logout'));
 };
 
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
-
-
-
-
 </script>
 
 <script>
 	export default {
-		props: {
-			hideSidebar: {
-				type: Boolean,
-				default: false
-			},
-			rightColumnFirst: {
-				type: Boolean,
-				default: false
-			},
-      switchColumns: {
-        type: Boolean,
-        default: false
-      }
-		},
 		data()
 		{
 			return {
 				guestNavigation : [
-				{ name: 'Entra', href: '/login' },
-				{ name: 'Registrati', href: '/register' },
-				],
-				navigation : [
-				{ name: 'Homepage', href: '/', current: route().current('homepage') , visible: true },				
-				{ name: 'Le tue prenotazioni', href: '#', current: false , visible: true },
-				{ name: 'Modulistica', href: '#', current: false , visible: true },
-				{ name: 'Le tue anagrafiche', href: '#', current: false , visible: true },
-				{ name: 'Impostazioni', href: route('admin'), current: route().current('admin') , visible: true },
-				]
+				    { name: 'Entra', href: '/login' },
+				    { name: 'Registrati', href: '/register' },
+				]				
 			}
 		}
 	}

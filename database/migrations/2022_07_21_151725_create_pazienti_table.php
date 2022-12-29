@@ -41,6 +41,7 @@ return new class extends Migration
             $table->string('civico')->nullable();
             $table->unsignedBigInteger('localita_residenza_id')->nullable();
             $table->foreign('localita_residenza_id')->references('id')->on('tabella_localita');
+            $table->string('cap_residenza')->nullable();
 
             $table->string('telefono')->nullable();
             $table->string('telefono_fisso')->nullable();
@@ -54,8 +55,10 @@ return new class extends Migration
             $table->unsignedBigInteger('documento_localita_rilascio_id')->nullable();
             $table->foreign('documento_localita_rilascio_id')->references('id')->on('tabella_localita');
 
+            $table->boolean('disabile')->default(false);
             $table->string('gruppo_sanguigno')->nullable();
-
+            $table->string('fattore_rh')->nullable();
+            
             $table->boolean('consenso_privacy')->nullable();
             $table->boolean('consenso_730')->nullable();
 

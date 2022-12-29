@@ -22,7 +22,13 @@ return new class extends Migration
             $table->unsignedBigInteger('prestazione_id');
             $table->foreign('prestazione_id')->references('id')->on('prestazioni_medsport');
 
-            $table->integer('sport_id')->nullable();
+            $table->unsignedBigInteger('sport_id')->nullable();
+            $table->foreign('sport_id')->references('id')->on('tabella_sport');
+
+            $table->boolean('visita_privata')->default(false);
+            $table->integer('pagamento_a_carico')->default(0); //0 : non specificato , 1: atleta , 2: società , 3: gratuita
+            $table->string('posizione_ticket')->nullable();
+
             $table->timestamps();
         });
     }

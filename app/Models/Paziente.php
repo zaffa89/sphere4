@@ -6,6 +6,7 @@ use DateTimeInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Paziente extends Model
@@ -55,7 +56,8 @@ class Paziente extends Model
 
         'note' => null,
         'gruppo_sanguigno' => null,
-
+        'disabile' => false,
+        
         //consensi
         'consenso_privacy' => true,
         'consenso_730' => true,
@@ -72,7 +74,7 @@ class Paziente extends Model
     public function prenotazioni()
     {
         return $this->hasMany(Prenotazione::class);
-    }
+    }    
 
     public function ultimaPrenotazione()
     {

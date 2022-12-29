@@ -24,7 +24,7 @@ class SportSeeder extends Seeder
                 'id' => $sport_vecchio->id_sport,
                 'nome' => strtolower($sport_vecchio->descrizione),
                 'tipo_visita' => $sport_vecchio->tipo_visita,
-                'codice' => $sport_vecchio->codice,
+                'codice_sport' => $sport_vecchio->codice,
                 'codice_federazione' => $sport_vecchio->cod_fed,
                 'sigla_federazione' => $sport_vecchio->sigla_fed,
                 'mesi_scadenza' => $sport_vecchio->mm_scad,

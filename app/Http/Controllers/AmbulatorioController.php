@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ValidateAmbulatorioRequest;
 use App\Models\Ambulatorio;
 use App\Models\Struttura;
 use Illuminate\Http\Request;
@@ -47,7 +48,7 @@ class AmbulatorioController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ValidateAmbulatorioRequest $request)
     {
         $ambulatorio = Ambulatorio::create($request->all());
         return $ambulatorio;
@@ -85,9 +86,9 @@ class AmbulatorioController extends Controller
      * @param  \App\Models\Ambulatorio  $ambulatorio
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Ambulatorio $ambulatorio)
+    public function update(ValidateAmbulatorioRequest $request, Ambulatorio $ambulatorio)
     {
-        $ambulatorio->update($request->all());
+        $ambulatorio->update($request->safe()->all());
         return $ambulatorio;
     }
 

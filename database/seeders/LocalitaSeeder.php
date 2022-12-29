@@ -27,8 +27,10 @@ class LocalitaSeeder extends Seeder
         ->select(
             'tab_localita.id_localita as id', 
             'tab_localita.descrizione as nome' , 
+            'tab_provincia.id_provincia as provincia_id',
             'tab_provincia.descrizione as provincia' ,
             'tab_provincia.codice as sigla_provincia' , 
+            'tab_regione.id_regione as regione_id',
             'tab_regione.descrizione as regione',
             'tab_nazione.descrizione as nazione',
             'tab_localita.cap',
@@ -41,8 +43,10 @@ class LocalitaSeeder extends Seeder
             Localita::create([
                 'vecchio_id' => $localita_vecchia->id,
                 'nome' => $this->sanitizeString($localita_vecchia->nome),
+                'provincia_id' => $localita_vecchia->provincia_id,
                 'provincia' => strtolower($localita_vecchia->provincia),
                 'sigla_provincia' => strtolower($localita_vecchia->sigla_provincia),
+                'regione_id' => $localita_vecchia->regione_id,
                 'regione' => strtolower($localita_vecchia->regione),
                 'nazione' => strtolower($localita_vecchia->nazione),
                 'cap' => $localita_vecchia->cap,

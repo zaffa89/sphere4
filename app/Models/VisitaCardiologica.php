@@ -17,6 +17,16 @@ class VisitaCardiologica extends Model
         'prestazione_id' => null,      
     ];
     
+    public function prenotazione() 
+    {
+        return $this->morphOne(Prenotazione::class , 'visita');
+    }
+
+    public function preAnamnesi() 
+    {
+        return $this->morphOne(PreAnamnesi::class , 'visita');
+    }
+    
     public function prestazione()
     {
         return $this->belongsTo(PrestazioneCardiologica::class , 'prestazione_id');
@@ -27,8 +37,5 @@ class VisitaCardiologica extends Model
         return $this->morphToMany(SphereUser::class , 'viewable' , 'gdpr_log_views')->withTimestamps();
     }
 
-    public function prenotazione() 
-    {
-        return $this->morphOne(Prenotazione::class , 'visita');
-    }
+    
 }

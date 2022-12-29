@@ -17,6 +17,29 @@ return new class extends Migration
             $table->id();
 
             $table->string('ragione_sociale');
+            $table->string('indirizzo')->nullable();
+            $table->string('civico')->nullable();
+
+            $table->unsignedBigInteger('localita_id')->nullable();
+            $table->foreign('localita_id')->references('id')->on('tabella_localita');
+
+            $table->string('telefono')->nullable();
+            $table->string('email')->nullable();
+
+            $table->string('responsabile')->nullable();
+            $table->string('responsabile_telefono')->nullable();
+            $table->string('responsabile_email')->nullable();
+
+            $table->string('presidente')->nullable();
+            $table->string('presidente_telefono')->nullable();
+            $table->string('presidente_email')->nullable();            
+
+            $table->string('partita_iva')->nullable();
+            $table->string('codice_fiscale')->nullable();
+            
+            $table->string('codice_destinatario')->nullable();
+            $table->string('pec')->nullable();
+            $table->string('codice_nazione')->nullable();
 
             $table->timestamps();
         });

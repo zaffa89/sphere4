@@ -43,10 +43,14 @@ class StrutturaDueSeeder extends Seeder
         Medico::create( [ 'ragione_sociale' => 'Medico-6', 'codice_fiscale' => $faker->taxId() ] );
         
         for($i=0; $i < 500; $i++) {
+            $nome = strtolower($faker->firstName());
+            $cognome = strtolower($faker->lastName());
+            $ragione_sociale = $cognome.' '.$nome;
+            
             $struttura->pazienti()->create([            
-                'nome' => strtolower($faker->firstName()),
-                'cognome' => strtolower($faker->lastName()),
-                'ragione_sociale' => $faker->lastName().' '.$faker->firstName(),
+                'nome' => $nome,
+                'cognome' => $cognome,
+                'ragione_sociale' => $ragione_sociale,
                 'codice_fiscale' => $faker->unique()->taxId(),
                 'sesso' => $faker->randomElement(['M' , 'F']),
                 'data_nascita' => $faker->date(),
@@ -61,6 +65,7 @@ class StrutturaDueSeeder extends Seeder
                 'localita_nascita_id' => rand(1 , 8000),
                 'localita_residenza_id' => rand(1 , 8000),
                 'documento_localita_rilascio_id' => rand(1 , 8000),
+                'disabile' => rand(0 , 1) == 1
             ]);
         }
 
@@ -69,7 +74,7 @@ class StrutturaDueSeeder extends Seeder
             $visita_type = rand(0 , 3);
             switch($visita_type) {
                 case 0:
-                    $visita = VisitaMedsport::create(['prestazione_id' => rand(1,2) , 'sport_id' => 1364]);
+                    $visita = VisitaMedsport::create(['prestazione_id' => rand(1,3) , 'sport_id' => 1364]);
                 break;
                 case 1:
                     $visita = VisitaAmbulatoriale::create(['prestazione_id' => rand(1,2)]);

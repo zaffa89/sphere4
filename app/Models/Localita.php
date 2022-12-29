@@ -22,4 +22,9 @@ class Localita extends Model
     {
         return $this->belongsTo(Asl::class , 'asl_id');
     }
+
+    public function societaSportive()
+    {
+        return $this->hasMany(SocietaSportiva::class , 'localita_id');
+    }
 }

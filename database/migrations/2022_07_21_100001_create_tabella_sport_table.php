@@ -13,13 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('sports', function (Blueprint $table) {
+        Schema::create('tabella_sport', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
             $table->string('tipo_visita');
-            $table->string('codice')->nullable();
+            $table->string('codice_sport')->nullable();
+            
             $table->string('codice_federazione')->nullable();
             $table->string('sigla_federazione')->nullable();
+            $table->string('affiliazione')->nullable();
+
             $table->integer('mesi_scadenza');
 
             $table->integer('eta_minima_maschi')->nullable();
@@ -38,10 +41,8 @@ return new class extends Migration
             $table->boolean('richiesto_gruppo_sanguigno')->default(false);
             $table->boolean('richiesto_eeg')->default(false);
             $table->boolean('prenotabile_online')->default(false);
-            
-            
-            
 
+            $table->boolean('storico')->nullable();
             $table->timestamps();
         });
     }
@@ -53,6 +54,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sports');
+        Schema::dropIfExists('tabella_sport');
     }
 };

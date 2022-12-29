@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Medico;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -30,14 +31,33 @@ class AdminController extends Controller
     {
         $this->authorize('solutionmed');
 
-        return Inertia::render('Admin/Impostazioni');
+        $settings = Setting::all();
+        $settingsObject = [];
+        foreach($settings as $key => $value)
+        {
+            $settingsObject[$value->attribute] = $value;
+        }
+        
+        return Inertia::render('Admin/Impostazioni' , [
+            'settings' => config('settings')
+        ]);
+    }
+
+    public function saveSetting(Request $request , Setting $setting)
+    {
+        $setting->update([
+            'value' => $request->all()
+        ]);
+        return $setting;
     }
 
     public function notifiche()
     {
         $this->authorize('solutionmed');
 
-        return Inertia::render('Admin/Notifiche');
+        return Inertia::render('Admin/Notifiche' , [
+            'settings' => config('settings')
+        ]);
     }
 
     public function pagamenti()

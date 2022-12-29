@@ -15,6 +15,12 @@ class Ambulatorio extends Model
     
     protected $guarded = [];
     
+    protected $attributes = [
+        'nome' => null,
+        'struttura_id' => 1, //da fixare
+        'ordine' => 1
+    ];
+    
     public function struttura()
     {
         return $this->belongsTo(Struttura::class);

@@ -20,6 +20,7 @@ class PazienteController extends Controller
     private $alfabeto = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
     private $matriceCodiceControllo = ["01" => 1, "00" => 0, "11" => 0, "10" => 1, "21" => 5, "20" => 2, "31" => 7, "30" => 3, "41" => 9, "40" => 4, "51" => 13, "50" => 5, "61" => 15, "60" => 6, "71" => 17, "70" => 7, "81" => 19, "80" => 8, "91" => 21, "90" => 9, "101" => 1, "100" => 0, "111" => 0, "110" => 1, "121" => 5, "120" => 2, "131" => 7, "130" => 3, "141" => 9, "140" => 4, "151" => 13, "150" => 5, "161" => 15, "160" => 6, "171" => 17, "170" => 7, "181" => 19, "180" => 8, "191" => 21, "190" => 9, "201" => 2, "200" => 10, "211" => 4, "210" => 11, "221" => 18, "220" => 12, "231" => 20, "230" => 13, "241" => 11, "240" => 14, "251" => 3, "250" => 15, "261" => 6, "260" => 16, "271" => 8, "270" => 17, "281" => 12, "280" => 18, "291" => 14, "290" => 19, "301" => 16, "300" => 20, "311" => 10, "310" => 21, "321" => 22, "320" => 22, "331" => 25, "330" => 23, "341" => 24, "340" => 24, "351" => 23, "350" => 25];        
 
+    /* POST
     public function ricercaPaziente(Request $request)
     {
         $request->validate([
@@ -28,7 +29,12 @@ class PazienteController extends Controller
         
         return Paziente::where('ragione_sociale' , 'like' , '%'.strtolower(trim($request->ricerca)).'%')->orderBy('ragione_sociale')->limit(200)->get();
     }
-    
+    */
+    public function ricercaPaziente($queryRicerca)
+    {
+        return $queryRicerca ? Paziente::with('localitaNascita' , 'localitaResidenza' , 'localitaRilascioDocumento')->where('ragione_sociale' , 'like' , '%'.strtolower(trim($queryRicerca)).'%')->orderBy('ragione_sociale')->limit(10)->get() : [];
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -69,12 +75,44 @@ class PazienteController extends Controller
             
         ]);
         
-        $paziente = Paziente::create(array_merge([
+        $paziente = Paziente::create([
             'user_id' => null,
             'sphere_user_id' => Auth::user()->sphereUser->id,
-            'struttura_id' => Auth::user()->sphereUser->struttura_id,
-            'ragione_sociale' => strtolower($request->cognome.' '.$request->nome),
-        ] , $request->except('struttura_id')));
+
+            'nome' => $request->nome,
+            'cognome' => $request->cognome,                
+            'ragione_sociale' => $request->cognome.' '.$request->nome,
+            'data_nascita' => $request->data_nascita,
+            'sesso' => $request->sesso,
+            'localita_nascita_id' => $request->localita_nascita_id,
+            'codice_fiscale' => $request->codice_fiscale,
+
+            'struttura_id' => 1, //da fixare
+            'codice' => null, //fare metodo appropriato                
+            
+            
+            'localita_residenza_id' => $request->localita_residenza_id,
+            'indirizzo' => $request->indirizzo,
+            'civico' => $request->civico,
+
+            'telefono' => $request->telefono,
+            'telefono_fisso' => $request->telefono_fisso,
+            'email' => $request->email,
+
+            'note' => $request->note,
+
+            'documento' => $request->documento,
+            'documento_numero' => $request->documento_numero,
+            'documento_data_rilascio' => $request->documento_data_rilascio,
+            'documento_localita_rilascio_id' => $request->documento_localita_rilascio_id,
+
+            'gruppo_sanguigno' => $request->gruppo_sanguigno,
+
+            'consenso_privacy' => $request->consenso_privacy,
+            'consenso_730' => $request->consenso_730,
+            'consenso_sms' => $request->consenso_sms,
+            'consenso_email' => $request->consenso_email,
+        ]);
         
         return $paziente;
     }
@@ -87,7 +125,7 @@ class PazienteController extends Controller
      */
     public function show(Paziente $paziente)
     {
-        
+        return $paziente->load('localitaNascita' , 'localitaResidenza' , 'localitaRilascioDocumento');
     }
 
     /**
@@ -98,7 +136,7 @@ class PazienteController extends Controller
      */
     public function edit(Paziente $paziente)
     {
-        return $paziente->load('localitaNascita' , 'localitaResidenza' , 'localitaRilascioDocumento');
+        return $paziente;
     }
 
     /**
@@ -150,6 +188,7 @@ class PazienteController extends Controller
                 'documento_data_rilascio' => $request->documento_data_rilascio,
                 'documento_localita_rilascio_id' => $request->documento_localita_rilascio_id,
 
+                'disabile' => $request->disabile,
                 'gruppo_sanguigno' => $request->gruppo_sanguigno,
 
                 'consenso_privacy' => $request->consenso_privacy,
@@ -159,7 +198,7 @@ class PazienteController extends Controller
             ]);
         });
                 
-        return $paziente;
+        return $paziente->load('localitaNascita' , 'localitaResidenza');
     }
 
     /**
@@ -173,13 +212,11 @@ class PazienteController extends Controller
         $paziente->delete();
         
     }
-
-
     
     /* CODICE FISCALE ******************************************/
     public function cercaTramiteCodiceFiscale($codiceFiscale)
     {
-        $paziente = Paziente::where('codice_fiscale' , '=' , trim($codiceFiscale))->first();
+        $paziente = Paziente::with('localitaNascita')->withCount('prenotazioni')->where('codice_fiscale' , '=' , trim($codiceFiscale))->first();
         return $paziente ? response()->json($paziente , 200) : response(null , 404);
     }
 

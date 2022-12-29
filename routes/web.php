@@ -41,6 +41,8 @@ Route::middleware(['auth' , 'solutionmed'])->group(function () {
     Route::get('admin/integrazioni' , [AdminController::class , 'integrazioni'])->name('admin.integrazioni');    
 });
 
+
+/* tests */
 Route::get('/certificato' , function () {
     return view('certificato' , ['nome' => 'Zaffanelli Nicholas' , 'sport' => 'Kayak']);
 });

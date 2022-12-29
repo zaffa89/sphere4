@@ -1,6 +1,7 @@
 <template>
-    <AppLayout>
-        <template #main>
+    <div class="grid grid-cols-1 gap-4 items-start lg:grid-cols-3 lg:gap-8">                   
+        <div class="col-span-1 lg:col-span-2 flex flex-col gap-4">
+
             <div class="rounded-lg bg-white overflow-hidden shadow p-6">
                 <h4 class="text-xl mb-4">Benvenuti nella prenotazione online di Solution Med Srl</h4>
                 <p class="text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut a aliquam tortor, vel tristique mauris. Maecenas eu ipsum porta, rutrum urna eget, eleifend nunc. Mauris euismod, enim nec posuere gravida, sem massa ornare velit, sed facilisis sem ex eget sapien. Maecenas vehicula urna sed condimentum aliquam. In feugiat semper tortor quis ultrices. Aliquam nisl tortor, malesuada ac fermentum sed, congue vitae neque.</p>
@@ -45,26 +46,28 @@
                                         {{ item.title }}<span aria-hidden="true"> &rarr;</span>
                                     </Link>
                                 </h3>
-                                <p class="mt-1 text-sm text-gray-500">{{ item.description }}</p>
-                            </div>
+                                <p class="mt-1 text-sm text-gray-500" v-if="item.active">{{ item.description }}</p>
+                                <p class="mt-1 text-sm text-red-500" v-else>{{ item.disabledText }}</p>
+                            </div>                            
                         </div>
                     </li>
                 </ul> 
             </div>
-            
-        </template>
-        <template #side>
+        </div>
+        <div class="col-span-1">
             <div class="rounded-lg bg-white overflow-hidden shadow">
                 <div class="p-6">                                           
                     Modulistica
                 </div>                
             </div>
-        </template>
-    </AppLayout>
+        </div>
+    </div>
 </template>
 
-<script>
+<script> 
+/* 1259 28/02 us nuova frontiera 347 25 22 131 */
 export default {
+    layout: AppLayout,
     methods: {
        
     }    
@@ -77,44 +80,66 @@ export default {
     import { Link } from '@inertiajs/inertia-vue3';
 
     import {
-        LoginIcon,
-        PencilAltIcon,
-        ArrowCircleRightIcon,
-        PlusCircleIcon
-    } from '@heroicons/vue/outline';
+        ArrowLeftOnRectangleIcon,
+        PencilIcon,
+        ArrowRightCircleIcon,
+        PlusCircleIcon,
+        TrashIcon,
 
-const not_logged_items = [
-  {
-    title: 'Entra',
-    description: 'Se hai già prenotato da noi, entra con il tuo profilo utente.',
-    icon: LoginIcon,
-    background: 'bg-pink-500',
-    route: route('login')
-  },
-  {
-    title: 'Registrati',
-    description: 'Se è la prima volta che prenoti, registrati ora.',
-    icon: PencilAltIcon,
-    background: 'bg-yellow-500',
-    route: route('register')
-  },
-  {
-    title: 'Continua senza registrarti',
-    description: 'Dovrai registrarti dopo aver scelto data e ora della visita.',
-    icon: ArrowCircleRightIcon,
-    background: 'bg-green-500',
-    route: route('prenotazione.selezione.categoria')
-  }
-]
+    } from '@heroicons/vue/24/outline';
 
-const logged_items = [
-  {
-    title: 'Prenota una visita',
-    description: 'Clicca qui per procedere con una nuova prenotazione.',
-    icon: PlusCircleIcon,
-    background: 'bg-blue-600',
-    route: route('prenotazione.selezione.categoria')
-  },
-  
-]
+    const not_logged_items = [
+    {
+        title: 'Entra',
+        description: 'Se hai già prenotato da noi, entra con il tuo profilo utente.',
+        icon: ArrowLeftOnRectangleIcon,
+        background: 'bg-pink-500',
+        route: route('login')
+    },
+    {
+        title: 'Registrati',
+        description: 'Se è la prima volta che prenoti, registrati ora.',
+        icon: PencilIcon,
+        background: 'bg-yellow-500',
+        route: route('register')
+    },
+    {
+        title: 'Continua senza registrarti',
+        description: 'Dovrai registrarti dopo aver scelto data e ora della visita.',
+        icon: ArrowRightCircleIcon,
+        background: 'bg-green-500',
+        route: route('prenotazione.selezione.categoria')
+    }
+    ]
+
+    const logged_items = [
+        {
+            title: 'Prenota una visita',
+            description: 'Clicca qui per procedere con una nuova prenotazione.',
+            icon: PlusCircleIcon,
+            background: 'bg-blue-600',
+            route: route('prenotazione.selezione.categoria'),
+            active: true,
+            disabledText: 'Prenotazione temporaneamente non possibile'
+        },
+        {
+            title: 'Modifica una prenotazione',
+            description: 'Clicca qui per modificare/spostare una delle tue prenotazioni.',
+            icon: PencilIcon,
+            background: 'bg-yellow-500',
+            route: route('prenotazione.selezione.categoria'),
+            active: false,
+            disabledText: 'Non hai in programma nessuna prenotazione'
+        },
+        {
+            title: 'Cancella una prenotazione',
+            description: 'Clicca qui per annullare una delle tue prenotazioni.',
+            icon: TrashIcon,
+            background: 'bg-red-600',
+            route: route('prenotazione.selezione.categoria'),
+            active: false,
+            disabledText: 'Non hai in programma nessuna prenotazione.'
+        }
+    
+    ]
 </script>

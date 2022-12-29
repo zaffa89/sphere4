@@ -14,7 +14,7 @@
                         </nav>
                     </aside>
 
-                    <div class="divide-y divide-gray-200 col-span-12 lg:col-span-9 py-6">
+                    <div class="divide-y divide-gray-200 col-span-12 lg:col-span-9 p-6">
                         <slot />
                     </div>
                 </div>
@@ -31,17 +31,17 @@
         CogIcon,
         CreditCardIcon,
         KeyIcon,
-        MenuIcon,
+        Bars3Icon,
         UserCircleIcon,
-        ViewGridAddIcon,
-        XIcon,
-    } from '@heroicons/vue/outline'
+        Square2StackIcon,
+        XMarkIcon,
+    } from '@heroicons/vue/24/outline'
     const menu_laterale = [
         { name: 'Generale', href: route('admin'), icon: UserCircleIcon, current: route().current('admin') },
         { name: 'Utenti', href: route('admin.utenti'), icon: KeyIcon, current: route().current('admin.utenti') },
         { name: 'Impostazioni', href: route('admin.impostazioni'), icon: CogIcon, current: route().current('admin.impostazioni') },
         { name: 'Notifiche', href: route('admin.notifiche'), icon: BellIcon, current: route().current('admin.notifiche') },
         { name: 'Pagamenti', href: route('admin.pagamenti'), icon: CreditCardIcon, current: route().current('admin.pagamenti') },
-        { name: 'Integrazioni', href: route('admin.integrazioni'), icon: ViewGridAddIcon, current: route().current('admin.integrazioni') },
+        { name: 'Integrazioni', href: route('admin.integrazioni'), icon: Square2StackIcon, current: route().current('admin.integrazioni') },
     ]
 </script>

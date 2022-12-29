@@ -1,12 +1,12 @@
 <template>
-    <AppLayout :hideSidebar="false">
-        <template #main>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="col-span-2 flex flex-col gap-4">
             <div class="rounded-lg bg-white overflow-hidden shadow p-6">              
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut a aliquam tortor, vel tristique mauris. Maecenas eu ipsum porta, rutrum urna eget, eleifend nunc. Mauris euismod, enim nec posuere gravida, sem massa ornare velit, sed facilisis sem ex eget sapien. Maecenas vehicula urna sed condimentum aliquam. In feugiat semper tortor quis ultrices. Aliquam nisl tortor, malesuada ac fermentum sed, congue vitae neque.               
             </div>
             
-            <div class="rounded-lg bg-white overflow-hidden shadow p-6 flex-col flex gap-5">
-                <div>
+            <div class="flex-col flex gap-5">
+                <div class="rounded-lg bg-white overflow-hidden shadow p-6">
                     <h2 class="text-2xl font-medium text-gray-900">Medicina dello sport</h2>
                     <p class="mt-1 text-md text-gray-500">Quale tipo di visita vuoi prenotare?</p>
                     <ul role="list" class="mt-6 border-t border-gray-200 py-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -29,7 +29,7 @@
                     </ul>
                 </div>
                 
-                <div>
+                <div class="rounded-lg bg-white overflow-hidden shadow p-6">
                     <h2 class="text-2xl font-medium text-gray-900">Area medica</h2>
                     <p class="mt-1 text-md text-gray-500">Quale tipo di visita vuoi prenotare?</p>
                     <ul role="list" class="mt-6 border-t border-gray-200 py-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -56,21 +56,31 @@
                     <a href="#" class="text-md font-medium text-indigo-600 hover:text-indigo-500">Oppure premi qui se la visita richiesta non è in elenco<span aria-hidden="true"> &rarr;</span></a>
                 </div>
             </div>                        
-        </template>
-        <template #side>
+        </div>
+        <div class="col-span-1">
             <div class="rounded-lg bg-white overflow-hidden shadow">
                 <div class="p-6">
                     
                 </div>
             </div>
-        </template>
-    </AppLayout>
+        </div>
+    </div>
 </template>
 
+<script>
+    export default {
+        layout: AppLayout,
+        data() {
+            return {
+                
+            }
+        }
+    }
+</script>
 <script setup>
     import AppLayout from '../../Layouts/AppLayout.vue';
    
-    import { BookmarkIcon } from '@heroicons/vue/outline'
+    import { BookmarkIcon } from '@heroicons/vue/24/outline'
     import { Link } from '@inertiajs/inertia-vue3';
     import { Inertia } from '@inertiajs/inertia';
 

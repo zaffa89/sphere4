@@ -17,6 +17,16 @@ class VisitaAmbulatoriale extends Model
         'prestazione_id' => null,      
     ];
     
+    public function prenotazione() 
+    {
+        return $this->morphOne(Prenotazione::class , 'visita');
+    }
+
+    public function preAnamnesi() 
+    {
+        return $this->morphOne(PreAnamnesi::class , 'visita');
+    }
+    
     public function prestazione()
     {
         return $this->belongsTo(PrestazioneAmbulatoriale::class , 'prestazione_id');
@@ -25,10 +35,5 @@ class VisitaAmbulatoriale extends Model
     public function visualizzazioni()
     {
         return $this->morphToMany(SphereUser::class , 'viewable' , 'gdpr_log_views')->withTimestamps();
-    }
-
-    public function prenotazione() 
-    {
-        return $this->morphOne(Prenotazione::class , 'visita');
     }
 }

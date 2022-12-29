@@ -68,7 +68,7 @@
                                         <div>
                                             <label for="medico" class="block text-sm font-medium text-gray-700">Medico</label>
                                             <select v-model="utente.medico_id" id="medico" name="medico" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                                                <option v-for="medico in medici" :key="medico.id" :value="medico.id"> {{ medico.nome }} </option>                                                
+                                                <option v-for="medico in medici" :key="medico.id" :value="medico.id"> {{ medico.ragione_sociale }} </option>                                                
                                             </select>
                                             <p class="mt-2 text-sm text-gray-500">Sono elencati solo i medici non assegnati ad alcun utente sphere</p>
                                         </div>
@@ -98,7 +98,7 @@
 <script setup>
 import { ref } from 'vue'
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
-import { PlusIcon } from '@heroicons/vue/outline'
+import { PlusIcon } from '@heroicons/vue/24/outline'
 
 </script>
 

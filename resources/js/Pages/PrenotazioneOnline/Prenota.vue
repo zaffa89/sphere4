@@ -23,7 +23,7 @@
 <script setup>
     import AppLayout from '../../Layouts/AppLayout.vue';
    
-    import { BookmarkIcon } from '@heroicons/vue/outline'
+    import { BookmarkIcon } from '@heroicons/vue/24/outline'
     
     import { usePrenotazioneUtenteStore } from '@/stores/PrenotazioneUtenteStore';
 

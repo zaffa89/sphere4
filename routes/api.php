@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccettazioneMedsportController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AmbulatorioController;
 use App\Http\Controllers\CalendarController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\PazienteController;
 use App\Http\Controllers\PrenotazioneController;
 use App\Http\Controllers\SocietaSportivaController;
 use App\Http\Controllers\SphereUserController;
+use App\Http\Controllers\SportController;
 use App\Http\Controllers\StrutturaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -59,26 +61,37 @@ Route::prefix('sphere')->group(function() {
     
         //PAZIENTI
         Route::resource('paziente' , PazienteController::class);     
-        Route::post('ricerca-paziente' , [PazienteController::class , 'ricercaPaziente']);
+        //Route::post('ricerca-paziente' , [PazienteController::class , 'ricercaPaziente']);
+        Route::get('ricerca-paziente/{queryRicerca}' , [PazienteController::class , 'ricercaPaziente']);
         Route::post('calcola-codice-fiscale' , [PazienteController::class , 'calcolaCodiceFiscale']);
         Route::get('cerca-tramite-codice-fiscale/{codiceFiscale}' , [PazienteController::class , 'cercaTramiteCodiceFiscale']);
 
         //SOCIETA SPORTIVE
         Route::resource('societa-sportiva' , SocietaSportivaController::class);
-        Route::post('ricerca-societa' , [SocietaSportivaController::class , 'search']);
-        
+        Route::get('ricerca-societa/{queryRicerca}' , [SocietaSportivaController::class , 'ricercaSocieta']);
+
         //PRENOTAZIONI
         Route::resource('prenotazione' , PrenotazioneController::class)->except('create'); //metodo CREATE separato in quanto creare una prenotazione richiede l'invio di dati dal calendario
         Route::post('prenotazione/create' , [PrenotazioneController::class , 'create']);
         
         //LOCALITA
         Route::resource('localita' , LocalitaController::class);
-        Route::post('ricerca-localita' , [LocalitaController::class , 'ricerca']);
+        //Route::post('ricerca-localita' , [LocalitaController::class , 'ricerca']);
+        Route::get('ricerca-localita/{queryRicerca}' , [LocalitaController::class , 'ricerca']);
 
         //CALENDARIO
         Route::get('calendario/carica' , [CalendarController::class , 'caricaCalendario']);
         Route::put('calendario/sposta-prenotazione/{prenotazione}' , [PrenotazioneController::class , 'move']);
         Route::post('calendario/genera-orario-medico' , [CalendarController::class , 'generaOrarioMedico']);
+
+        //ACCETTAZIONI
+        Route::post('carica-accettazione-medsport' , [AccettazioneMedsportController::class , 'accettazioni']);
+        Route::get('apri-scheda-medsport/{prenotazione}' , [AccettazioneMedsportController::class , 'apriScheda']);
+        Route::get('calcola-posizione-ticket/{visitaMedsport}' , [AccettazioneMedsportController::class , 'calcolaPosizioneTicket']);
+
+        //SPORT
+        Route::resource('sport' , SportController::class);
+        Route::get('sport-tramite-tipo-visita/{tipoVisita}' , [SportController::class , 'sportTramiteTipoVisita']);
     });
 
     //API PANNELLO AMMINISTRAZIONE WEB
@@ -86,6 +99,7 @@ Route::prefix('sphere')->group(function() {
         Route::post('user/create' , [SphereUserController::class , 'store']);
     });
 
+    Route::put('save-setting/{setting}' , [AdminController::class , 'saveSetting']);
 });
 
 

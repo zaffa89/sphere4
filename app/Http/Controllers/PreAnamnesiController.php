@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ValidateSportRequest;
-use App\Models\Sport;
+use App\Models\PreAnamnesi;
 use Illuminate\Http\Request;
 
-class SportController extends Controller
+class PreAnamnesiController extends Controller
 {
-    public function sportTramiteTipoVisita($tipoVisita) {
-        return Sport::where('tipo_visita' , $tipoVisita)->orderBy('nome')->get();
-    }
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +14,7 @@ class SportController extends Controller
      */
     public function index()
     {
-        return Sport::orderBy('nome')->get();
+        //
     }
 
     /**
@@ -28,7 +24,7 @@ class SportController extends Controller
      */
     public function create()
     {
-        return new Sport();
+        //
     }
 
     /**
@@ -37,20 +33,18 @@ class SportController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ValidateSportRequest $request)
+    public function store(Request $request)
     {
-        $sport = Sport::create($request->safe()->all());
-
-        return $sport;
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Sport  $sport
+     * @param  \App\Models\PreAnamnesi  $preAnamnesi
      * @return \Illuminate\Http\Response
      */
-    public function show(Sport $sport)
+    public function show(PreAnamnesi $preAnamnesi)
     {
         //
     }
@@ -58,36 +52,34 @@ class SportController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Sport  $sport
+     * @param  \App\Models\PreAnamnesi  $preAnamnesi
      * @return \Illuminate\Http\Response
      */
-    public function edit(Sport $sport)
+    public function edit(PreAnamnesi $preAnamnesi)
     {
-        return $sport;
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Sport  $sport
+     * @param  \App\Models\PreAnamnesi  $preAnamnesi
      * @return \Illuminate\Http\Response
      */
-    public function update(ValidateSportRequest $request, Sport $sport)
-    {        
-        $sport->update($request->safe()->all());
-
-        return $sport;
+    public function update(Request $request, PreAnamnesi $preAnamnesi)
+    {
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Sport  $sport
+     * @param  \App\Models\PreAnamnesi  $preAnamnesi
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Sport $sport)
+    public function destroy(PreAnamnesi $preAnamnesi)
     {
-        $sport->delete();
+        //
     }
 }

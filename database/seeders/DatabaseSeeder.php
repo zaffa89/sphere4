@@ -46,19 +46,25 @@ class DatabaseSeeder extends Seeder
             'nome' => 'Struttura-2',
             'colore' => 'FFFFFF'
         ]);
+        $this->call(SettingSeeder::class);
         //utenti di default e relativi utenti sphere
         $this->call(UserSeeder::class);
         $this->call(AslSeeder::class);
         $this->call(LocalitaSeeder::class);
         $this->call(SportSeeder::class);
         
-        $prestazioneMedsport = PrestazioneMedsport::create(['nome' => 'Visita B1 ago' , 'tipo_visita' => 'B1' , 'codice' => 'B1' , 'prezzo' => 40.00]);
+        $prestazioneMedsport = PrestazioneMedsport::create(['nome' => 'Visita B1 ago' , 'tipo_visita' => 'B1' , 'codice' => 'B1' , 'prezzo' => 50.00]);
         $sottoprestazione = SottoprestazioneMedsport::create(['nome' => 'Spirometria semplice' , 'codice' => 'SPIRO']);        
         $prestazioneMedsport->sottoprestazioni()->attach($sottoprestazione->id);        
         $prestazioneMedsport->save();
 
         $prestazioneMedsport = PrestazioneMedsport::create(['nome' => 'Visita A1 ago' , 'tipo_visita' => 'A1' , 'codice' => 'A1' , 'prezzo' => 40.00]);
         $sottoprestazione = SottoprestazioneMedsport::create(['nome' => 'Spirometria polpetta' , 'codice' => 'SPIRO-POLP']);        
+        $prestazioneMedsport->sottoprestazioni()->attach($sottoprestazione->id);        
+        $prestazioneMedsport->save();
+
+        $prestazioneMedsport = PrestazioneMedsport::create(['nome' => 'Visita non ago' , 'tipo_visita' => 'BS' , 'codice' => 'BS' , 'prezzo' => 30.00]);
+        $sottoprestazione = SottoprestazioneMedsport::create(['nome' => 'ECG a riposo' , 'codice' => 'ECG-EASY']);        
         $prestazioneMedsport->sottoprestazioni()->attach($sottoprestazione->id);        
         $prestazioneMedsport->save();
 

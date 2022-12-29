@@ -15,11 +15,11 @@ class CalendarController extends Controller
     {        
         return [            
             //'prenotazioni' => PrenotazioneCalendarioResource::collection(Prenotazione::with('paziente')->whereBetween('data_inizio' , [Carbon::now()->subMonth() , Carbon::now()->addMonths(6)])->get()),
-            'prenotazioni' => Prenotazione::with('paziente')->whereBetween('data_inizio' , [Carbon::now()->subMonth() , Carbon::now()->addMonths(6)])->get(),
+            'prenotazioni' => Prenotazione::with('paziente')->whereBetween('data_inizio' , [Carbon::now()->subMonth() , Carbon::now()->addMonths(2)])->get(),
             //'ambulatori' => Ambulatorio::all(),
             //'medici' => Medico::all(),
             //'orari_medici' => OrarioMedico::all(),
-            'strutture' => Struttura::with('ambulatori' , 'orariMedici')->get(),            
+            'strutture' => Struttura::with('ambulatori' , 'orariMedici')->get(),
             //'servizi_medsport' => PrestazioneMedsport::with('sottoprestazioni')->get(),
             //'servizi_ambulatoriali' => PrestazioneAmbulatoriale::all(),
             //'servizi_cardiologici' => PrestazioneCardiologica::all(),
