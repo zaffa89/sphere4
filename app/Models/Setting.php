@@ -12,6 +12,6 @@ class Setting extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'value' => 'array'
+        //'value' => 'array'
     ];
 }

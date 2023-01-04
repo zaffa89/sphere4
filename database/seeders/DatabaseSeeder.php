@@ -3,28 +3,15 @@
 namespace Database\Seeders;
 
 use App\Http\Controllers\CalendarController;
-use App\Models\User;
+
 use App\Models\Medico;
-use App\Models\Localita;
-use App\Models\Paziente;
 use App\Models\Struttura;
 use App\Models\SphereUser;
-use App\Models\Ambulatorio;
-use Illuminate\Support\Str;
-use App\Models\Prenotazione;
 use App\Models\PrestazioneMedsport;
 use App\Models\PrestazioneAmbulatoriale;
-use App\Models\PrestazioneCardiologica;
-use App\Models\PrestazioneFisioterapica;
 use App\Models\SocietaSportiva;
 use App\Models\SottoprestazioneMedsport;
-use App\Models\VisitaAmbulatoriale;
-use App\Models\VisitaCardiologica;
-use App\Models\VisitaFisioterapica;
-use App\Models\VisitaMedsport;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Faker\Generator;
 
 
@@ -71,29 +58,22 @@ class DatabaseSeeder extends Seeder
         PrestazioneAmbulatoriale::create([ 'nome' => 'Prestazione ambulatoriale 1' , 'codice' => 'AMB-1' , 'prezzo' => 50.00 ]);
         PrestazioneAmbulatoriale::create([ 'nome' => 'Prestazione ambulatoriale 2' , 'codice' => 'AMB-2' , 'prezzo' => 70.00 ]);
 
-        PrestazioneFisioterapica::create(['nome' => 'Massaggio 1' , 'codice' => 'MSG-1' , 'prezzo' => 60.00 ]);
-        PrestazioneFisioterapica::create(['nome' => 'Massaggio 2' , 'codice' => 'MSG-1' , 'prezzo' => 80.00 ]);
+        PrestazioneAmbulatoriale::create(['nome' => 'Massaggio 1' , 'codice' => 'MSG-1' , 'prezzo' => 60.00 ]);
+        PrestazioneAmbulatoriale::create(['nome' => 'Massaggio 2' , 'codice' => 'MSG-1' , 'prezzo' => 80.00 ]);
 
-        PrestazioneCardiologica::create(['nome' => 'Cardiologico 1' , 'codice' => 'CARDIO-1' , 'prezzo' => 150.00 ]);
-        PrestazioneCardiologica::create(['nome' => 'Cardiologico 2' , 'codice' => 'CARDIO-1' , 'prezzo' => 100.00 ]);
-
-        /*
-        Struttura::factory(1)
-            ->has(Ambulatorio::factory()->count(3) , 'ambulatori')
-            ->has(Medico::factory()->count(3) , 'medici')
-            ->has(Paziente::factory()->count(1000) , 'pazienti')
-            ->has(Prenotazione::factory()->count(2000) , 'prenotazioni')
-            ->create();
-        */
-
-        /* GENERA STRUTTURE - PAZIENTI E TUTTO IL RESTO  */
-        $this->call(StrutturaUnoSeeder::class);
-        $this->call(StrutturaDueSeeder::class);
+        PrestazioneAmbulatoriale::create(['nome' => 'Cardiologico 1' , 'codice' => 'CARDIO-1' , 'prezzo' => 150.00 ]);
+        PrestazioneAmbulatoriale::create(['nome' => 'Cardiologico 2' , 'codice' => 'CARDIO-1' , 'prezzo' => 100.00 ]);
 
         SocietaSportiva::create( [ 'ragione_sociale' => 'societa 1' ] );
         SocietaSportiva::create( [ 'ragione_sociale' => 'societa 2' ] );
         SocietaSportiva::create( [ 'ragione_sociale' => 'societa 3' ] );
         SocietaSportiva::create( [ 'ragione_sociale' => 'societa 4' ] );
+        
+        /* GENERA STRUTTURE - PAZIENTI E TUTTO IL RESTO  */
+        $this->call(StrutturaUnoSeeder::class);
+        $this->call(StrutturaDueSeeder::class);
+
+        
         
 
         CalendarController::generaOrariDefault(1 , 1 , now() , now()->addMonths(3) , '09:00:00' , '16:00:00');

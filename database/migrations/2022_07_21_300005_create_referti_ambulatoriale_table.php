@@ -13,15 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('visite_cardiologiche', function (Blueprint $table) {
+        Schema::create('referti_ambulatoriale', function (Blueprint $table) {
             $table->id();
 
-            //$table->unsignedBigInteger('prenotazione_id');
-            //$table->foreign('prenotazione_id')->references('id')->on('prenotazioni');
-            
-            $table->unsignedBigInteger('prestazione_id');
-            $table->foreign('prestazione_id')->references('id')->on('prestazioni_cardiologiche');
-            
+            $table->unsignedBigInteger('visita_id');
+            $table->foreign('visita_id')->references('id')->on('visite_ambulatoriali');
+
             $table->timestamps();
         });
     }
@@ -33,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('visite_cardiologiche');
+        Schema::dropIfExists('referti_ambulatoriale');
     }
 };

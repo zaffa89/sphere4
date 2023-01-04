@@ -24,17 +24,17 @@ class ValidatePrenotazioneRequest extends FormRequest
     public function rules()
     {
         return [
-            'visita_type' => 'nullable',        
+            'sezione_visita' => 'nullable|required',
             'data_inizio' => 'required',           
             'struttura_id' => 'required',
-            'ambulatorio_id' => 'required',
-            'paziente_id' => 'required_unless:visita_type,null|integer',
-            'medico_id' => 'required_unless:visita_type,null',
+            'ambulatorio_id' => 'required',            
+            'medico_id' => 'nullable',
             'note' => 'nullable|max:255',
             'durata' => 'required|integer|min:1',
-            'visita.prestazione_id' => 'required_unless:visita_type,null|integer',
-            'societa_id' => 'nullable',
-            'sport_id' => 'nullable'
+            'visita.prestazione_id' => 'required_if:sezione_visita,M,A',
+            'societa_id' => 'required_if:sezione_visita,SM,SA',
+            'sport_id' => 'nullable',
+            'visita.paziente_id' => 'required_if:sezione_visita,M,A'            
         ];
     }
 

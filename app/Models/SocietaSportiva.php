@@ -49,6 +49,16 @@ class SocietaSportiva extends Model
         return $this->hasManyThrough(Paziente::class , Prenotazione::class , 'paziente_id');
     }
 
+    public function visiteMedsport()
+    {
+        return $this->hasMany(VisitaMedsport::class , 'societa_id');
+    }
+
+    public function visiteAmbulatoriali()
+    {
+        return $this->hasMany(VisitaAmbulatoriale::class , 'societa_id');
+    }
+
     public function localita() {
         return $this->belongsTo(Localita::class);
     }

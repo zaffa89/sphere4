@@ -64,7 +64,7 @@ class SocietaSportivaController extends Controller
      */
     public function show(SocietaSportiva $societaSportiva)
     {
-        
+        return $societaSportiva;
     }
 
     /**

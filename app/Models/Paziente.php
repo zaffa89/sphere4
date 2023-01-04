@@ -74,11 +74,31 @@ class Paziente extends Model
     public function prenotazioni()
     {
         return $this->hasMany(Prenotazione::class);
-    }    
+    }
 
     public function ultimaPrenotazione()
     {
         return $this->hasOne(Prenotazione::class)->ofMany()->latestOfMany();
+    }
+
+    public function visiteMedsport()
+    {
+        return $this->hasMany(VisitaMedsport::class);
+    }
+
+    public function ultimaVisitaMedsport()
+    {
+        return $this->hasOne(VisitaMedsport::class)->ofMany()->latestOfMany();
+    }
+
+    public function visiteAmbulatoriali() 
+    {
+        return $this->hasMany(VisitaAmbulatoriale::class);
+    }
+
+    public function ultimaVisitaAmbulatoriale()
+    {
+        return $this->hasOne(VisitaAmbulatoriale::class)->ofMany()->latestOfMany();
     }
 
     public function user()

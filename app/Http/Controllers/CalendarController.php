@@ -8,6 +8,7 @@ use App\Models\Ambulatorio;
 use App\Models\Prenotazione;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use App\Http\Resources\PrenotazioneCalendarioResource;
 
 class CalendarController extends Controller
 {
@@ -15,7 +16,7 @@ class CalendarController extends Controller
     {        
         return [            
             //'prenotazioni' => PrenotazioneCalendarioResource::collection(Prenotazione::with('paziente')->whereBetween('data_inizio' , [Carbon::now()->subMonth() , Carbon::now()->addMonths(6)])->get()),
-            'prenotazioni' => Prenotazione::with('paziente')->whereBetween('data_inizio' , [Carbon::now()->subMonth() , Carbon::now()->addMonths(2)])->get(),
+            'prenotazioni' => PrenotazioneCalendarioResource::collection(Prenotazione::with('societaSportiva' , 'visitaMedsport.paziente' , 'visitaMedsport.prestazione' , 'visitaAmbulatoriale.paziente' , 'visitaAmbulatoriale.prestazione')->withCount('visiteMedsport' , 'visiteAmbulatoriali')->whereBetween('data_inizio' , [Carbon::now()->subMonth() , Carbon::now()->addMonths(1)])->get()),
             //'ambulatori' => Ambulatorio::all(),
             //'medici' => Medico::all(),
             //'orari_medici' => OrarioMedico::all(),
@@ -33,7 +34,7 @@ class CalendarController extends Controller
                 'fisioterapia' => true,
                 'medico_default_fuori_orario' => null,
                 'avviso_presenza_orario_medico' => true,
-                'limita_medici_con_orario_medico' => true,
+                'limita_medici_con_orario_medico' => false,
             ],
             'colori' => [
                 [

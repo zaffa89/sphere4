@@ -42,7 +42,7 @@ class StrutturaDueSeeder extends Seeder
         Medico::create( [ 'ragione_sociale' => 'Medico-5', 'codice_fiscale' => $faker->taxId() ] );
         Medico::create( [ 'ragione_sociale' => 'Medico-6', 'codice_fiscale' => $faker->taxId() ] );
         
-        for($i=0; $i < 500; $i++) {
+        for($i=0; $i < 2000; $i++) {
             $nome = strtolower($faker->firstName());
             $cognome = strtolower($faker->lastName());
             $ragione_sociale = $cognome.' '.$nome;
@@ -69,58 +69,114 @@ class StrutturaDueSeeder extends Seeder
             ]);
         }
 
-        for($i=0; $i < 500; $i++) {
+        for($i=0; $i < 2000; $i++) {
 
-            $visita_type = rand(0 , 3);
-            switch($visita_type) {
-                case 0:
-                    $visita = VisitaMedsport::create(['prestazione_id' => rand(1,3) , 'sport_id' => 1364]);
-                break;
-                case 1:
-                    $visita = VisitaAmbulatoriale::create(['prestazione_id' => rand(1,2)]);
-                    break;
-                    case 2:
-                        $visita = VisitaCardiologica::create(['prestazione_id' => rand(1,2)]);
-                        break;
-                        case 3:
-                            $visita = VisitaFisioterapica::create(['prestazione_id' => rand(1,2)]);
-                            break;
-            }
             $datetime = $faker->dateTimeBetween('-1 month' , '+4 month');
             $data_inizio = Carbon::parse($datetime)->format('Y-m-d H:i:s');
 
             $rand_id_med_ambu = $faker->numberBetween(4 , 6);
 
+            $rand_sez = rand(0 , 2);
+            if($rand_sez == 0) $sezione_visita = 'M';
+            if($rand_sez == 1) $sezione_visita = 'SM';
+            if($rand_sez == 2) $sezione_visita = 'A';
+
+            $rand_soc = rand(1 , 4);
+            $rand_sport = rand(1204 , 1457);
+
+            $rand_prest_med = rand(1 , 3);
+            $rand_prest_amb = rand(1 , 6);
+
             $prenotazione = $struttura->prenotazioni()->create([
                 'user_id' => 1,   
-                'sphere_user_id' => 1,
+                'sphere_user_id' => 1,                
+                
                 'data_prenotazione' => now(),
                 'data_inizio' => $data_inizio,
-                'data_fine' => Carbon::parse($datetime)->addMinutes(10)->format('Y-m-d H:i:s'),                
-                'paziente_id' => $faker->numberBetween(501 , 1000),                
+                'data_fine' => Carbon::parse($datetime)->addMinutes(10)->format('Y-m-d H:i:s'),
+                                                       
                 'medico_id' => $rand_id_med_ambu,                
-                'ambulatorio_id' => $rand_id_med_ambu
+                'ambulatorio_id' => $rand_id_med_ambu,
+                'societa_id' => $rand_soc,
+                
+                'sezione_visita' => $sezione_visita
             ]);
 
-            $prenotazione->visita()->associate($visita);
-            $prenotazione->save();
+            
+            switch($sezione_visita) {
+                case 'M':                    
+                    $visita = $prenotazione->visiteMedsport()->create([
+                        'prestazione_id' => $rand_prest_med, 
+                        'sport_id' => $rand_sport, 
+                        'societa_id' => $prenotazione->societa_id,
+                        'paziente_id' => $prenotazione->sezione_visita == 'SM' ? null : $faker->numberBetween(2001 , 4000) , 
+                        'struttura_id' => 2                        
+                    ]);
+                    $visita->preAnamnesi()->create(['diabete' => rand(0,1) == 1]);
+                    $visita->datiClinici()->create(['capacita_vitale' => rand(1, 50)]);                
+                break;
+                case 'SM':
+                    $visita = $prenotazione->visiteMedsport()->create([
+                        'prestazione_id' => $rand_prest_med, 
+                        'sport_id' => $rand_sport, 
+                        'societa_id' => $prenotazione->societa_id,
+                        'paziente_id' => $prenotazione->sezione_visita == 'SM' ? null : $faker->numberBetween(2001 , 4000) , 
+                        'struttura_id' => 2                        
+                    ]);
+                    $visita->preAnamnesi()->create(['diabete' => rand(0,1) == 1]);
+                    $visita->datiClinici()->create(['capacita_vitale' => rand(1, 50)]);
+                    
+                    $visita = $prenotazione->visiteMedsport()->create([
+                        'prestazione_id' => $rand_prest_med, 
+                        'sport_id' => $rand_sport, 
+                        'societa_id' => $prenotazione->societa_id,
+                        'paziente_id' => $prenotazione->sezione_visita == 'SM' ? null : $faker->numberBetween(2001 , 4000) , 
+                        'struttura_id' => 2                        
+                    ]);
+                    $visita->preAnamnesi()->create(['diabete' => rand(0,1) == 1]);
+                    $visita->datiClinici()->create(['capacita_vitale' => rand(1, 50)]);
+                break;
+                case 'A':
+                    $prenotazione->visiteAmbulatoriali()->create(['prestazione_id' => $rand_prest_amb , 'paziente_id' => $faker->numberBetween(2001 , 4000) , 'struttura_id' => 2]);
+                break;
+            }
         }
 
+        //NOTE
         for($i = 0; $i < 100; $i++)
         {
             $datetime = $faker->dateTimeBetween('-1 month' , '+4 month');
             $data_inizio = Carbon::parse($datetime)->format('Y-m-d H:i:s');
 
-            $rand_id_med_ambu = $faker->numberBetween(4 , 6);
+            $rand_id_med_ambu = $faker->numberBetween(4 , 6);          
 
             $struttura->prenotazioni()->create([              
-                'sphere_user_id' => 1,       
-                'data_prenotazione' => now(),                     
+                'sphere_user_id' => 1,            
+                'data_prenotazione' => now(),                
                 'data_inizio' => $data_inizio,
                 'data_fine' => Carbon::parse($datetime)->addMinutes(20)->format('Y-m-d H:i:s'),   
                 'ambulatorio_id' => $rand_id_med_ambu,
                 'note' => $faker->realText(30),
-                'blocco' => rand(0 , 1) ? true : false
+                'sezione_visita' => 'N',
+            ]);
+        }
+
+        //ASSENZE
+        for($i = 0; $i < 100; $i++)
+        {
+            $datetime = $faker->dateTimeBetween('-1 month' , '+4 month');
+            $data_inizio = Carbon::parse($datetime)->format('Y-m-d H:i:s');
+
+            $rand_id_med_ambu = $faker->numberBetween(4 , 6);          
+
+            $struttura->prenotazioni()->create([              
+                'sphere_user_id' => 1,            
+                'data_prenotazione' => now(),                
+                'data_inizio' => $data_inizio,
+                'data_fine' => Carbon::parse($datetime)->addMinutes(20)->format('Y-m-d H:i:s'),   
+                'ambulatorio_id' => $rand_id_med_ambu,
+                'note' => $faker->realText(30),
+                'sezione_visita' => 'X',
             ]);
         }
     }

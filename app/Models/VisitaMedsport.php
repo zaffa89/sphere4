@@ -20,9 +20,23 @@ class VisitaMedsport extends Model
 
     public function prenotazione() 
     {
-        return $this->morphOne(Prenotazione::class , 'visita');
+        return $this->belongsTo(Prenotazione::class);
     }
 
+    public function medico()
+    {
+        return $this->belongsTo(Medico::class);
+    }
+
+    public function paziente() {
+        return $this->belongsTo(Paziente::class);
+    }
+
+    public function societaSportiva()
+    {
+        return $this->belongsTo(SocietaSportiva::class , 'societa_id');
+    }
+    
     public function preAnamnesi() 
     {
         return $this->morphOne(PreAnamnesi::class , 'visita');
@@ -42,11 +56,4 @@ class VisitaMedsport extends Model
     {
         return $this->belongsTo(Sport::class , 'sport_id');
     }
-
-    public function visualizzazioni()
-    {
-        return $this->morphToMany(SphereUser::class , 'viewable' , 'gdpr_log_views')->withTimestamps();
-    }
-
-    
 }

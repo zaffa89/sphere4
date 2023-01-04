@@ -21,15 +21,15 @@ return new class extends Migration
 
             $table->unsignedBigInteger('sphere_user_id')->nullable();
             $table->foreign('sphere_user_id')->references('id')->on('sphere_users');
-            
+    
+            $table->unsignedBigInteger('societa_id')->nullable();
+            $table->foreign('societa_id')->references('id')->on('societa_sportive');
+
             $table->timestamp('data_prenotazione');
             $table->timestamp('data_inizio');
             $table->timestamp('data_fine');
 
-            //chiavi esterne
-            $table->unsignedBigInteger('paziente_id')->nullable();
-            $table->foreign('paziente_id')->references('id')->on('pazienti');
-            
+            //chiavi esterne                        
             $table->unsignedBigInteger('medico_id')->nullable();
             $table->foreign('medico_id')->references('id')->on('medici');
             
@@ -38,16 +38,11 @@ return new class extends Migration
 
             $table->unsignedBigInteger('struttura_id');
             $table->foreign('struttura_id')->references('id')->on('strutture');
-
-            $table->unsignedBigInteger('societa_id')->nullable();
-            $table->foreign('societa_id')->references('id')->on('societa_sportive');
             
-            $table->unsignedBigInteger('visita_id')->nullable();
-            $table->string('visita_type')->nullable();
-
+            $table->string('sezione_visita');
             $table->text('note')->nullable();
             $table->boolean('accettata')->default(false);
-            $table->boolean('blocco')->default(false);
+            
             $table->string('colore')->nullable();
 
             $table->softDeletes();

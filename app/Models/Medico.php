@@ -37,6 +37,16 @@ class Medico extends Model
         return $this->hasMany(Prenotazione::class);
     }
 
+    public function visiteMedsport()
+    {
+        return $this->hasMany(VisitaMedsport::class);
+    }
+
+    public function visiteAmbulatoriali()
+    {
+        return $this->hasMany(VisitaAmbulatoriale::class);
+    }
+
     public function sphereUser()
     {
         return $this->belongsTo(SphereUser::class);

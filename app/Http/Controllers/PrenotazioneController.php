@@ -22,8 +22,11 @@ use App\Events\PrenotazioneModificata;
 use App\Models\PrestazioneCardiologica;
 use App\Events\PrenotazioneVisualizzata;
 use App\Http\Requests\ValidatePrenotazioneRequest;
+use App\Http\Resources\PrenotazioneCalendarioResource;
 use App\Models\PrestazioneAmbulatoriale;
 use App\Models\PrestazioneFisioterapica;
+
+use function Symfony\Component\String\b;
 
 class PrenotazioneController extends Controller
 {
@@ -51,7 +54,7 @@ class PrenotazioneController extends Controller
             'struttura_id' => 'required',
             'ambulatorio_id' => 'required',
             'medico_id' => 'nullable',
-            'visita_type' => 'nullable',
+            'sezione_visita' => 'required',
         ]);
                 
         //$prenotazione = new Prenotazione($request->all());        
@@ -61,34 +64,25 @@ class PrenotazioneController extends Controller
             'struttura_id' => $request->struttura_id,
             'ambulatorio_id' => $request->ambulatorio_id,
             'medico_id' => $request->medico_id,
-            'visita_type' => $request->visita_type,
-            'blocco' => $request->blocco
+            'sezione_visita' => $request->sezione_visita        
         ]);
 
-        $prestazioni = [];
-        $elenco_sport = [];
-        switch($request->visita_type)
+        $prestazioni = null;
+        $elenco_sport = null;
+        switch($request->sezione_visita)
         {
-            case 'medsport':
-                $prenotazione->visita = new VisitaMedsport();
+            case 'M':
+                $prenotazione->visita = new VisitaMedsport(['struttura_id' => $request->struttura_id , 'medico_id' => $request->medico_id]);
                 $prestazioni = PrestazioneMedsport::with('sottoprestazioni')->get();
                 $elenco_sport = Sport::orderBy('nome')->get();
-                break;
+            break;
+            
+            case 'A':
+                $prenotazione->visita = new VisitaAmbulatoriale(['struttura_id' => $request->struttura_id , 'medico_id' => $request->medico_id]);
+                $prestazioni = PrestazioneAmbulatoriale::all();
+            break;
 
-                case 'ambulatoriale':
-                    $prenotazione->visita = new VisitaAmbulatoriale();
-                    $prestazioni = PrestazioneAmbulatoriale::all();
-                    break;
-                    
-                    case 'cardiologica':
-                        $prenotazione->visita = new VisitaCardiologica();
-                        $prestazioni = PrestazioneCardiologica::all();
-                        break;
-
-                        case 'fisioterapica':
-                            $prenotazione->visita = new VisitaFisioterapica();
-                            $prestazioni = PrestazioneFisioterapica::all();
-                            break;                            
+            
         }
         
         return [
@@ -107,13 +101,10 @@ class PrenotazioneController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(ValidatePrenotazioneRequest $request)
-    {
-        
-        
+    {                
         return DB::transaction(function () use ($request) {
             $prenotazione = Prenotazione::create([
-                'sphere_user_id' => auth()->user()->sphereUser->id,
-                'paziente_id' => $request->paziente_id,
+                'sphere_user_id' => auth()->user()->sphereUser->id,               
                 'medico_id' => $request->medico_id,
                 'ambulatorio_id' => $request->ambulatorio_id,
                 'struttura_id' => $request->struttura_id,
@@ -122,27 +113,58 @@ class PrenotazioneController extends Controller
                 'data_inizio' => Carbon::parse($request->data_inizio)->format('Y-m-d H:i:s'),
                 'data_fine' => Carbon::parse($request->data_inizio)->addMinutes($request->durata)->format('Y-m-d H:i:s'),
                 'note' => $request->note,
-                'blocco' => $request->blocco,
-                'accettata' => false
+          
+                'accettata' => false,
+                'sezione_visita' => $request->sezione_visita
             ]);
             
-            $visita = match( $request->visita_type ) {
-                'medsport' => VisitaMedsport::create(['prestazione_id' => $request->visita['prestazione_id'] , 'sport_id' => $request->visita['sport_id']]),
-                'ambulatoriale' => VisitaAmbulatoriale::create(['prestazione_id' => $request->visita['prestazione_id']]),
-                'cardiologica' => VisitaCardiologica::create(['prestazione_id' => $request->visita['prestazione_id']]),
-                'fisioterapica' => VisitaFisioterapica::create(['prestazione_id' => $request->visita['prestazione_id']]),
-                default => null
-            };
-            
-            if( $visita ) {
-                $prenotazione->visita()->associate($visita); 
-                $prenotazione->save();
+            switch($prenotazione->sezione_visita) {
+                case 'M':
+                    $prenotazione->visitaMedsport()->create([
+                        'prestazione_id' => $request->visita['prestazione_id'] , 
+                        'sport_id' => $request->visita['sport_id'],
+                        'paziente_id' => $request->paziente_id,
+                        'medico_id' => $request->medico_id, //medico esecutore
+                        'societa_id' => $request->societa_id
+                    ]);
+                break;
+                case 'SM':
+                    for($i = 1; $i <= $request->numero_paz; $i++) {
+                        $prenotazione->visiteMedsport()->create([
+                            'prestazione_id' => $request->visita['prestazione_id'] , 
+                            'sport_id' => $request->visita['sport_id'],                            
+                            'medico_id' => $request->medico_id, //medico esecutore
+                            'societa_id' => $request->societa_id
+                        ]);
+                    }                    
+                break;
+                case 'A':
+                    $prenotazione->visitaAmbulatoriale()->create([
+                        'prestazione_id' => $request->visita['prestazione_id'],
+                        'paziente_id' => $request->paziente_id,
+                        'medico_id' => $request->medico_id, //medico esecutore
+                        'societa_id' => $request->societa_id
+                    ]);
+                break;
+                case 'SA':
+                    for($i = 1; $i <= $request->numero_paz; $i++) {
+                        $prenotazione->visiteAmbulatoriali()->create([
+                            'prestazione_id' => $request->visita['prestazione_id'] , 
+                            'sport_id' => $request->visita['sport_id'],                            
+                            'medico_id' => $request->medico_id, //medico esecutore
+                            'societa_id' => $request->societa_id
+                        ]);
+                    }  
+                break;
             }
+            
+            
+            
 
-            PrenotazioneCreata::dispatchIf($prenotazione , $prenotazione , auth()->user()->sphereUser , $request->header('Electron-Client-UUID'));
+            //PrenotazioneCreata::dispatchIf($prenotazione , $prenotazione , auth()->user()->sphereUser , $request->header('Electron-Client-UUID'));
 
             //return new PrenotazioneCalendarioResource($prenotazione);
-            return $prenotazione->load('paziente');
+            return $prenotazione;
         });
     }
 
@@ -165,19 +187,31 @@ class PrenotazioneController extends Controller
      */
     public function edit(Prenotazione $prenotazione)
     {
-        $prestazioni = match ($prenotazione->visita_type) {
-            'medsport' => PrestazioneMedsport::with('sottoprestazioni')->get(),
-            'ambulatoriale' => PrestazioneAmbulatoriale::all(),
-            'cardiologica' => PrestazioneCardiologica::all(),
-            'fisioterapica' => PrestazioneFisioterapica::all(),
+        $prestazioni = match ($prenotazione->sezione_visita) {
+            'M' => PrestazioneMedsport::with('sottoprestazioni')->get(),
+            'A' => PrestazioneAmbulatoriale::all(),
             default => null
         };
 
+        switch($prenotazione->sezione_visita) {
+            case 'M':                                
+                $prenotazione->load('visitaMedsport.prestazione' , 'visitaMedsport.paziente');                
+            break;
+            case 'A':
+                $prenotazione->load('visitaAmbulatoriale.prestazione' , 'visitaAmbulatoriale.paziente');
+            break;
+            case 'SM':
+                $prenotazione->load('visitaMedsport' , 'societaSportiva');
+            break;
+            case 'SA':
+                $prenotazione->load('visitaAmbulatoriale' , 'societaSportiva');
+            break;
+        }
    
         return [
-            'prenotazione' => $prenotazione->load('visita.prestazione'), // , 'paziente.localitaNascita' , 'paziente.localitaResidenza' , 'paziente.localitaRilascioDocumento'),
+            'prenotazione' => new PrenotazioneCalendarioResource($prenotazione),
             'prestazioni' => $prestazioni,
-            'elenco_sport' => $prenotazione->visita_type === 'medsport' ? Sport::orderBy('nome')->get() : [],
+            'elenco_sport' => $prenotazione->sezione_visita === 'M' ? Sport::orderBy('nome')->get() : [],
             'struttura' => Struttura::with('ambulatori' , 'orariMedici')->where('id' , $prenotazione->struttura_id)->first(),
             'medici' => Medico::all()
         ];
@@ -190,56 +224,47 @@ class PrenotazioneController extends Controller
      * @param  \App\Models\Prenotazione  $prenotazione
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Prenotazione $prenotazione)
+    public function update(ValidatePrenotazioneRequest $request, Prenotazione $prenotazione)
     {
-        //aggiungere validazione
-        $request->validate([
-            'visita_type' => 'nullable',         
-            'data_inizio' => 'required',   
-            'durata' => 'required|integer|gte:1',
-            'struttura_id' => 'required',
-            'ambulatorio_id' => 'required',
-            'paziente_id' => 'required_unless:visita_type,null|integer',
-            'medico_id' => 'required_unless:visita_type,null',
-            'note' => 'nullable|max:255',
-            'visita.prestazione_id' => 'required_unless:visita_type,null|integer',
-            'sport_id' => 'nullable',
-            'societa_id' => 'nullable'
-        ]);
-
+       
         return DB::transaction(function () use ($request , $prenotazione) {
             //nuovo metodo:
             //duplica in tabella backup
             //esegui update
             //manda notifica usando sia vecchio che nuovo
             //ritorna risposta
-            
-            $oldPrenotazione = $prenotazione->toArray();
-            
+
             $prenotazione->data_inizio = Carbon::parse($request->data_inizio)->format('Y-m-d H:i:s');
-            $prenotazione->data_fine = Carbon::parse($request->data_inizio)->addMinutes($request->durata)->format('Y-m-d H:i:s');           
-            $prenotazione->paziente_id = $request->paziente_id;
+            $prenotazione->data_fine = Carbon::parse($request->data_inizio)->addMinutes($request->durata)->format('Y-m-d H:i:s');            
             $prenotazione->ambulatorio_id = $request->ambulatorio_id;
             $prenotazione->struttura_id = $request->struttura_id;
             $prenotazione->societa_id = $request->societa_id;
+            $prenotazione->medico_id = $request->medico_id;
 
-            $visitaDirty = false;
-            if($prenotazione->visita_type) {
-                $prenotazione->medico_id = $request->medico_id;
-                $prenotazione->visita->prestazione_id = $request->visita['prestazione_id'];
-                
-                $prenotazione->visita_type == 'medsport' ?? $prenotazione->visita->sport_id = $request->visita['sport_id'];
-                
-                $visitaDirty = $prenotazione->visita->isDirty();
-            }
+            switch($prenotazione->sezione_visita) {
+                case 'M':
+                    $prenotazione->visitaMedsport->paziente_id = $request->visita['paziente_id'];
+                    $prenotazione->push();
 
-            $isDirty = $prenotazione->isDirty();
-            
-            $prenotazione->push();
+                    return new PrenotazioneCalendarioResource($prenotazione->load('visitaMedsport'));
+                break;
+                case 'SM':
+                    
+                break;
+                case 'A':
+                    $prenotazione->visitaAmbulatoriale->paziente_id = $request->visita['paziente_id'];
+                    $prenotazione->push();
+
+                    return new PrenotazioneCalendarioResource($prenotazione->load('visitaAmbulatoriale'));
+                break;
+                case 'SA':
+
+                break;
+            }                                    
             
             //PrenotazioneModificata::dispatchIf($isDirty , $prenotazione , $oldPrenotazione , auth()->user()->sphereUser , $request->header('Electron-Client-UUID'));         
             //return new PrenotazioneCalendarioResource($prenotazione);
-            return $prenotazione->load('paziente');
+            
         });
     }
 
@@ -261,7 +286,7 @@ class PrenotazioneController extends Controller
                'medico_id' => $request->medico_id 
             ]);
             //return new PrenotazioneCalendarioResource($prenotazione);
-            return $prenotazione->load('paziente');
+            return $prenotazione;
         });
     }
 

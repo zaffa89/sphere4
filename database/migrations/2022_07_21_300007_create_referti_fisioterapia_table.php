@@ -13,13 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('sezioni_prenotazione_online', function (Blueprint $table) {
+        Schema::create('referti_fisioterapia', function (Blueprint $table) {
             $table->id();
 
-            $table->string('nome');
-            $table->text('descrizione');
-            $table->boolean('attiva');
-            $table->integer('ordine');
+            $table->unsignedBigInteger('visita_id');
+            $table->foreign('visita_id')->references('id')->on('visite_ambulatoriali');
 
             $table->timestamps();
         });
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sezioni_prenotazione_online');
+        Schema::dropIfExists('referti_fisioterapia');
     }
 };

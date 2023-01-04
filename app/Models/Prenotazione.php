@@ -27,26 +27,18 @@ class Prenotazione extends Model
     
     /* attributi di default */
     protected $attributes = [
-        'blocco' => false,
-        'accettata' => false,
+        'accettata' => false
     ];
 
     public function struttura()
     {
         return $this->belongsTo(Struttura::class);
     }
-    
-    public function paziente()
-    {
-        return $this->belongsTo(Paziente::class);
-    }
 
     public function societaSportiva()
     {
-        return $this->belongsTo(SocietaSportiva::class);
+        return $this->belongsTo(SocietaSportiva::class , 'societa_id');
     }
-
-    //prenotazioni di gruppo ???
 
     public function medico()
     {
@@ -58,15 +50,23 @@ class Prenotazione extends Model
         return $this->belongsTo(Ambulatorio::class);
     }
 
-    public function visita()
+    public function visitaMedsport() 
     {
-        return $this->morphTo(__FUNCTION__ , 'visita_type' , 'visita_id');
+        return $this->hasOne(VisitaMedsport::class)->latestOfMany();
     }
 
-    public function visualizzazioni()
+    public function visitaAmbulatoriale()
     {
-        return $this->morphToMany(SphereUser::class , 'viewable' , 'gdpr_log_views')->withTimestamps();
+        return $this->hasOne(VisitaAmbulatoriale::class)->latestOfMany();
+    }
+
+    public function visiteMedsport()
+    {
+        return $this->hasMany(VisitaMedsport::class);
+    }
+
+    public function visiteAmbulatoriali()
+    {
+        return $this->hasMany(VisitaAmbulatoriale::class);
     }
 }
-
-/* 379 218 50 41 */

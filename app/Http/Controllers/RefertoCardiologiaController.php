@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PrestazioneFisioterapica;
+use App\Models\RefertoCardiologia;
 use Illuminate\Http\Request;
 
-class PrestazioneFisioterapicaController extends Controller
+class RefertoCardiologiaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class PrestazioneFisioterapicaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\PrestazioneFisioterapica  $prestazioneFisioterapica
+     * @param  \App\Models\RefertoCardiologia  $refertoCardiologia
      * @return \Illuminate\Http\Response
      */
-    public function show(PrestazioneFisioterapica $prestazioneFisioterapica)
+    public function show(RefertoCardiologia $refertoCardiologia)
     {
         //
     }
@@ -52,10 +52,10 @@ class PrestazioneFisioterapicaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\PrestazioneFisioterapica  $prestazioneFisioterapica
+     * @param  \App\Models\RefertoCardiologia  $refertoCardiologia
      * @return \Illuminate\Http\Response
      */
-    public function edit(PrestazioneFisioterapica $prestazioneFisioterapica)
+    public function edit(RefertoCardiologia $refertoCardiologia)
     {
         //
     }
@@ -64,10 +64,10 @@ class PrestazioneFisioterapicaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\PrestazioneFisioterapica  $prestazioneFisioterapica
+     * @param  \App\Models\RefertoCardiologia  $refertoCardiologia
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PrestazioneFisioterapica $prestazioneFisioterapica)
+    public function update(Request $request, RefertoCardiologia $refertoCardiologia)
     {
         //
     }
@@ -75,10 +75,10 @@ class PrestazioneFisioterapicaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\PrestazioneFisioterapica  $prestazioneFisioterapica
+     * @param  \App\Models\RefertoCardiologia  $refertoCardiologia
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PrestazioneFisioterapica $prestazioneFisioterapica)
+    public function destroy(RefertoCardiologia $refertoCardiologia)
     {
         //
     }
