@@ -27,7 +27,8 @@ class Prenotazione extends Model
     
     /* attributi di default */
     protected $attributes = [
-        'accettata' => false
+        'accettata' => false,
+        'societa_id' => null
     ];
 
     public function struttura()

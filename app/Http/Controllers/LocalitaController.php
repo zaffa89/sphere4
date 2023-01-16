@@ -12,6 +12,10 @@ class LocalitaController extends Controller
         return $queryRicerca ? Localita::where('nome' , 'like' , '%'.$queryRicerca.'%')->orderBy('nome')->limit(10)->get() : [];
     }
 
+    public function cercaTramiteCodiceCatastale($codice)
+    {
+        return Localita::where('codice_catastale' , $codice)->first();
+    }
     /**
      * Display a listing of the resource.
      *

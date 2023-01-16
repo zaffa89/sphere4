@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Sport;
+use App\Models\Medico;
+use App\Models\Prenotazione;
 use Illuminate\Http\Request;
 use App\Models\VisitaMedsport;
 use Illuminate\Support\Facades\DB;
-use App\Events\VisitaMedsportVisualizzata;
 use App\Events\VisitaMedsportModificata;
+use App\Events\VisitaMedsportVisualizzata;
 
 class VisitaMedsportController extends Controller
 {
@@ -49,9 +52,31 @@ class VisitaMedsportController extends Controller
      */
     public function show(VisitaMedsport $visitaMedsport)
     {
-        VisitaMedsportVisualizzata::dispatchIf($visitaMedsport , $visitaMedsport , auth()->user()->sphereUser);
+        //$visitaMedsport->load('prenotazione' , 'datiClinici' , 'preAnamnesi');
+        
+        if( !$visitaMedsport->datiClinici ) { 
+            //prendi dati clinici da visita precedente
+            $visitaPrecedente = VisitaMedsport::with('datiClinici' , 'preAnamnesi')->where('accettata' , true)->where('paziente_id' , $visitaMedsport->paziente_id)->orderBy('accettata_at' , 'desc')->first();
+            
+            if( $visitaPrecedente ) {                
+                $replicaDatiClinici = $visitaPrecedente->datiClinici->replicate();
+                $replicaPreAnamnesi = $visitaPrecedente->preAnamnesi->replicate();
+                    
+                $visitaMedsport->datiClinici()->save($replicaDatiClinici);
+                $visitaMedsport->preAnamnesi()->save($replicaPreAnamnesi);
+            }
+            else {
+                //crea dati clinici di default
+                $visitaMedsport->datiClinici()->create();
+                $visitaMedsport->preAnamnesi()->create();
+            }
+        }
 
-        return $visitaMedsport;
+        return [
+            'visita' => $visitaMedsport->load('prenotazione' , 'datiClinici' , 'preAnamnesi' , 'medico' , 'prestazione' , 'sport' , 'paziente.localitaNascita' , 'paziente.localitaResidenza'),
+            'elenco_sport' => Sport::where('tipo_visita' , $visitaMedsport->sport->tipo_visita)->get(),
+            'elenco_medici' => Medico::where('attivo' , true)->orWhere('id' , $visitaMedsport->medico_id)->orderBy('ragione_sociale')->get()
+        ];
     }
 
     /**

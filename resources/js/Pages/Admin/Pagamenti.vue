@@ -1,11 +1,7 @@
 <template>
-    <AppLayout :hideSidebar="true">
-        <template #main>
-            <AdminLayout>
+    <AdminLayout>
                 
-            </AdminLayout>   
-        </template>
-    </AppLayout>
+    </AdminLayout>   
 </template>
 
 <script setup>
@@ -15,6 +11,6 @@
 
 <script>
 export default {
-    
+    layout: AppLayout
 }
 </script>

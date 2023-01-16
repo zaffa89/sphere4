@@ -126,6 +126,14 @@ class Paziente extends Model
         return $this->belongsTo(Localita::class , 'documento_localita_rilascio_id');
     }
 
+    //ULTIMA VISITA NON AGO
+
+    //ULTIMA VISITA AGO
+
+    //VISITE FUTURE
+
+    //VISITE PASSATE NON ACCETTATE
+    
     /* MUTATORS */
     protected function ragioneSociale(): Attribute
     {

@@ -112,8 +112,7 @@ class StrutturaDueSeeder extends Seeder
                         'paziente_id' => $prenotazione->sezione_visita == 'SM' ? null : $faker->numberBetween(2001 , 4000) , 
                         'struttura_id' => 2                        
                     ]);
-                    $visita->preAnamnesi()->create(['diabete' => rand(0,1) == 1]);
-                    $visita->datiClinici()->create(['capacita_vitale' => rand(1, 50)]);                
+                                   
                 break;
                 case 'SM':
                     $visita = $prenotazione->visiteMedsport()->create([
@@ -123,8 +122,7 @@ class StrutturaDueSeeder extends Seeder
                         'paziente_id' => $prenotazione->sezione_visita == 'SM' ? null : $faker->numberBetween(2001 , 4000) , 
                         'struttura_id' => 2                        
                     ]);
-                    $visita->preAnamnesi()->create(['diabete' => rand(0,1) == 1]);
-                    $visita->datiClinici()->create(['capacita_vitale' => rand(1, 50)]);
+                    
                     
                     $visita = $prenotazione->visiteMedsport()->create([
                         'prestazione_id' => $rand_prest_med, 
@@ -133,8 +131,7 @@ class StrutturaDueSeeder extends Seeder
                         'paziente_id' => $prenotazione->sezione_visita == 'SM' ? null : $faker->numberBetween(2001 , 4000) , 
                         'struttura_id' => 2                        
                     ]);
-                    $visita->preAnamnesi()->create(['diabete' => rand(0,1) == 1]);
-                    $visita->datiClinici()->create(['capacita_vitale' => rand(1, 50)]);
+                    
                 break;
                 case 'A':
                     $prenotazione->visiteAmbulatoriali()->create(['prestazione_id' => $rand_prest_amb , 'paziente_id' => $faker->numberBetween(2001 , 4000) , 'struttura_id' => 2]);

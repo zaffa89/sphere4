@@ -15,7 +15,8 @@ class VisitaMedsport extends Model
     
     protected $attributes = [
         'prestazione_id' => null,
-        'sport_id' => null
+        'sport_id' => null,
+        'societa_id' => null
     ];
 
     public function prenotazione() 

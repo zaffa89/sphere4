@@ -69,18 +69,20 @@ class PrenotazioneController extends Controller
 
         $prestazioni = null;
         $elenco_sport = null;
-        switch($request->sezione_visita)
+        switch(true)
         {
-            case 'M':
+            case $prenotazione->sezione_visita == 'M' || $prenotazione->sezione_visita == 'SM':
                 $prenotazione->visita = new VisitaMedsport(['struttura_id' => $request->struttura_id , 'medico_id' => $request->medico_id]);
                 $prestazioni = PrestazioneMedsport::with('sottoprestazioni')->get();
                 $elenco_sport = Sport::orderBy('nome')->get();
             break;
             
-            case 'A':
+            case $prenotazione->sezione_visita == 'A':
                 $prenotazione->visita = new VisitaAmbulatoriale(['struttura_id' => $request->struttura_id , 'medico_id' => $request->medico_id]);
                 $prestazioni = PrestazioneAmbulatoriale::all();
             break;
+
+            
 
             
         }
@@ -123,10 +125,13 @@ class PrenotazioneController extends Controller
                     $prenotazione->visitaMedsport()->create([
                         'prestazione_id' => $request->visita['prestazione_id'] , 
                         'sport_id' => $request->visita['sport_id'],
-                        'paziente_id' => $request->paziente_id,
+                        'paziente_id' => $request->visita['paziente_id'],
                         'medico_id' => $request->medico_id, //medico esecutore
-                        'societa_id' => $request->societa_id
+                        'societa_id' => $request->societa_id,
+                        'struttura_id' => $request->struttura_id
                     ]);
+
+                    $prenotazione->load('visitaMedsport.paziente');
                 break;
                 case 'SM':
                     for($i = 1; $i <= $request->numero_paz; $i++) {
@@ -134,8 +139,10 @@ class PrenotazioneController extends Controller
                             'prestazione_id' => $request->visita['prestazione_id'] , 
                             'sport_id' => $request->visita['sport_id'],                            
                             'medico_id' => $request->medico_id, //medico esecutore
-                            'societa_id' => $request->societa_id
+                            'societa_id' => $request->societa_id,
+                            'struttura_id' => $request->struttura_id
                         ]);
+                        $prenotazione->load('societaSportiva');
                     }                    
                 break;
                 case 'A':
@@ -143,7 +150,8 @@ class PrenotazioneController extends Controller
                         'prestazione_id' => $request->visita['prestazione_id'],
                         'paziente_id' => $request->paziente_id,
                         'medico_id' => $request->medico_id, //medico esecutore
-                        'societa_id' => $request->societa_id
+                        'societa_id' => $request->societa_id,
+                        'struttura_id' => $request->struttura_id
                     ]);
                 break;
                 case 'SA':
@@ -160,11 +168,11 @@ class PrenotazioneController extends Controller
             
             
             
-
+            
             //PrenotazioneCreata::dispatchIf($prenotazione , $prenotazione , auth()->user()->sphereUser , $request->header('Electron-Client-UUID'));
 
             //return new PrenotazioneCalendarioResource($prenotazione);
-            return $prenotazione;
+            return new PrenotazioneCalendarioResource($prenotazione);
         });
     }
 
@@ -188,30 +196,35 @@ class PrenotazioneController extends Controller
     public function edit(Prenotazione $prenotazione)
     {
         $prestazioni = match ($prenotazione->sezione_visita) {
-            'M' => PrestazioneMedsport::with('sottoprestazioni')->get(),
-            'A' => PrestazioneAmbulatoriale::all(),
+            'M' , 'SM' => PrestazioneMedsport::with('sottoprestazioni')->get(),
+            'A' , 'SA' => PrestazioneAmbulatoriale::all(),
+            default => null
+        };
+
+        $elenco_sport = match ($prenotazione->sezione_visita) {
+            'M' , 'SM' => Sport::orderBy('nome')->get(),
             default => null
         };
 
         switch($prenotazione->sezione_visita) {
             case 'M':                                
-                $prenotazione->load('visitaMedsport.prestazione' , 'visitaMedsport.paziente');                
+                $prenotazione->load('visitaMedsport.prestazione' , 'visitaMedsport.paziente' , 'societaSportiva');                
             break;
             case 'A':
                 $prenotazione->load('visitaAmbulatoriale.prestazione' , 'visitaAmbulatoriale.paziente');
             break;
             case 'SM':
-                $prenotazione->load('visitaMedsport' , 'societaSportiva');
+                $prenotazione->load('visitaMedsport' , 'societaSportiva')->loadCount('visiteMedsport');
             break;
             case 'SA':
-                $prenotazione->load('visitaAmbulatoriale' , 'societaSportiva');
+                $prenotazione->load('visitaAmbulatoriale' , 'societaSportiva')->loadCount('visiteAmbulatoriali');
             break;
         }
    
         return [
             'prenotazione' => new PrenotazioneCalendarioResource($prenotazione),
             'prestazioni' => $prestazioni,
-            'elenco_sport' => $prenotazione->sezione_visita === 'M' ? Sport::orderBy('nome')->get() : [],
+            'elenco_sport' => $elenco_sport,
             'struttura' => Struttura::with('ambulatori' , 'orariMedici')->where('id' , $prenotazione->struttura_id)->first(),
             'medici' => Medico::all()
         ];
@@ -244,15 +257,26 @@ class PrenotazioneController extends Controller
             switch($prenotazione->sezione_visita) {
                 case 'M':
                     $prenotazione->visitaMedsport->paziente_id = $request->visita['paziente_id'];
+                    $prenotazione->visitaMedsport->medico_id = $request->medico_id;
+                    $prenotazione->visitaMedsport->sport_id = $request->visita['sport_id'];
+                    $prenotazione->visitaMedsport->prestazione_id = $request->visita['prestazione_id'];
+                    $prenotazione->visitaMedsport->societa_id = $request->societa_id;
                     $prenotazione->push();
 
                     return new PrenotazioneCalendarioResource($prenotazione->load('visitaMedsport'));
                 break;
                 case 'SM':
-                    
+                    foreach($prenotazione->visiteMedsport as $visita) {
+                        $visita->prestazione_id = $request->visita['prestazione_id'];                        
+                    }                   
+                    $prenotazione->push();
+                    return new PrenotazioneCalendarioResource($prenotazione->load('societaSportiva')->loadCount('visiteMedsport'));
                 break;
                 case 'A':
                     $prenotazione->visitaAmbulatoriale->paziente_id = $request->visita['paziente_id'];
+                    $prenotazione->visitaAmbulatoriale->prestazione_id = $request->visita['prestazione_id'];
+                    $prenotazione->visitaAmbulatoriale->societa_id = $request->societa_id;
+                    $prenotazione->visitaAmbulatoriale->medico_id = $request->medico_id;
                     $prenotazione->push();
 
                     return new PrenotazioneCalendarioResource($prenotazione->load('visitaAmbulatoriale'));
@@ -262,9 +286,7 @@ class PrenotazioneController extends Controller
                 break;
             }                                    
             
-            //PrenotazioneModificata::dispatchIf($isDirty , $prenotazione , $oldPrenotazione , auth()->user()->sphereUser , $request->header('Electron-Client-UUID'));         
-            //return new PrenotazioneCalendarioResource($prenotazione);
-            
+            //PrenotazioneModificata::dispatchIf($isDirty , $prenotazione , $oldPrenotazione , auth()->user()->sphereUser , $request->header('Electron-Client-UUID'));                        
         });
     }
 

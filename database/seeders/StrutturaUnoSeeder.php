@@ -113,8 +113,7 @@ class StrutturaUnoSeeder extends Seeder
                         'paziente_id' => $prenotazione->sezione_visita == 'SM' ? null : $faker->numberBetween(1 , 2000) , 
                         'struttura_id' => 1                        
                     ]);
-                    $visita->preAnamnesi()->create(['diabete' => rand(0,1) == 1]);
-                    $visita->datiClinici()->create(['capacita_vitale' => rand(1, 50)]);                
+                                  
                 break;
                 case 'SM':                    
                     $visita = $prenotazione->visiteMedsport()->create([
@@ -124,8 +123,7 @@ class StrutturaUnoSeeder extends Seeder
                         'paziente_id' => $prenotazione->sezione_visita == 'SM' ? null : $faker->numberBetween(1 , 2000) , 
                         'struttura_id' => 1                        
                     ]);
-                    $visita->preAnamnesi()->create(['diabete' => rand(0,1) == 1]);
-                    $visita->datiClinici()->create(['capacita_vitale' => rand(1, 50)]);   
+                    
                     
                     $visita = $prenotazione->visiteMedsport()->create([
                         'prestazione_id' => $rand_prest_med, 
@@ -134,8 +132,7 @@ class StrutturaUnoSeeder extends Seeder
                         'paziente_id' => $prenotazione->sezione_visita == 'SM' ? null : $faker->numberBetween(1 , 2000) , 
                         'struttura_id' => 1                        
                     ]);
-                    $visita->preAnamnesi()->create(['diabete' => rand(0,1) == 1]);
-                    $visita->datiClinici()->create(['capacita_vitale' => rand(1, 50)]);
+                    
 
                     $visita = $prenotazione->visiteMedsport()->create([
                         'prestazione_id' => $rand_prest_med, 
@@ -144,8 +141,7 @@ class StrutturaUnoSeeder extends Seeder
                         'paziente_id' => $prenotazione->sezione_visita == 'SM' ? null : $faker->numberBetween(1 , 2000) , 
                         'struttura_id' => 1                        
                     ]);
-                    $visita->preAnamnesi()->create(['diabete' => rand(0,1) == 1]);
-                    $visita->datiClinici()->create(['capacita_vitale' => rand(1, 50)]);
+                    
                 break;
                 case 'A':
                     $prenotazione->visiteAmbulatoriali()->create([

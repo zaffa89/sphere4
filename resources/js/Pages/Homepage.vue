@@ -64,8 +64,7 @@
     </div>
 </template>
 
-<script> 
-/* 1259 28/02 us nuova frontiera 347 25 22 131 */
+<script>
 export default {
     layout: AppLayout,
     methods: {

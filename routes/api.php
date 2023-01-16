@@ -13,6 +13,7 @@ use App\Http\Controllers\SocietaSportivaController;
 use App\Http\Controllers\SphereUserController;
 use App\Http\Controllers\SportController;
 use App\Http\Controllers\StrutturaController;
+use App\Http\Controllers\VisitaMedsportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -76,19 +77,26 @@ Route::prefix('sphere')->group(function() {
         
         //LOCALITA
         Route::resource('localita' , LocalitaController::class);
+        Route::get('ricerca-localita/codice-catastale/{codice}' , [LocalitaController::class , 'cercaTramiteCodiceCatastale']);
         //Route::post('ricerca-localita' , [LocalitaController::class , 'ricerca']);
-        Route::get('ricerca-localita/{queryRicerca}' , [LocalitaController::class , 'ricerca']);
+        Route::get('ricerca-localita/nome/{queryRicerca}' , [LocalitaController::class , 'ricerca']);
 
         //CALENDARIO
         Route::get('calendario/carica' , [CalendarController::class , 'caricaCalendario']);
         Route::put('calendario/sposta-prenotazione/{prenotazione}' , [PrenotazioneController::class , 'move']);
         Route::post('calendario/genera-orario-medico' , [CalendarController::class , 'generaOrarioMedico']);
 
-        //ACCETTAZIONI
+        //ACCETTAZIONE MEDSPORT
         Route::post('carica-accettazione-medsport' , [AccettazioneMedsportController::class , 'accettazioni']);
-        Route::get('apri-scheda-medsport/{prenotazione}' , [AccettazioneMedsportController::class , 'apriScheda']);
+        Route::get('apri-visita-medsport/{visitaMedsport}' , [AccettazioneMedsportController::class , 'apriVisita']);
         Route::get('calcola-posizione-ticket/{visitaMedsport}' , [AccettazioneMedsportController::class , 'calcolaPosizioneTicket']);
 
+        //VISITE MEDSPORT
+        Route::resource('visita-medsport' , VisitaMedsportController::class);
+
+        //ACCETTAZIONE AMBULATORIALE 
+
+        //VISITE AMBULATORIALI
         //SPORT
         Route::resource('sport' , SportController::class);
         Route::get('sport-tramite-tipo-visita/{tipoVisita}' , [SportController::class , 'sportTramiteTipoVisita']);

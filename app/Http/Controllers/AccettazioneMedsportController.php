@@ -22,6 +22,13 @@ class AccettazioneMedsportController extends Controller
             'data_fine' => 'required|date_format:Y-m-d',
         ]);
         
+        return VisitaMedsport::whereHas('prenotazione' , function($query) { 
+            $query->whereIn('sezione_visita' , ['M' , 'SM'])
+                ->where('struttura_id' , 1)
+                ->whereBetween('data_inizio' , [Carbon::today()->format('Y-m-d 00:00:00') , Carbon::today()->format('Y-m-d 23:59:59')])
+                ->orderBy('data_inizio');
+        })->with('prenotazione' , 'medico' , 'prestazione' , 'sport' , 'paziente' , 'societaSportiva')->get();
+/*
         return Prenotazione::with('medico' , 'visita.prestazione' , 'visita.sport' , 'paziente')
             ->where('visita_type' , 'medsport')
             ->where('struttura_id' , 1)
@@ -29,16 +36,17 @@ class AccettazioneMedsportController extends Controller
             ->whereBetween('data_inizio' , [Carbon::today()->format('Y-m-d 00:00:00') , Carbon::today()->format('Y-m-d 23:59:59')])
             ->orderBy('data_inizio')
             ->get();                
+            */
     }
 
-    public function apriScheda($prenotazione_id)
+    public function apriVisita(VisitaMedsport $visitaMedsport)
     {
-        $prenotazione = Prenotazione::find($prenotazione_id);
-        $prenotazione->load('visita.datiClinici' , 'visita.preAnamnesi');
+      
+        $visitaMedsport->load('prenotazione' , 'datiClinici' , 'preAnamnesi');
         
-        if( !$prenotazione->visita->datiClinici ) { 
+        if( !$visitaMedsport->datiClinici ) { 
             //prendi dati clinici da visita precedente
-            $prenotazionePrecedente = Prenotazione::with('visita.datiClinici')->where('paziente_id' , $prenotazione->paziente_id)
+            $prenotazionePrecedente = Prenotazione::with('visita.datiClinici')->where('paziente_id' , $visitaMedsport->paziente_id)
                 ->where('visita_type' , 'medsport')
                 ->where('accettata' , true)
                 ->orderBy('data_inizio' , 'desc')->first();
@@ -47,18 +55,18 @@ class AccettazioneMedsportController extends Controller
                 $replica = $prenotazionePrecedente->visita->datiClinici->replicate();
     
                 
-                $prenotazione->visita->datiClinici()->save($replica);
+                $visitaMedsport->datiClinici()->save($replica);
                 
                
             }
             else {
                 //crea dati clinici di default
-                $prenotazione->visita->datiClinici()->create();                
+                $visitaMedsport->datiClinici()->create();                
             }            
         }        
        
-        if( !$prenotazione->visita->preAnamnesi ) {
-            $prenotazionePrecedente = Prenotazione::with('visita.preAnamnesi')->where('paziente_id' , $prenotazione->paziente_id)
+        if( !$visitaMedsport->preAnamnesi ) {
+            $prenotazionePrecedente = Prenotazione::with('visita.preAnamnesi')->where('paziente_id' , $visitaMedsport->paziente_id)
                 ->where('visita_type' , 'medsport')
                 ->where('accettata' , true)
                 ->orderBy('data_inizio' , 'desc')->first();
@@ -67,20 +75,20 @@ class AccettazioneMedsportController extends Controller
                 $replica = $prenotazionePrecedente->visita->preAnamnesi->replicate();
     
                 
-                $prenotazione->visita->preAnamnesi()->save($replica);
+                $visitaMedsport->preAnamnesi()->save($replica);
                 
                 
             }
             else {
                 //crea preAnamnesi di default
-                $prenotazione->visita->preAnamnesi()->create();                
+                $visitaMedsport->preAnamnesi()->create();                
             }
         }
 
         return [
-            'prenotazione' => $prenotazione->load('medico' , 'visita.prestazione' , 'visita.sport' , 'paziente.localitaNascita' , 'paziente.localitaResidenza' , 'visita.datiClinici' , 'visita.preAnamnesi'),
-            'elenco_sport' => Sport::where('tipo_visita' , $prenotazione->visita->sport->tipo_visita)->get(),
-            'elenco_medici' => Medico::where('attivo' , true)->orWhere('id' , $prenotazione->medico_id)->orderBy('ragione_sociale')->get()
+            'visita' => $visitaMedsport->load('medico' , 'prestazione' , 'sport' , 'paziente.localitaNascita' , 'paziente.localitaResidenza'),
+            'elenco_sport' => Sport::where('tipo_visita' , $visitaMedsport->sport->tipo_visita)->get(),
+            'elenco_medici' => Medico::where('attivo' , true)->orWhere('id' , $visitaMedsport->medico_id)->orderBy('ragione_sociale')->get()
         ];
     }
 

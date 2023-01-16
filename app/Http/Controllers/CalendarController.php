@@ -14,17 +14,9 @@ class CalendarController extends Controller
 {
     public function caricaCalendario()
     {        
-        return [            
-            //'prenotazioni' => PrenotazioneCalendarioResource::collection(Prenotazione::with('paziente')->whereBetween('data_inizio' , [Carbon::now()->subMonth() , Carbon::now()->addMonths(6)])->get()),
-            'prenotazioni' => PrenotazioneCalendarioResource::collection(Prenotazione::with('societaSportiva' , 'visitaMedsport.paziente' , 'visitaMedsport.prestazione' , 'visitaAmbulatoriale.paziente' , 'visitaAmbulatoriale.prestazione')->withCount('visiteMedsport' , 'visiteAmbulatoriali')->whereBetween('data_inizio' , [Carbon::now()->subMonth() , Carbon::now()->addMonths(1)])->get()),
-            //'ambulatori' => Ambulatorio::all(),
-            //'medici' => Medico::all(),
-            //'orari_medici' => OrarioMedico::all(),
+        return [                        
+            'prenotazioni' => PrenotazioneCalendarioResource::collection(Prenotazione::with('societaSportiva' , 'visitaMedsport.paziente' , 'visitaMedsport.prestazione' , 'visitaAmbulatoriale.paziente' , 'visitaAmbulatoriale.prestazione')->withCount('visiteMedsport' , 'visiteAmbulatoriali')->whereBetween('data_inizio' , [Carbon::now()->subMonth() , Carbon::now()->addMonths(1)])->get()),            
             'strutture' => Struttura::with('ambulatori' , 'orariMedici')->get(),
-            //'servizi_medsport' => PrestazioneMedsport::with('sottoprestazioni')->get(),
-            //'servizi_ambulatoriali' => PrestazioneAmbulatoriale::all(),
-            //'servizi_cardiologici' => PrestazioneCardiologica::all(),
-            //'servizi_fisioterapici' => PrestazioneFisioterapica::all(),
             
             //da spostare in global
             'impostazioni' => [

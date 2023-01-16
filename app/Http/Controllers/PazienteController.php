@@ -32,7 +32,7 @@ class PazienteController extends Controller
     */
     public function ricercaPaziente($queryRicerca)
     {
-        return $queryRicerca ? Paziente::with('localitaNascita' , 'localitaResidenza' , 'localitaRilascioDocumento')->where('ragione_sociale' , 'like' , '%'.strtolower(trim($queryRicerca)).'%')->orderBy('ragione_sociale')->limit(10)->get() : [];
+        return $queryRicerca ? Paziente::with('localitaNascita' , 'localitaResidenza' , 'localitaRilascioDocumento')->withCount(['visiteMedsport' => function($query) { $query->where('accettata' , true); }])->where('ragione_sociale' , 'like' , '%'.strtolower(trim($queryRicerca)).'%')->orderBy('ragione_sociale')->limit(10)->get() : [];
     }
 
     /**
@@ -216,7 +216,7 @@ class PazienteController extends Controller
     /* CODICE FISCALE ******************************************/
     public function cercaTramiteCodiceFiscale($codiceFiscale)
     {
-        $paziente = Paziente::with('localitaNascita')->withCount('prenotazioni')->where('codice_fiscale' , '=' , trim($codiceFiscale))->first();
+        $paziente = Paziente::with('localitaNascita')->where('codice_fiscale' , '=' , trim($codiceFiscale))->first();
         return $paziente ? response()->json($paziente , 200) : response(null , 404);
     }
 
@@ -249,6 +249,7 @@ class PazienteController extends Controller
         if ($sesso == 'F') {
             $giorno += 40;
         }
+        
         $codiceFiscale .= $anno . $this->mesi[$mese - 1] . $giorno;
 
         // aggiunge il codice del comune
