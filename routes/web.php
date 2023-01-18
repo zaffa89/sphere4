@@ -48,6 +48,6 @@ Route::get('/certificato' , function () {
 });
 
 Route::prefix('sphere')->group(function() {
-    Route::get('client/login' , [SphereUserController::class , 'loginWindow'])->name('sphere.client.login');
+    Route::get('client/login' , [SphereUserController::class , 'loginWindow'])->name('sphere.client.login');    
 });
 

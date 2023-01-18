@@ -104,7 +104,8 @@ Route::prefix('sphere')->group(function() {
 
     //API PANNELLO AMMINISTRAZIONE WEB
     Route::middleware([ 'auth:sanctum' , 'solutionmed' ])->group(function() {
-        Route::post('user/create' , [SphereUserController::class , 'store']);
+        Route::resource('sphere-user' , SphereUserController::class);
+        
     });
 
     Route::put('save-setting/{setting}' , [AdminController::class , 'saveSetting']);

@@ -6,6 +6,7 @@ use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Medico;
 use App\Models\Setting;
+use App\Models\SphereUserRole;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -22,8 +23,9 @@ class AdminController extends Controller
         $this->authorize('solutionmed');
 
         return Inertia::render('Admin/Utenti' , [
-            'utenti' => User::has('sphereUser')->with('sphereUser.medico')->get(),
-            'medici_senza_utente' => Medico::doesntHave('sphereUser')->get()
+            'utenti' => User::has('sphereUser')->with('sphereUser.medico' , 'sphereUser.role')->get(),
+            'medici_senza_utente' => Medico::doesntHave('sphereUser')->get(),
+            'ruoli' => SphereUserRole::all()
         ]);
     }
 

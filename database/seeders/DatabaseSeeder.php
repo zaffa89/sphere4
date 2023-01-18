@@ -35,6 +35,9 @@ class DatabaseSeeder extends Seeder
         ]);
         $this->call(SettingSeeder::class);
         //utenti di default e relativi utenti sphere
+        
+        $this->call(SphereUserPermissionSeeder::class);
+        $this->call(SphereUserRoleSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(AslSeeder::class);
         $this->call(LocalitaSeeder::class);

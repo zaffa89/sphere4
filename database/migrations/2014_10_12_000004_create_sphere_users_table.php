@@ -18,8 +18,11 @@ return new class extends Migration
             
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
-            $table->string('username')->unique();
-            $table->boolean('admin')->default(false);
+            $table->string('username')->unique();           
+
+            $table->unsignedBigInteger('sphere_user_role_id')->nullable();
+            $table->foreign('sphere_user_role_id')->references('id')->on('sphere_user_roles')->onDelete('set null');
+
             $table->boolean('attivo')->default(true);
             
             $table->unsignedBigInteger('struttura_id')->nullable();

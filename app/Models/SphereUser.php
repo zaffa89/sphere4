@@ -16,6 +16,16 @@ class SphereUser extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function role() 
+    {
+        return $this->belongsTo(SphereUserRole::class , 'sphere_user_role_id');
+    }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(SphereUserPermission::class , 'sphere_user_permission' , 'sphere_user_id' , 'sphere_user_permission_id')->withTimestamps();
+    }
+
     public function struttura()
     {
         return $this->belongsTo(Struttura::class);

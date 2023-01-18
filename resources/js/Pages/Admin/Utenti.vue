@@ -35,17 +35,18 @@
                         </td>
                         <td class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">{{ utente.sphere_user.medico ? utente.sphere_user.medico.ragione_sociale : '' }}</td>
                         <td class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">{{ utente.sphere_user.attivo ? 'SI' : 'NO' }}</td>
-                        <td class="px-3 py-4 text-sm text-gray-500">RUOLO</td>
+                        <td class="px-3 py-4 text-sm text-gray-500">{{  utente.sphere_user.role?.name }}</td>
                         <td class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                            <a href="#" class="text-indigo-600 hover:text-indigo-900">
+                            <button @click="apriModalModifica(utente.sphere_user.id)" class="text-indigo-600 hover:text-indigo-900">
                                 Modifica
-                            </a>
+                            </button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>              
-        <ModalNuovoUtente :open="modalNuovoUtenteOpen" v-on:chiudi-modal="modalNuovoUtenteOpen = false" v-on:utente-creato="utenteCreato" :medici="$page.props.medici_senza_utente" />
+        <ModalNuovoUtente v-if="modalNuovoUtenteOpen" v-on:chiudi-modal="modalNuovoUtenteOpen = false" v-on:utente-creato="refresh" :medici="$page.props.medici_senza_utente" :ruoli="$page.props.ruoli" />
+        <ModalModificaUtente v-if="modalModificaId" v-on:chiudi-modal="modalModificaId = null" v-on:utente-modificato="refresh" :id="modalModificaId" :medici="$page.props.medici_senza_utente" :ruoli="$page.props.ruoli" />
     </AdminLayout>
 </template>
 
@@ -53,6 +54,7 @@
     import AppLayout from '../../Layouts/AppLayout.vue';
     import AdminLayout from '../../Layouts/AdminLayout.vue';
     import ModalNuovoUtente from './Components/ModalNuovoUtente.vue';
+    import ModalModificaUtente from './Components/ModalModificaUtente.vue';
     import { Inertia } from '@inertiajs/inertia';
 </script>
 
@@ -63,9 +65,19 @@ export default {
     {
         return {
             modalNuovoUtenteOpen : false,
+            modalModificaId: null
         }
     },
     methods: {
+        apriModalModifica(id)
+        {
+            this.modalModificaId = id
+        },
+        refresh() {
+            this.modalNuovoUtenteOpen = false
+            this.modalModificaId = null
+            Inertia.reload()
+        },
         utenteCreato()
         {
             this.modalNuovoUtenteOpen = false;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use stdClass;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Medico;
@@ -35,13 +36,15 @@ class SphereUserController extends Controller
         {
             if( Auth::attempt( ['email' => $user->email , 'password' => $request->password] ) )
             {
-                //$user->tokens()->delete();
+                $user->tokens()->delete();
                 $token = $user->createToken($request->username , ['sphere-client']);
-                return response()->json( [ 'token' => $token->plainTextToken , 'client_uuid' => Str::uuid() , 'permessi' => [
-                    'calendario' => true,
-                    'anagrafiche_pazienti' => true,
-                    'anagrafiche_medici' => false
-                ] ] , 200 );
+
+                $permessi = [];
+                foreach($user->sphereUser->permissions as $permesso) {
+                    $permessi[$permesso['field']] = true;
+                }
+                
+                return response()->json( [ 'token' => $token->plainTextToken , 'client_uuid' => Str::uuid() , 'permessi' => $permessi ] , 200 );
             }
             
         }
@@ -91,9 +94,9 @@ class SphereUserController extends Controller
             'username' => 'string|required',
             'password' => 'string|required|confirmed', //password_confirmation 
             'email' => 'nullable|email|max:255',
-            'telefono' => 'nullable|string',
-            'admin' => 'required|boolean',
+            'telefono' => 'nullable|string',      
             'attivo' => 'required|boolean',
+            'sphere_user_role_id' => 'nullable|exists:sphere_user_roles,id',
             'medico_id' => 'nullable|exists:medici,id'      
         ]);
 
@@ -114,7 +117,7 @@ class SphereUserController extends Controller
             return response('Questo utente è già associato ad un profilo Sphere' , 422);
         }
         else {
-            $user->sphereUser()->create($request->only(['username' , 'admin' , 'attivo']));
+            $user->sphereUser()->create($request->only(['username' , 'sphere_user_role_id' , 'attivo']));
             
             if( $request->medico_id ) {
                 $medico = Medico::find($request->medico_id);
@@ -134,7 +137,7 @@ class SphereUserController extends Controller
      */
     public function show(SphereUser $sphereUser)
     {
-        //
+        return $sphereUser;
     }
 
     /**
