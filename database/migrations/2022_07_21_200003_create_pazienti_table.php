@@ -17,10 +17,7 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');            
-
-            $table->unsignedBigInteger('sphere_user_id')->nullable();
-            $table->foreign('sphere_user_id')->references('id')->on('sphere_users');
+            $table->foreign('user_id')->references('id')->on('users');
 
             $table->unsignedBigInteger('struttura_id');
             $table->foreign('struttura_id')->references('id')->on('strutture');

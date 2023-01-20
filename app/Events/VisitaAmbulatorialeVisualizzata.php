@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\SphereUser;
+use App\Models\User;
 use App\Models\VisitaAmbulatoriale;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -17,17 +17,17 @@ class VisitaAmbulatorialeVisualizzata
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $visitaAmbulatoriale;
-    public $sphereUser;
+    public $user;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(VisitaAmbulatoriale $visitaAmbulatoriale , SphereUser $sphereUser)
+    public function __construct(VisitaAmbulatoriale $visitaAmbulatoriale , User $user)
     {
         $this->visitaAmbulatoriale = $visitaAmbulatoriale;
-        $this->sphereUser = $sphereUser;
+        $this->user = $user;
     }
 
     /**

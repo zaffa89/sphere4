@@ -22,9 +22,6 @@ class PrenotazioneFactory extends Factory
         
         return [
             'user_id' => 1,
-   
-            'sphere_user_id' => 1,
-            
             //'data_prenotazione' => $this->faker->date(),
 
             'data_inizio' => $data_inizio,

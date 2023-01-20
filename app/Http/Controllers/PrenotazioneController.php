@@ -12,19 +12,16 @@ use Illuminate\Http\Request;
 use App\Models\VisitaMedsport;
 use Illuminate\Support\Carbon;
 use App\Events\PrenotazioneCreata;
-use App\Models\VisitaCardiologica;
 use Illuminate\Support\Facades\DB;
 use App\Models\PrestazioneMedsport;
 use App\Models\VisitaAmbulatoriale;
-use App\Models\VisitaFisioterapica;
 use App\Events\PrenotazioneEliminata;
 use App\Events\PrenotazioneModificata;
-use App\Models\PrestazioneCardiologica;
 use App\Events\PrenotazioneVisualizzata;
 use App\Http\Requests\ValidatePrenotazioneRequest;
 use App\Http\Resources\PrenotazioneCalendarioResource;
 use App\Models\PrestazioneAmbulatoriale;
-use App\Models\PrestazioneFisioterapica;
+
 
 use function Symfony\Component\String\b;
 
@@ -106,7 +103,7 @@ class PrenotazioneController extends Controller
     {                
         return DB::transaction(function () use ($request) {
             $prenotazione = Prenotazione::create([
-                'sphere_user_id' => auth()->user()->sphereUser->id,               
+                'user_id' => auth()->user()->id,               
                 'medico_id' => $request->medico_id,
                 'ambulatorio_id' => $request->ambulatorio_id,
                 'struttura_id' => $request->struttura_id,
@@ -169,7 +166,7 @@ class PrenotazioneController extends Controller
             
             
             
-            //PrenotazioneCreata::dispatchIf($prenotazione , $prenotazione , auth()->user()->sphereUser , $request->header('Electron-Client-UUID'));
+            //PrenotazioneCreata::dispatchIf($prenotazione , $prenotazione , auth()->user() , $request->header('Electron-Client-UUID'));
 
             //return new PrenotazioneCalendarioResource($prenotazione);
             return new PrenotazioneCalendarioResource($prenotazione);
@@ -286,7 +283,7 @@ class PrenotazioneController extends Controller
                 break;
             }                                    
             
-            //PrenotazioneModificata::dispatchIf($isDirty , $prenotazione , $oldPrenotazione , auth()->user()->sphereUser , $request->header('Electron-Client-UUID'));                        
+            //PrenotazioneModificata::dispatchIf($isDirty , $prenotazione , $oldPrenotazione , auth()->user() , $request->header('Electron-Client-UUID'));                        
         });
     }
 
@@ -322,7 +319,7 @@ class PrenotazioneController extends Controller
     {
         
         DB::transaction(function() use ($prenotazione , $request) {
-            PrenotazioneEliminata::dispatchIf($prenotazione , $prenotazione , auth()->user()->sphereUser , $request->header('Electron-Client-UUID'));
+            PrenotazioneEliminata::dispatchIf($prenotazione , $prenotazione , auth()->user()->id , $request->header('Electron-Client-UUID'));
             $prenotazione->delete();
         });
         

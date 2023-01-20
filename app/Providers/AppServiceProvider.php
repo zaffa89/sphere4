@@ -35,8 +35,6 @@ class AppServiceProvider extends ServiceProvider
             'users' => 'App\Models\User',
             'medsport' => 'App\Models\VisitaMedsport',
             'ambulatoriale' => 'App\Models\VisitaAmbulatoriale',
-            'cardiologica' => 'App\Models\VisitaCardiologica',
-            'fisioterapica' => 'App\Models\VisitaFisioterapica',
         ]);
 
         if (Schema::hasTable('settings')) {

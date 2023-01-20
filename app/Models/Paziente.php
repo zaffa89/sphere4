@@ -108,7 +108,7 @@ class Paziente extends Model
 
     public function visualizzazioni()
     {
-        return $this->morphToMany(SphereUser::class , 'viewable' , 'gdpr_log_views')->withTimestamps();
+        return $this->morphToMany(User::class , 'viewable' , 'gdpr_log_views')->withTimestamps();
     }
 
     public function localitaNascita()

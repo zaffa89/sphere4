@@ -1,203 +1,158 @@
 <template>
-  <div class="min-h-full">
-    <Popover as="header" class="pb-24 bg-blue-600" v-slot="{ open }">
-      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <div class="relative py-5 flex items-center justify-center lg:justify-between">
-          <!-- Logo -->
-          <div class="absolute left-0 flex-shrink-0 lg:static">
-            <a href="#">              
-              <img class="h-10 w-auto" src="/storage/header_logo.png" />
-            </a>
-          </div>
+        <Disclosure as="nav" class="bg-white shadow sticky top-0 z-50" v-slot="{ open }">
+            <div class="mx-auto max-w-full px-2 sm:px-6 lg:px-8">
+                <div class="relative flex h-16 justify-between">
+                    <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                        <!-- Mobile menu button -->
+                        <DisclosureButton
+                            class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                            <span class="sr-only">Open main menu</span>
+                            <Bars3Icon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
+                            <XMarkIcon v-else class="block h-6 w-6" aria-hidden="true" />
+                        </DisclosureButton>
+                    </div>
+                    <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                        <div class="flex flex-shrink-0 items-center">
+                            <img class="block h-8 w-auto lg:hidden"
+                                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                                alt="Your Company" />
+                            <img class="hidden h-8 w-auto lg:block"
+                                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                                alt="Your Company" />
+                        </div>
+                        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                            <!-- Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
+                            <Link href="/anagrafiche/pazienti"
+                                class="inline-flex items-center border-b-2 border-indigo-500 px-1 pt-1 text-sm font-medium text-gray-900">Pazienti</Link>
+                            <Link href="/anagrafiche/pazienti"
+                                class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Ambulatori</Link>
+                            <a href="#"
+                                class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Projects</a>
+                            <a href="#"
+                                class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Calendar</a>
+                        </div>
+                    </div>
+                    <div
+                        class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                        <button type="button"
+                            class="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                            <span class="sr-only">View notifications</span>
+                            <BellIcon class="h-6 w-6" aria-hidden="true" />
+                        </button>
 
-          <!-- Right section on desktop -->
-          <div class="hidden lg:ml-4 lg:flex lg:items-center lg:pr-0.5">
-            <button type="button" class="flex-shrink-0 p-1 text-blue-200 rounded-full hover:text-white hover:bg-white hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-white">
-              <span class="sr-only">View notifications</span>
-              <BellIcon class="h-6 w-6" aria-hidden="true" />
-            </button>
-
-            <!-- Profile dropdown -->
-            <Menu as="div" class="ml-4 relative flex-shrink-0">
-              <div>
-                <MenuButton class="flex-shrink-0 p-1 text-blue-200 rounded-full hover:text-white hover:bg-white hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-white">                  
-                  <UserCircleIcon class="h-6 w-6" aria-hidden="true" /> 
-                </MenuButton>
-              </div>
-              <transition leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95" v-if="$page.props.user">
-                <MenuItems class="origin-top-right z-40 absolute -right-2 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  <MenuItem v-slot="{ active }">
-                    <Link :href="route('profile.show')" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Impostazioni</Link>
-                  </MenuItem>
-                  <MenuItem v-slot="{ active }">
-                    <Link @click="logout" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Esci</Link>
-                  </MenuItem>
-                </MenuItems>                
-              </transition>
-              <transition leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95" v-if="!$page.props.user">
-                <MenuItems class="origin-top-right z-40 absolute -right-2 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  <MenuItem v-for="item in guestNavigation" :key="item.name" v-slot="{ active }">
-                    <a :href="item.href" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">{{ item.name }}</a>
-                  </MenuItem>
-                </MenuItems>
-              </transition>
-            </Menu>
-          </div>
-
-          <!-- Search -->
-          <div class="flex-1 min-w-0 px-12 lg:hidden">
-            <div class="max-w-xs w-full mx-auto">
-              <label for="desktop-search" class="sr-only">Search</label>
-              <div class="relative text-white focus-within:text-gray-600">
-                <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
-                  <MagnifyingGlassIcon  class="h-5 w-5" aria-hidden="true" />
+                        <!-- Profile dropdown -->
+                        <Menu as="div" class="relative ml-3">
+                            <div>
+                                <MenuButton
+                                    class="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                    <span class="sr-only">Open user menu</span>
+                                    <img class="h-8 w-8 rounded-full"
+                                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                        alt="" />
+                                </MenuButton>
+                            </div>
+                            <transition enter-active-class="transition ease-out duration-200"
+                                enter-from-class="transform opacity-0 scale-95"
+                                enter-to-class="transform opacity-100 scale-100"
+                                leave-active-class="transition ease-in duration-75"
+                                leave-from-class="transform opacity-100 scale-100"
+                                leave-to-class="transform opacity-0 scale-95">
+                                <MenuItems
+                                    class="absolute right-0 z-50 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                    <MenuItem v-slot="{ active }">
+                                    <a href="#"
+                                        :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Your
+                                        Profile</a>
+                                    </MenuItem>
+                                    <MenuItem v-slot="{ active }">
+                                    <a href="#"
+                                        :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Settings</a>
+                                    </MenuItem>
+                                    <MenuItem v-slot="{ active }">
+                                    <button @click="logout"
+                                        :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Sign
+                                        out</button>
+                                    </MenuItem>
+                                </MenuItems>
+                            </transition>
+                        </Menu>
+                    </div>
                 </div>
-                <input id="desktop-search" class="block w-full bg-white bg-opacity-20 py-2 pl-10 pr-3 border border-transparent rounded-md leading-5 text-gray-900 placeholder-white focus:outline-none focus:bg-opacity-100 focus:border-transparent focus:placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="Search" type="search" name="search" />
-              </div>
             </div>
-          </div>
 
-          <!-- Menu button -->
-          <div class="absolute right-0 flex-shrink-0 lg:hidden">
-            <!-- Mobile menu button -->
-            <PopoverButton class="bg-transparent p-2 rounded-md inline-flex items-center justify-center text-blue-200 hover:text-white hover:bg-white hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-white">
-              <span class="sr-only">Open main menu</span>
-              <Bars3Icon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
-              <XMarkIcon v-else class="block h-6 w-6" aria-hidden="true" />
-            </PopoverButton>
-          </div>
-        </div>
-        <div class="hidden lg:block border-t border-white border-opacity-20 py-5">
-          <div class="grid grid-cols-3 gap-8 items-center">
-            <div class="col-span-2">
-              <nav class="flex space-x-4">                
-                <Link href="/" :class="[route().current('homepage') ? 'text-white bg-opacity-10' : 'text-blue-100', 'text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10']">Homepage</Link>
-                <Link href="/" :class="[route().current('modulistica') ? 'text-white' : 'text-blue-100', 'text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10']">Modulistica</Link>
-                <Link v-if="$page.props.user" href="#" :class="[route().current('prenotazioni')  ? 'text-white' : 'text-blue-100', 'text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10']">Le tue prenotazioni</Link>
-                <Link v-if="$page.props.user" href="#" :class="[route().current('anagrafiche')  ? 'text-white' : 'text-blue-100', 'text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10']">Le tue anagrafiche</Link>
-                <Link v-if="$page.props.user?.admin" :href="route('admin')" :class="[route().current('admin') ? 'text-white' : 'text-blue-100', 'text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10']">Impostazioni</Link>
-               
-              </nav>
-            </div>
-            <div>
-              <div class="max-w-md w-full mx-auto">
-                <label for="mobile-search" class="sr-only">Search</label>
-                <div class="relative text-white focus-within:text-gray-600">
-                  <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
-                    <MagnifyingGlassIcon  class="h-5 w-5" aria-hidden="true" />
-                  </div>
-                  <input id="mobile-search" class="block w-full bg-white bg-opacity-20 py-2 pl-10 pr-3 border border-transparent rounded-md leading-5 text-gray-900 placeholder-white focus:outline-none focus:bg-opacity-100 focus:border-transparent focus:placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="Search" type="search" name="search" />
+            <DisclosurePanel class="sm:hidden">
+                <div class="space-y-1 pt-2 pb-4">
+                    <!-- Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" -->
+                    <DisclosureButton as="a" href="#"
+                        class="block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700">
+                        Dashboard</DisclosureButton>
+                    <DisclosureButton as="a" href="#"
+                        class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700">
+                        Team</DisclosureButton>
+                    <DisclosureButton as="a" href="#"
+                        class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700">
+                        Projects</DisclosureButton>
+                    <DisclosureButton as="a" href="#"
+                        class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700">
+                        Calendar</DisclosureButton>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <TransitionRoot as="template" :show="open">
-        <div class="lg:hidden">
-          <TransitionChild as="template" enter="duration-150 ease-out" enter-from="opacity-0" enter-to="opacity-100" leave="duration-150 ease-in" leave-from="opacity-100" leave-to="opacity-0">
-            <PopoverOverlay class="z-20 fixed inset-0 bg-black bg-opacity-25" />
-          </TransitionChild>
-
-          <TransitionChild as="template" enter="duration-150 ease-out" enter-from="opacity-0 scale-95" enter-to="opacity-100 scale-100" leave="duration-150 ease-in" leave-from="opacity-100 scale-100" leave-to="opacity-0 scale-95">
-            <PopoverPanel focus class="z-30 absolute top-0 inset-x-0 max-w-3xl mx-auto w-full p-2 transition transform origin-top">
-              <div class="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white divide-y divide-gray-200">
-                <div class="pt-3 pb-2">
-                  <div class="flex items-center justify-between px-4">
-                    <div>
-                      <img class="h-8 w-auto" src="/storage/header_logo.png" alt="Workflow" />
-                    </div>
-                    <div class="-mr-2">
-                      <PopoverButton class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
-                        <span class="sr-only">Close menu</span>
-                        <XMarkIcon class="h-6 w-6" aria-hidden="true" />
-                      </PopoverButton>
-                    </div>
-                  </div>
-                  <div class="mt-3 px-2 space-y-1">                    
-                    <Link href="/"  :class="[ route().current('homepage') ? 'bg-gray-200' : 'bg-white' , 'block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800']">Homepage</Link>
-                    <Link href="/" :class="[ route().current('modulistica') ? 'bg-gray-200' : 'bg-white' , 'block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800']">Modulistica</Link> 
-                    <Link v-if="$page.props.user" href="#" :class="[ route().current('prenotazioni') ? 'bg-gray-200' : 'bg-white' , 'block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800']">Le tue prenotazioni</Link> 
-                    <Link v-if="$page.props.user" href="#" :class="[ route().current('anagrafiche') ? 'bg-gray-200' : 'bg-white' , 'block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800']">Le tue anagrafiche</Link> 
-                    <Link v-if="$page.props.user?.admin" :href="route('admin')" :class="[ route().current('admin') ? 'bg-gray-200' : 'bg-white' , 'block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800']">Impostazioni</Link>                                        
-                  </div>
-                </div>
-                <div class="pt-4 pb-2">
-                  <div class="flex items-center px-5">
-                    <div class="flex-shrink-0">
-                      <UserCircleIcon class="h-10 w-10 rounded-full text-gray-400" /> 
-                    </div>
-                    <div class="ml-3 min-w-0 flex-1">
-                      <div class="text-base font-medium text-gray-800 truncate">{{ $page.props.user.email }}</div>                      
-                    </div>
-                    <button type="button" class="ml-auto flex-shrink-0 bg-white p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                      <span class="sr-only">View notifications</span>
-                      <BellIcon class="h-6 w-6" aria-hidden="true" />
-                    </button>
-                  </div>
-                  <div class="mt-3 px-2 space-y-1" v-if="$page.props.user">
-                    <Link class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800" :href="route('profile.show')">Impostazioni</Link>
-                    <Link class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800" @click="logout">Esci</Link>
-                  </div>
-                  <div class="mt-3 px-2 space-y-1" v-if="!$page.props.user">
-                    <Link v-for="item in guestNavigation" :key="item.name" :href="item.href" class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800">{{ item.name }}</Link>
-                  </div>
-                </div>
-              </div>
-            </PopoverPanel>
-          </TransitionChild>
-        </div>
-      </TransitionRoot>
-    </Popover>
-    <main class="-mt-24 pb-8">
-      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <slot />
-      </div>
-    </main>
-    <footer>
-      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 lg:max-w-7xl">
-        <div class="border-t border-gray-200 py-8 text-sm text-gray-500 text-center sm:text-left"><span class="block sm:inline">&copy; 2021 Tailwind Labs Inc.</span> <span class="block sm:inline">All rights reserved.</span></div>
-      </div>
-    </footer>
-  </div>
+            </DisclosurePanel>
+        </Disclosure>
+        <main class="w-full mx-auto p-4 mb-10 overflow-hidden">
+            <slot />          
+        </main>
+        <footer class="w-full mx-auto px-4 fixed bottom-0 border-t border-gray-200 text-gray-500 text-center text-sm h-10 items-center flex justify-center">           
+          
+                <span class="block sm:inline">&copy; 2023 Solution Med Srl.</span> <span class="block sm:inline">All rights reserved.</span>
+              
+        </footer>
 </template>
 
 <script setup>
 import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-vue3';
 
-import {
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  Popover,
-  PopoverButton,
-  PopoverOverlay,
-  PopoverPanel,
-  TransitionChild,
-  TransitionRoot,
-} from '@headlessui/vue'
-import { BellIcon, Bars3Icon, XMarkIcon , UserCircleIcon} from '@heroicons/vue/20/solid'
-import { MagnifyingGlassIcon  } from '@heroicons/vue/20/solid'
-
-const logout = () => {
-    Inertia.post(route('logout'));
-};
+import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 
 </script>
 
 <script>
-	export default {
-		data()
-		{
-			return {
-				guestNavigation : [
-				    { name: 'Entra', href: '/login' },
-				    { name: 'Registrati', href: '/register' },
-				]				
-			}
-		}
-	}
+export default {
+    data() {
+        return {
+            guestNavigation: [
+                { name: 'Entra', href: '/login' },
+                { name: 'Registrati', href: '/register' },
+            ],
+            activeTabs: [],
+            currentTab: null,
+            notifications: [],
+
+        }
+    },
+    computed() {
+
+        return 
+    },
+    methods: {
+        convertiPermessi(arrayPermessi)
+        {
+            let obj = {};
+            arrayPermessi.forEach(p => {
+                obj[p.field] = true
+            })
+            return obj
+        },
+        logout() {
+            if(window.electron) window.electron.eliminaMenu();
+            Inertia.post(route('logout'));
+            
+        }
+    },
+    async created() 
+    {
+        if(window.electron) window.electron.creaMenu(this.convertiPermessi(this.$page.props.user.permessi))
+    }
+}
 </script>

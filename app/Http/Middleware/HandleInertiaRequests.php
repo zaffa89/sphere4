@@ -40,7 +40,13 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
-            //
+            // Lazily...
+
+            /* carica permessi con inertia, vengono già caricati in automatico in User::class . Usare se caricare sempre i permessi insieme all'utente è un problema
+            'permessi' => fn () => $request->user()
+                ? $request->user()->permessi
+                : null,
+            */
         ]);
     }
 }

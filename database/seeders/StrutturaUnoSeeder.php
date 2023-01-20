@@ -5,12 +5,8 @@ namespace Database\Seeders;
 use Faker\Generator;
 use App\Models\Medico;
 use App\Models\Struttura;
-use App\Models\VisitaMedsport;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
-use App\Models\VisitaCardiologica;
-use App\Models\VisitaAmbulatoriale;
-use App\Models\VisitaFisioterapica;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class StrutturaUnoSeeder extends Seeder
@@ -89,8 +85,7 @@ class StrutturaUnoSeeder extends Seeder
             $rand_prest_amb = rand(1 , 6);
 
             $prenotazione = $struttura->prenotazioni()->create([
-                'user_id' => 1,   
-                'sphere_user_id' => 1,                
+                'user_id' => 1,                
                 
                 'data_prenotazione' => now(),
                 'data_inizio' => $data_inizio,
@@ -162,7 +157,7 @@ class StrutturaUnoSeeder extends Seeder
             $rand_id_med_ambu = $faker->numberBetween(1 , 3);          
 
             $struttura->prenotazioni()->create([              
-                'sphere_user_id' => 1,            
+                'user_id' => 1,            
                 'data_prenotazione' => now(),                
                 'data_inizio' => $data_inizio,
                 'data_fine' => Carbon::parse($datetime)->addMinutes(20)->format('Y-m-d H:i:s'),   
@@ -181,7 +176,7 @@ class StrutturaUnoSeeder extends Seeder
             $rand_id_med_ambu = $faker->numberBetween(1 , 3);          
 
             $struttura->prenotazioni()->create([              
-                'sphere_user_id' => 1,            
+                'user_id' => 1,            
                 'data_prenotazione' => now(),                
                 'data_inizio' => $data_inizio,
                 'data_fine' => Carbon::parse($datetime)->addMinutes(20)->format('Y-m-d H:i:s'),   

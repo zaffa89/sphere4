@@ -26,6 +26,6 @@ class LogVisualizzazioneFattura implements ShouldQueue
      */
     public function handle(FatturaVisualizzata $event)
     {
-        return $event->sphereUser->visualizzazioniFatture()->attach($event->fattura->id);
+        return $event->visualizzazioniFatture()->attach($event->fattura->id);
     }
 }

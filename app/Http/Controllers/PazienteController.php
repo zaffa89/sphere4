@@ -76,8 +76,7 @@ class PazienteController extends Controller
         ]);
         
         $paziente = Paziente::create([
-            'user_id' => null,
-            'sphere_user_id' => Auth::user()->sphereUser->id,
+            'user_id' => Auth::user()->id,           
 
             'nome' => $request->nome,
             'cognome' => $request->cognome,                
@@ -159,7 +158,7 @@ class PazienteController extends Controller
 
         DB::transaction(function () use ($request , $paziente) {            
             $paziente->update([                
-                'sphere_user_id' => Auth::user()->sphereUser->id,
+                'user_id' => Auth::user()->id,
 
                 'nome' => $request->nome,
                 'cognome' => $request->cognome,                

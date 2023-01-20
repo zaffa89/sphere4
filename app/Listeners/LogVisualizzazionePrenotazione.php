@@ -26,6 +26,6 @@ class LogVisualizzazionePrenotazione implements ShouldQueue
      */
     public function handle(PrenotazioneVisualizzata $event)
     {
-        return $event->sphereUser->visualizzazioniPrenotazioni()->attach($event->prenotazione->id);
+        return $event->visualizzazioniPrenotazioni()->attach($event->prenotazione->id);
     }
 }

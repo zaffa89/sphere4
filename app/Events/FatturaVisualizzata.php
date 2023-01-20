@@ -2,8 +2,8 @@
 
 namespace App\Events;
 
+use App\Models\User;
 use App\Models\Fattura;
-use App\Models\SphereUser;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -17,16 +17,16 @@ class FatturaVisualizzata
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $fattura;
-    public $sphereUser;
+    public $user;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Fattura $fattura , SphereUser $sphereUser)
+    public function __construct(Fattura $fattura , User $user)
     {
         $this->fattura = $fattura;
-        $this->sphereUser = $sphereUser;
+        $this->user = $user;
     }
 
     /**

@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Http\Controllers\CalendarController;
+use App\Models\User;
 
+use Faker\Generator;
 use App\Models\Medico;
 use App\Models\Struttura;
-use App\Models\SphereUser;
+use App\Models\SocietaSportiva;
+use Illuminate\Database\Seeder;
 use App\Models\PrestazioneMedsport;
 use App\Models\PrestazioneAmbulatoriale;
-use App\Models\SocietaSportiva;
 use App\Models\SottoprestazioneMedsport;
-use Illuminate\Database\Seeder;
-use Faker\Generator;
+use App\Http\Controllers\CalendarController;
 
 
 class DatabaseSeeder extends Seeder
@@ -36,8 +36,8 @@ class DatabaseSeeder extends Seeder
         $this->call(SettingSeeder::class);
         //utenti di default e relativi utenti sphere
         
-        $this->call(SphereUserPermissionSeeder::class);
-        $this->call(SphereUserRoleSeeder::class);
+        $this->call(UserPermissionSeeder::class);
+        $this->call(UserRoleSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(AslSeeder::class);
         $this->call(LocalitaSeeder::class);
@@ -87,15 +87,15 @@ class DatabaseSeeder extends Seeder
         CalendarController::generaOrariDefault(6 , 6 , now() , now()->addMonths(3) , '09:00:00' , '15:00:00');
 
         //assegna gli utenti di default ai primi 2 medici
-        $sphereUser = SphereUser::find(1);
+        $user = User::find(1);
         $medico = Medico::find(1);
-        $medico->sphereUser()->associate($sphereUser);
+        $medico->user()->associate($user);
         
         $medico->save();
 
-        $sphereUser = SphereUser::find(2);
+        $user = User::find(2);
         $medico = Medico::find(2);
-        $medico->sphereUser()->associate($sphereUser);
+        $medico->user()->associate($user);
         
         $medico->save();
 

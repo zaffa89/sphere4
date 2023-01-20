@@ -1,5 +1,6 @@
 import './bootstrap';
 import '../css/app.css';
+import 'devextreme/dist/css/dx.light.css';
 
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/inertia-vue3';
@@ -16,7 +17,7 @@ createInertiaApp({
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
     setup({ el, app, props, plugin }) {
         return createApp({ render: () => h(app, props) })
-            .use(plugin)
+            .use(plugin)            
             .use(ZiggyVue, Ziggy)
             .use(pinia)
             .mount(el);

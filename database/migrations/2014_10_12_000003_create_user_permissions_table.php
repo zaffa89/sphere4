@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('sphere_user_permissions', function (Blueprint $table) {
+        Schema::create('user_permissions', function (Blueprint $table) {
             $table->id();
             
             $table->string('label');
@@ -32,6 +32,6 @@ return new class extends Migration
     
     public function down()
     {
-        Schema::dropIfExists('sphere_user_permissions');
+        Schema::dropIfExists('user_permissions');
     }
 };

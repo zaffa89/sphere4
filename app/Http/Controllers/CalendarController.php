@@ -21,9 +21,7 @@ class CalendarController extends Controller
             //da spostare in global
             'impostazioni' => [
                 'medsport' => true,
-                'ambulatoriale' => true,
-                'cardiologia' => true,
-                'fisioterapia' => true,
+                'ambulatoriale' => true,               
                 'medico_default_fuori_orario' => null,
                 'avviso_presenza_orario_medico' => true,
                 'limita_medici_con_orario_medico' => false,

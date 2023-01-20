@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\SphereUser;
+use App\Models\User;
 use App\Models\Prenotazione;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
@@ -18,19 +18,19 @@ class PrenotazioneModificata implements ShouldBroadcast
 
     public $oldPrenotazione;
     public $prenotazione;
-    public $sphereUser;
+    public $user;
     public $client_uuid;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Prenotazione $prenotazione , $oldPrenotazione , SphereUser $sphereUser , $client_uuid)
+    public function __construct(Prenotazione $prenotazione , $oldPrenotazione , User $user , $client_uuid)
     {        
         $this->oldPrenotazione = $oldPrenotazione;
         $this->prenotazione = $prenotazione;
         $this->client_uuid = $client_uuid;
-        $this->sphereUser = $sphereUser;
+        $this->user = $user;
     }
 
     public function broadcastAs()

@@ -3,7 +3,6 @@
 namespace App\Listeners;
 
 use App\Events\PazienteVisualizzato;
-use App\Models\SphereUser;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -27,6 +26,6 @@ class LogVisualizzazionePaziente implements ShouldQueue
      */
     public function handle(PazienteVisualizzato $event)
     {
-        return $event->sphereUser->visualizzazioniPazienti()->attach($event->paziente->id);
+        return $event->visualizzazioniPazienti()->attach($event->paziente->id);
     }
 }

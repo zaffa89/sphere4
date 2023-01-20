@@ -33,6 +33,12 @@ class AuthServiceProvider extends ServiceProvider
                 : Response::deny();
         });
 
+        Gate::define('sphere-user' , function(User $user) {
+            return $user
+                ? Response::allow()
+                : Response::deny();
+        });
+
         Gate::define('sphere-client', function (User $user) {
             return $user->tokenCan('sphere-client') && !$user->tokenCan('*')
                         ? Response::allow()

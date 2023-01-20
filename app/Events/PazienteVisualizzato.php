@@ -3,7 +3,7 @@
 namespace App\Events;
 
 use App\Models\Paziente;
-use App\Models\SphereUser;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -16,7 +16,7 @@ class PazienteVisualizzato
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $sphereUser;
+    public $user;
     public $paziente;
 
     /**
@@ -24,9 +24,9 @@ class PazienteVisualizzato
      *
      * @return void
      */
-    public function __construct(Paziente $paziente , SphereUser $sphereUser)
+    public function __construct(Paziente $paziente , User $user)
     {
-        $this->sphereUser = $sphereUser;
+        $this->user = $user;
         $this->paziente = $paziente;
     }
 

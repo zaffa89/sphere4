@@ -60,7 +60,7 @@
                                         
                                         <div>
                                             <label for="ruolo" class="block text-sm font-medium text-gray-700">Ruolo</label>
-                                            <select v-model="utente.sphere_user_role_id" id="ruolo" name="ruolo" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                            <select v-model="utente.user_role_id" id="ruolo" name="ruolo" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                                 <option v-for="ruolo in ruoli" :key="ruolo.id" :value="ruolo.id"> {{ ruolo.name }} </option>                                                
                                             </select>
                                             <p class="mt-2 text-sm text-gray-500">Selezionando un ruolo, verranno precaricati i permessi relativi al ruolo selezionato. Dopo la creazione sarà possibile aggiungere o togliere i permessi a questo utente.</p>

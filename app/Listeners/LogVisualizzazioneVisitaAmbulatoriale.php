@@ -26,6 +26,6 @@ class LogVisualizzazioneVisitaAmbulatoriale implements ShouldQueue
      */
     public function handle(VisitaAmbulatorialeVisualizzata $event)
     {
-        return $event->sphereUser->visualizzazioniVisiteAmbulatoriali()->attach($event->visitaAmbulatoriale->id);
+        return $event->visualizzazioniVisiteAmbulatoriali()->attach($event->visitaAmbulatoriale->id);
     }
 }

@@ -14,12 +14,10 @@ class Medico extends Model
     protected $guarded = [];
     
     protected $attributes = [
-        'sphere_user_id' => null,
+        'user_id' => null,
         'attivo' =>  true,
         'abilitazione_medsport' => true,
         'abilitazione_ambulatoriale' => true,
-        'abilitazione_cardiologia' => true,
-        'abilitazione_fisioterapia' => true,
     ];
 
     public function struttura()
@@ -47,8 +45,8 @@ class Medico extends Model
         return $this->hasMany(VisitaAmbulatoriale::class);
     }
 
-    public function sphereUser()
+    public function user()
     {
-        return $this->belongsTo(SphereUser::class);
+        return $this->belongsTo(User::class);
     }
 }

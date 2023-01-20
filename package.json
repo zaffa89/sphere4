@@ -23,6 +23,9 @@
     "dependencies": {
         "@headlessui/vue": "^1.7.7",
         "@heroicons/vue": "^2.0.13",
+        "dayjs": "^1.11.7",
+        "devextreme": "22.2.3",
+        "devextreme-vue": "22.2.3",
         "pinia": "^2.0.14"
     }
 }

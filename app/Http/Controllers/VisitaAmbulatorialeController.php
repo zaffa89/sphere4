@@ -49,7 +49,7 @@ class VisitaAmbulatorialeController extends Controller
      */
     public function show(VisitaAmbulatoriale $visitaAmbulatoriale)
     {
-        VisitaAmbulatorialeVisualizzata::dispatchIf($visitaAmbulatoriale , $visitaAmbulatoriale , auth()->user()->sphereUser);
+        VisitaAmbulatorialeVisualizzata::dispatchIf($visitaAmbulatoriale , $visitaAmbulatoriale , auth()->user()->id);
 
         return $visitaAmbulatoriale;
     }
@@ -80,7 +80,7 @@ class VisitaAmbulatorialeController extends Controller
             
      
             
-            VisitaAmbulatorialeModificata::dispatchIf($visitaAmbulatoriale->isDirty() , $visitaAmbulatoriale , auth()->user()->sphereUser);
+            VisitaAmbulatorialeModificata::dispatchIf($visitaAmbulatoriale->isDirty() , $visitaAmbulatoriale , auth()->user()->id);
             $visitaAmbulatoriale->save();
         });
         

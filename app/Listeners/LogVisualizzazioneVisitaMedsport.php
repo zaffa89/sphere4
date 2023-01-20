@@ -26,6 +26,6 @@ class LogVisualizzazioneVisitaMedsport implements ShouldQueue
      */
     public function handle(VisitaMedsportVisualizzata $event)
     {
-        return $event->sphereUser->visualizzazioniVisiteMedsport()->attach($event->visitaMedsport->id);
+        return $event->visualizzazioniVisiteMedsport()->attach($event->visitaMedsport->id);
     }
 }

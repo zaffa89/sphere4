@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SphereUserPermission extends Model
+class UserPermission extends Model
 {
     use HasFactory;
 
-    public function sphereUser()
+    public function user()
     {
-        return $this->belongsToMany(SphereUser::class);
+        return $this->belongsToMany(User::class);
     }
 }

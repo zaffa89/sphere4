@@ -13,9 +13,9 @@ class Struttura extends Model
 
     protected $guarded = [];
 
-    public function sphereUser()
+    public function users()
     {
-        return $this->hasMany(SphereUser::class , 'struttura_id');
+        return $this->hasMany(User::class , 'struttura_id');
     }
     
     public function ambulatori()

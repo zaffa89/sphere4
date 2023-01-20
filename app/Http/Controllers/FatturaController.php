@@ -47,7 +47,7 @@ class FatturaController extends Controller
      */
     public function show(Fattura $fattura)
     {
-        FatturaVisualizzata::dispatchIf($fattura , $fattura , auth()->user()->sphereUser);
+        FatturaVisualizzata::dispatchIf($fattura , $fattura , auth()->user);
 
         return $fattura;
     }

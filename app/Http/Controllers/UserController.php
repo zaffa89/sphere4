@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use stdClass;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Medico;
-use App\Models\SphereUser;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,15 +12,57 @@ use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Validation\ValidationException;
 
-class SphereUserController extends Controller
+class UserController extends Controller
 {
-    public function loginWindow()
+    public function clientLoginForm(Request $request)
     {
-
-        return Inertia::render('SphereClientLogin');
+        return Inertia::render('Sphere/Login' , [
+            'token' => $request->header('Authorization')
+        ]);
     }
 
-    public function authenticate(Request $request)
+    public function externalLoginForm()
+    {
+        //eventuale blocco
+        return Inertia::render('Sphere/ExternalLoginForm');
+    }
+
+    public function doLogin(Request $request) {
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required'
+        ]);
+        
+        $user = User::where('username' , $request->username)->first();
+
+        if( $user && $user->attivo )
+        {
+            if( Auth::attempt( ['username' => $request->username , 'password' => $request->password] ) )
+            {
+               // $user->tokens()->delete();
+                //$token = $user->createToken($request->username , ['sphere-client']);
+
+                $permessi = [];
+                foreach($user->permessi as $permesso) {
+                    $permessi[$permesso['field']] = true;
+                }                
+                return redirect()->intended('sphere');
+            }            
+        }
+        if( $user && !$user->attivo)
+        {
+            return back()->withErrors([
+                'message' => 'Questo utente è stato disabilitato'
+            ])->onlyInput('username');
+            //return response()->json( ['message' => 'Questo utente è stato disabilitato'] , 401 );
+        }
+        //return response()->json( ['message' => 'Nome utente o password errati'] , 401 );
+        return back()->withErrors([
+            'message' => 'Nome utente o password errati'
+        ])->onlyInput('username');
+    }
+
+    public function authenticate(Request $request)  /* NON UTILIZZARE */
     {
         $request->validate([
             'username' => 'required',
@@ -40,7 +80,7 @@ class SphereUserController extends Controller
                 $token = $user->createToken($request->username , ['sphere-client']);
 
                 $permessi = [];
-                foreach($user->sphereUser->permissions as $permesso) {
+                foreach($user->sphereUser->permessi as $permesso) {
                     $permessi[$permesso['field']] = true;
                 }
                 
@@ -52,14 +92,14 @@ class SphereUserController extends Controller
         {
             return response()->json( ['message' => 'Questo utente è stato disabilitato'] , 401 );
         }
-        return response()->json( ['message' => 'Nome utente o password sbagliati'] , 401 );
+        return response()->json( ['message' => 'Nome utente o password errati'] , 401 );
         
     }
 
     public function checkAuth(Request $request)
     {
         
-        return response()->json( Auth::user()->sphereUser->id , 200 );
+        return response()->json( Auth::user()->id , 200 );
     }
 
     /**
@@ -94,9 +134,9 @@ class SphereUserController extends Controller
             'username' => 'string|required',
             'password' => 'string|required|confirmed', //password_confirmation 
             'email' => 'nullable|email|max:255',
-            'telefono' => 'nullable|string',      
+            'telefono' => 'nullable|string',
             'attivo' => 'required|boolean',
-            'sphere_user_role_id' => 'nullable|exists:sphere_user_roles,id',
+            'user_role_id' => 'nullable|exists:user_roles,id',
             'medico_id' => 'nullable|exists:medici,id'      
         ]);
 
@@ -106,7 +146,7 @@ class SphereUserController extends Controller
 
         $user = User::firstOrCreate(
             [
-                'email' => $request->email
+                'username' => $request->username
             ],
             [
                 'password' => Hash::make($request->password),
@@ -117,7 +157,7 @@ class SphereUserController extends Controller
             return response('Questo utente è già associato ad un profilo Sphere' , 422);
         }
         else {
-            $user->sphereUser()->create($request->only(['username' , 'sphere_user_role_id' , 'attivo']));
+            $user->sphereUser()->create($request->only(['username' , 'user_role_id' , 'attivo']));
             
             if( $request->medico_id ) {
                 $medico = Medico::find($request->medico_id);
@@ -135,9 +175,9 @@ class SphereUserController extends Controller
      * @param  \App\Models\SphereUser  $sphereUser
      * @return \Illuminate\Http\Response
      */
-    public function show(SphereUser $sphereUser)
+    public function show(User $user)
     {
-        return $sphereUser;
+        return $user;
     }
 
     /**
@@ -146,7 +186,7 @@ class SphereUserController extends Controller
      * @param  \App\Models\SphereUser  $sphereUser
      * @return \Illuminate\Http\Response
      */
-    public function edit(SphereUser $sphereUser)
+    public function edit(User $user)
     {
         //
     }
@@ -155,10 +195,10 @@ class SphereUserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\SphereUser  $sphereUser
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, SphereUser $sphereUser)
+    public function update(Request $request, User $user)
     {
         //
     }
@@ -166,10 +206,10 @@ class SphereUserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\SphereUser  $sphereUser
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SphereUser $sphereUser)
+    public function destroy(User $user)
     {
         //
     }

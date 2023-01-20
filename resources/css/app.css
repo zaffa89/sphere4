@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#griglia .dx-datagrid > .dx-datagrid-header-panel {
+	order: 2 !important;
+    padding:5px;
+}
+
+#griglia .dx-datagrid > .dx-datagrid-header-panel .dx-toolbar {
+    margin: 0 !important
+}
+
+#griglia .dx-datagrid > .dx-datagrid-pager {
+	order: 3 !important
+}
+
+/* INPUTS */
+.dx-state-disabled.dx-widget {
+    opacity: 1 !important;
+}

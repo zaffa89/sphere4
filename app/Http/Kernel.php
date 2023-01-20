@@ -69,6 +69,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,        
 
         'sphere-client' => \App\Http\Middleware\SphereClient::class,
+        'sphere-user' => \App\Http\Middleware\SphereUser::class,
         'solutionmed' => \App\Http\Middleware\Solutionmed::class,
         'electron' => \App\Http\Middleware\Electron::class,
     ];

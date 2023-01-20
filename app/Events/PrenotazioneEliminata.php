@@ -3,7 +3,7 @@
 namespace App\Events;
 
 
-use App\Models\SphereUser;
+use App\Models\User;
 use App\Models\Prenotazione;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
@@ -18,7 +18,7 @@ class PrenotazioneEliminata implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $prenotazione;
-    public $sphereUser;
+    public $user;
     public $client_uuid;
 
     /**
@@ -26,10 +26,10 @@ class PrenotazioneEliminata implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(Prenotazione $prenotazione , SphereUser $sphereUser , $client_uuid)
+    public function __construct(Prenotazione $prenotazione , User $user , $client_uuid)
     {
         //$this->prenotazione = new PrenotazioneCalendarioResource($prenotazione);
-        $this->sphereUser = $sphereUser;
+        $this->user = $user;
         $this->client_uuid = $client_uuid;
     }
 

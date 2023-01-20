@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('medici', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('sphere_user_id')->nullable();
-            $table->foreign('sphere_user_id')->references('id')->on('sphere_users')->onDelete('set null');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
 
             $table->string('ragione_sociale');
             $table->string('codice_fiscale')->nullable();

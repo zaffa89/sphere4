@@ -4,8 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
-class Electron
+class SphereUser
 {
     /**
      * Handle an incoming request.
@@ -16,10 +17,15 @@ class Electron
      */
     public function handle(Request $request, Closure $next)
     {
-        if($request->bearerToken() === '7202f2dd-6cea-47a8-8b16-6f48bcb3a4f4')  //token da modificare in licenceToken        
-        {
+        $inspection = Gate::inspect('sphere-user');
+
+        if( $inspection->allowed() ) {
             return $next($request);
         }
-        return response()->json('Client non autorizzato' , 403);
+        else
+        {
+            //return response()->json(['message' => 'Non è un account di Sphere'] , 401);
+            return redirect('sphere/external/login');
+        }    
     }
 }
