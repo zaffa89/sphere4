@@ -1,6 +1,6 @@
 <script setup>
 import { XCircleIcon, LockClosedIcon , ExclamationCircleIcon } from '@heroicons/vue/20/solid';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/vue3';
 </script>
 
 <template>
@@ -193,7 +193,7 @@ export default {
         submit() {
             this.processing = true;
             localStorage.setItem('last_username' , this.form.username)
-            Inertia.post('/sphere/login' , this.form , { headers: { 'Authorization' : this.$page.props.token }});
+            router.post('/sphere/login' , this.form , { headers: { 'Authorization' : this.$page.props.token }});
             this.processing = false;
         },
         errorFor(field){        //metodo che assegna il messaggio di errore al campo 'field'.

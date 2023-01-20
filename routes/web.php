@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\FormSphereController;
 use App\Http\Controllers\Online\Prenotazione\IndexController;
 use App\Http\Controllers\UserController;
@@ -37,6 +38,8 @@ return Inertia::render('PrenotazioneOnline/SelezioneAnagrafica');
 Route::get('/' , [FormSphereController::class , 'mainForm'])->middleware('auth')->name('sphere.main');
 
 Route::get('/anagrafiche/pazienti' , [FormSphereController::class , 'formPazienti'])->middleware('auth')->name('sphere.anagrafiche.pazienti');
+Route::get('/anagrafiche/ambulatori' , [FormSphereController::class , 'formAmbulatori'])->middleware('auth')->name('sphere.anagrafiche.ambulatori');
+Route::get('/calendario' , [CalendarController::class , 'caricaCalendario'])->middleware('auth')->name('sphere.calendario');
 
 Route::prefix('sphere')->group(function() {
     Route::get('client/login' , [UserController::class , 'clientLoginForm'])  //FORM DI LOGIN PER CLIENT ELECTRON

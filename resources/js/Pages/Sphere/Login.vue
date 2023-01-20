@@ -1,5 +1,5 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 import JetValidationErrors from '@/Jetstream/ValidationErrors.vue';
 
 defineProps({
@@ -8,8 +8,8 @@ defineProps({
 });
 
 const form = useForm({
-    username: '',
-    password: '',
+    username: 'solutionmed',
+    password: 'password',
     remember: false,
 });
 

@@ -13,7 +13,7 @@ use App\Http\Resources\PrenotazioneCalendarioResource;
 class CalendarController extends Controller
 {
     public function caricaCalendario()
-    {        
+    {
         return [                        
             'prenotazioni' => PrenotazioneCalendarioResource::collection(Prenotazione::with('societaSportiva' , 'visitaMedsport.paziente' , 'visitaMedsport.prestazione' , 'visitaAmbulatoriale.paziente' , 'visitaAmbulatoriale.prestazione')->withCount('visiteMedsport' , 'visiteAmbulatoriali')->whereBetween('data_inizio' , [Carbon::now()->subMonth() , Carbon::now()->addMonths(1)])->get()),            
             'strutture' => Struttura::with('ambulatori' , 'orariMedici')->get(),

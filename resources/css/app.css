@@ -2,6 +2,87 @@
 @tailwind components;
 @tailwind utilities;
 
+/* CALENDARIO */
+/* IMPOSTAZIONI CSS AGENDA */
+#calendario {
+    height: calc(100vh - 230px);
+}
+
+.dx-scheduler.dx-widget {
+    height: calc(100vh - 230px);
+}
+
+
+.dx-scheduler-date-table {
+    /* width: 100% !important */
+}
+
+.dx-scheduler-all-day-title {
+    display: none !important;
+}
+.dx-scheduler-all-day-panel {
+    display: none !important;
+}
+
+.dx-scheduler-header-panel {
+    /* width: 100% !important; */
+    height: 40px;
+    margin: 0px !important;
+}
+
+.dx-scheduler-header-panel-container {
+    height: 75px;
+    border-bottom:2px solid black;
+}
+
+/*
+.dx-scheduler-cell-sizes-vertical {
+    height: 25px;
+}
+*/
+
+/*
+.dx-scheduler-appointment  {
+    min-height: 30px !important;
+}
+*/
+.dx-scheduler-appointment-content {
+    padding: 0 !important;
+}
+
+.dx-scheduler-appointment:hover {
+    z-index: 1000 !important;
+}
+
+.dx-scheduler-time-panel-cell {
+    height: 30px !important;
+}
+
+.dx-scheduler-date-table-cell {
+    height: 30px !important;
+}
+
+.dx-scheduler-time-panel-cell.dx-scheduler-cell-sizes-vertical {
+    font-size: 12px !important;
+}
+.dx-scheduler-cell-sizes-horizontal {
+    /* width: 150px; */
+}
+
+.dx-scheduler-group-header {
+    width: 250px;
+}
+
+.dx-scheduler-all-day-table-cell, .dx-scheduler-date-table-cell {
+    padding:0;
+    border-bottom: 1px solid gray !important
+}
+
+.dx-texteditor-input {
+    text-transform: uppercase;
+}
+
+/* GRIGLIE */
 #griglia .dx-datagrid > .dx-datagrid-header-panel {
 	order: 2 !important;
     padding:5px;

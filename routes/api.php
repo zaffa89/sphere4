@@ -43,7 +43,7 @@ Route::prefix('test')->group(function() {
 // API SPHERE
 Route::prefix('sphere')->group(function() {
 
-    Route::middleware([ 'auth:sanctum' , 'sphere-client' ])->group(function() {   
+    Route::middleware([ 'auth:sanctum' ])->group(function() {   //, 'sphere-client' 
         //STRUTTURA
         Route::resource('struttura' , StrutturaController::class);
         

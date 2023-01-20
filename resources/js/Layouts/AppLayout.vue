@@ -20,17 +20,24 @@
                                 src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
                                 alt="Your Company" />
                         </div>
-                        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                            <!-- Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
-                            <Link href="/anagrafiche/pazienti"
-                                class="inline-flex items-center border-b-2 border-indigo-500 px-1 pt-1 text-sm font-medium text-gray-900">Pazienti</Link>
-                            <Link href="/anagrafiche/pazienti"
-                                class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Ambulatori</Link>
-                            <a href="#"
-                                class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Projects</a>
-                            <a href="#"
-                                class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Calendar</a>
-                        </div>
+                        <slot name="navigazione">
+                            <!-- default per brower -->
+                            <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                                <!-- Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
+                                <Link href="/anagrafiche/pazienti" preserveState
+                                    class="inline-flex items-center border-b-2 border-indigo-500 px-1 pt-1 text-sm font-medium text-gray-900">Pazienti</Link>
+                                <Link href="/anagrafiche/ambulatori" preserveState
+                                    class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Ambulatori</Link>
+                                <Link href="/calendario" preserveState
+                                    class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Calendario</Link>                            
+                            </div>
+                        </slot>
+                        
+                    </div>
+                    <div class="flex items-center">
+                        <slot name="bottoneChiusuraForm">
+                            
+                        </slot>
                     </div>
                     <div
                         class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
@@ -109,50 +116,39 @@
 </template>
 
 <script setup>
-import { Inertia } from '@inertiajs/inertia';
-import { Link } from '@inertiajs/inertia-vue3';
+import { router } from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3'
 
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+
+/* FORM APPLICAZIONE */
+
 
 </script>
 
 <script>
 export default {
+    
     data() {
         return {
             guestNavigation: [
                 { name: 'Entra', href: '/login' },
                 { name: 'Registrati', href: '/register' },
             ],
-            activeTabs: [],
-            currentTab: null,
-            notifications: [],
-
+            
         }
     },
     computed() {
 
-        return 
     },
     methods: {
-        convertiPermessi(arrayPermessi)
-        {
-            let obj = {};
-            arrayPermessi.forEach(p => {
-                obj[p.field] = true
-            })
-            return obj
-        },
+        
         logout() {
             if(window.electron) window.electron.eliminaMenu();
-            Inertia.post(route('logout'));
+            router.post(route('logout'));
             
         }
-    },
-    async created() 
-    {
-        if(window.electron) window.electron.creaMenu(this.convertiPermessi(this.$page.props.user.permessi))
     }
 }
 </script>

@@ -55,7 +55,7 @@
     import AdminLayout from '../../Layouts/AdminLayout.vue';
     import ModalNuovoUtente from './Components/ModalNuovoUtente.vue';
     import ModalModificaUtente from './Components/ModalModificaUtente.vue';
-    import { Inertia } from '@inertiajs/inertia';
+    import { router } from '@inertiajs/vue3';
 </script>
 
 <script>
@@ -76,12 +76,12 @@ export default {
         refresh() {
             this.modalNuovoUtenteOpen = false
             this.modalModificaId = null
-            Inertia.reload()
+            router.reload()
         },
         utenteCreato()
         {
             this.modalNuovoUtenteOpen = false;
-            Inertia.reload();
+            router.reload();
         }
     }
 }
