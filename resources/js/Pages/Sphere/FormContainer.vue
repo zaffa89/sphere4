@@ -28,17 +28,9 @@
             v-show="tab.component == currentTab.component"
             :key="'active-component-' + tab.component"
             @notify="addNotification"
-        >
-            Main form client sphere
-            <button
-            type="button"
-            class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            @click="letturaTessera"
-            >
-            Leggi tessera sanitaria
-            </button>
-            {{ dati_tessera }}
-        </component>                                    
+        >            
+        </component>
+        <FormHome v-if="activeTabs.length === 0" />
     </AppLayout>    
 </template>
 
@@ -54,7 +46,7 @@
     import FormSocieta from './FormSocieta.vue';
     import FormAccettazioneMedsport from './FormAccettazioneMedsport.vue'
     import FormImpostazioniSport from './FormImpostazioniSport.vue'
-
+    import FormHome from './FormHome.vue';
 </script>
 
 <script>
@@ -68,6 +60,7 @@
             FormSocieta,
             FormAccettazioneMedsport,
             FormImpostazioniSport,
+            FormHome,
             UserIcon
         },
         data() {
@@ -129,15 +122,7 @@
                     obj[p.field] = true
                 })
                 return obj
-            },
-            letturaTessera() {
-                if(window.electron) {
-                    window.electron.leggiTessera().then(response => {
-                        this.dati_tessera = response;
-                        console.log(this.dati_tessera);
-                    });
-                }
-            },
+            },            
         },
     };
 </script>

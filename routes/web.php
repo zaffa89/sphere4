@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\FormSphereController;
 use App\Http\Controllers\Online\Prenotazione\IndexController;
+use App\Http\Controllers\StampeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -50,6 +51,13 @@ Route::prefix('sphere')->group(function() {
         //->middleware('electron')
         ->name('sphere.login');
 
+    //STAMPE
+    Route::get('stampe/maschera-stampa' , function() {
+        return Inertia::render('Sphere/Stampe/MascheraStampa');
+    });
+    
+    Route::get('stampe/certificati/agonistico/{visitaMedsport}' , [StampeController::class , 'stampaCertificatoAgonistico']);
+
     Route::middleware(['auth' , 'solutionmed'])->group(function () {
         Route::get('/' , [AdminController::class , 'generale'])->name('admin');
         Route::get('utenti' , [AdminController::class , 'utenti'])->name('admin.utenti');
@@ -67,8 +75,6 @@ Route::get('/certificato' , function () {
 
 Route::prefix('sphere')->group(function() {
     //Route::get('external/login' , [UserController::class , 'externalLoginForm'])->name('sphere.external.login.form');
-    
-    
 
     Route::middleware(['sphere-user'])->group(function() { // 'auth:sanctum' , 
         
