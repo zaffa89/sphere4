@@ -27,9 +27,9 @@ class AccettazioneMedsportController extends Controller
                 ->where('struttura_id' , 1)
                 ->whereBetween('data_inizio' , [Carbon::today()->format('Y-m-d 00:00:00') , Carbon::today()->format('Y-m-d 23:59:59')])
                 ->orderBy('data_inizio');
-        })->with('prenotazione' , 'medico' , 'prestazione' , 'sport' , 'paziente' , 'societaSportiva')->get();
+        })->with('prenotazione' , 'medico' , 'listino' , 'sport' , 'paziente' , 'societaSportiva')->get();
 /*
-        return Prenotazione::with('medico' , 'visita.prestazione' , 'visita.sport' , 'paziente')
+        return Prenotazione::with('medico' , 'visita.listino' , 'visita.sport' , 'paziente')
             ->where('visita_type' , 'medsport')
             ->where('struttura_id' , 1)
             //->whereBetween('data_inizio' , [Carbon::parse($request->data_inizio) , Carbon::parse($request->data_fine)])
@@ -86,7 +86,7 @@ class AccettazioneMedsportController extends Controller
         }
 
         return [
-            'visita' => $visitaMedsport->load('medico' , 'prestazione' , 'sport' , 'paziente.localitaNascita' , 'paziente.localitaResidenza'),
+            'visita' => $visitaMedsport->load('medico' , 'listino' , 'sport' , 'paziente.localitaNascita' , 'paziente.localitaResidenza'),
             'elenco_sport' => Sport::where('tipo_visita' , $visitaMedsport->sport->tipo_visita)->get(),
             'elenco_medici' => Medico::where('attivo' , true)->orWhere('id' , $visitaMedsport->medico_id)->orderBy('ragione_sociale')->get()
         ];
@@ -94,10 +94,10 @@ class AccettazioneMedsportController extends Controller
 
     public function calcolaPosizioneTicket(VisitaMedsport $visitaMedsport) {
                
-        $visitaMedsport->load('prestazione');
+        $visitaMedsport->load('listino');
         
         //buona salute = BB
-        if( $visitaMedsport->prestazione->tipo_visita == 'BS' ) { return 'BB'; }
+        if( $visitaMedsport->listino->tipo_visita == 'BS' ) { return 'BB'; }
 
         //se paga atleta , società oppure la visita è gratuita = 40
         if(in_array($visitaMedsport->pagamento_a_carico , [ 1 , 2 , 3]) || $visitaMedsport->visita_privata) { return 40; }

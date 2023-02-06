@@ -196,7 +196,7 @@
                         :disabled="disabledElement"
                       />
 
-                      <!-- prestazione , sport e società -->
+                      <!-- listino , sport e società -->
                       <div class="relative">
                         <div
                           class="absolute inset-0 flex items-center"
@@ -205,11 +205,11 @@
                           <div class="w-full border-t border-gray-300" />
                         </div>
                         <div class="relative flex justify-center">
-                          <span class="bg-white px-2 text-sm text-gray-500">Prestazione e
+                          <span class="bg-white px-2 text-sm text-gray-500">Listino e
                             sport</span>
                         </div>
                       </div>
-                      <!-- prestazione e sport per medicina sportiva -->
+                      <!-- listino e sport per medicina sportiva -->
                       <DxSelectBox
                         v-model:value="prenotazione.visita.sport_id"
                         label="Sport praticato"
@@ -224,15 +224,15 @@
                       />
 
                       <DxSelectBox
-                        v-model:value="prenotazione.visita.prestazione_id"
-                        label="Prestazione"
-                        :data-source="prestazioniFiltratePerSport"
+                        v-model:value="prenotazione.visita.listino_id"
+                        label="Listino"
+                        :data-source="listiniFiltratiPerSport"
                         value-expr="id"
                         display-expr="nome"
-                        :item-template="prestazioneItemTemplate"
-                        :is-valid="!errorFor('visita.prestazione_id')"
+                        :item-template="listinoItemTemplate"
+                        :is-valid="!errorFor('visita.listino_id')"
                         :disabled="disabledElement"
-                        no-data-text="Nessuna prestazione trovata"
+                        no-data-text="Nessun listino trovato"
                       />
                     </div>
 
@@ -399,7 +399,7 @@ export default {
             struttura: [],
             prenotazione: [],
             societa: null,
-            prestazioni: [],
+            listini: [],
             colori: [],
             elenco_sport: [],
             modal_societa_id: null,
@@ -432,12 +432,12 @@ export default {
             let unique = [...new Set(array.map(item => item))];
             return unique;
         },
-        prestazioniFiltratePerSport() {
+        listiniFiltratiPerSport() {
             let array = this.prenotazione.visita.sport_id && this.prenotazione.visita.sport_id != 0
-                ? this.prestazioni.filter(prestazione => { return prestazione.tipo_visita == this.elenco_sport.find(sport => { return sport.id === this.prenotazione.visita.sport_id; }).tipo_visita; })
-                : this.prestazioni;
+                ? this.listini.filter(listino => { return listino.tipo_visita == this.elenco_sport.find(sport => { return sport.id === this.prenotazione.visita.sport_id; }).tipo_visita; })
+                : this.listini;
 
-            this.prenotazione.visita.prestazione_id = this.prenotazione.visita.sport_id ? array[0]?.id : null;
+            this.prenotazione.visita.listino_id = this.prenotazione.visita.sport_id ? array[0]?.id : null;
             return array;
         },
         orarioInOrarioMedico() {
@@ -463,7 +463,7 @@ export default {
                     this.colori = response.data.colori;
                     this.elenco_sport = response.data.elenco_sport;
                     this.struttura = response.data.struttura;
-                    this.prestazioni = response.data.prestazioni;
+                    this.listini = response.data.listini;
                     this.medici = response.data.medici;
                 })
                 .catch(
@@ -481,7 +481,7 @@ export default {
                     this.prenotazione.durata = dayjs(response.data.prenotazione.data_fine).diff(response.data.prenotazione.data_inizio, 'minute');
                     this.prenotazione.numero_paz = 1;
                     this.struttura = response.data.struttura;
-                    this.prestazioni = response.data.prestazioni;
+                    this.listini = response.data.listini;
                     this.colori = response.data.colori;
                     this.elenco_sport = response.data.elenco_sport;
                     this.medici = response.data.medici;
@@ -534,7 +534,7 @@ export default {
         sportItemTemplate(data) {
             return '<div class="flex justify-between"><span class="uppercase truncate">' + data.nome + '</span><span>' + data.tipo_visita + '</span></div>';
         },
-        prestazioneItemTemplate(data) {
+        listinoItemTemplate(data) {
             return '<div class="flex justify-between"><span class="truncate">' + data.nome + '</span><span>' + data.codice + '</span></div>';
         },
         coloriTemplate(data) {

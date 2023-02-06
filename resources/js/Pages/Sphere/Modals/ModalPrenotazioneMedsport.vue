@@ -204,7 +204,7 @@
                       <div v-if="avviso_paziente">
                         AVVISO PAZIENTE
                       </div>
-                      <!-- prestazione , sport e società -->
+                      <!-- listino , sport e società -->
                       <div class="relative">
                         <div
                           class="absolute inset-0 flex items-center"
@@ -213,11 +213,11 @@
                           <div class="w-full border-t border-gray-300" />
                         </div>
                         <div class="relative flex justify-center">
-                          <span class="bg-white px-2 text-sm text-gray-500">Prestazione e
+                          <span class="bg-white px-2 text-sm text-gray-500">Listino e
                             sport</span>
                         </div>
                       </div>
-                      <!-- prestazione e sport per medicina sportiva -->
+                      <!-- listino e sport per medicina sportiva -->
                       <DxSelectBox
                         v-model:value="prenotazione.visita.sport_id"
                         label="Sport praticato"
@@ -232,27 +232,27 @@
                       />
 
                       <DxSelectBox
-                        v-model:value="prenotazione.visita.prestazione_id"
-                        label="Prestazione Agonistica"
-                        :data-source="prestazioniFiltratePerSport"
+                        v-model:value="prenotazione.visita.listino_id"
+                        label="Listino Agonistico"
+                        :data-source="listiniFiltratiPerSport"
                         value-expr="id"
                         display-expr="nome"
-                        :item-template="prestazioneItemTemplate"
-                        :is-valid="!errorFor('visita.prestazione_id')"
+                        :item-template="listinoItemTemplate"
+                        :is-valid="!errorFor('visita.listino_id')"
                         :disabled="disabledElement"
-                        no-data-text="Nessuna prestazione trovata"
+                        no-data-text="Nessun listino trovato"
                       />
 
                       <DxSelectBox
-                        v-model:value="prenotazione.visita.prestazione_id"
-                        label="Prestazione non Agonistica"
-                        :data-source="prestazioniNonAgonistiche"
+                        v-model:value="prenotazione.visita.listino_id"
+                        label="Listino non Agonistico"
+                        :data-source="listiniNonAgonistici"
                         value-expr="id"
                         display-expr="nome"
-                        :item-template="prestazioneItemTemplate"
-                        :is-valid="!errorFor('visita.prestazione_id')"
+                        :item-template="listinoItemTemplate"
+                        :is-valid="!errorFor('visita.listino_id')"
                         :disabled="disabledElement"
-                        no-data-text="Nessuna prestazione trovata"
+                        no-data-text="Nessun listino trovato"
                       />
 
                       <DxSelectBox
@@ -543,7 +543,7 @@ export default {
             struttura: [],
             prenotazione: [],
 
-            prestazioni: [],
+            listini: [],
             colori: [],
             elenco_sport: [],
             modalPazienteId: null,
@@ -578,16 +578,16 @@ export default {
             let unique = [...new Set(array.map(item => item))];
             return unique;
         },
-        prestazioniFiltratePerSport() {
+        listiniFiltratiPerSport() {
             let array = this.prenotazione.visita.sport_id && this.prenotazione.visita.sport_id != 0
-                ? this.prestazioni.filter(prestazione => { return prestazione.tipo_visita == this.elenco_sport.find(sport => { return sport.id === this.prenotazione.visita.sport_id; }).tipo_visita; })
-                : this.prestazioni.filter(prestazione => prestazione.tipo_visita != 'BS');
+                ? this.listini.filter(listino => { return listino.tipo_visita == this.elenco_sport.find(sport => { return sport.id === this.prenotazione.visita.sport_id; }).tipo_visita; })
+                : this.listini.filter(listino => listino.tipo_visita != 'BS');
 
-            this.prenotazione.visita.prestazione_id = this.prenotazione.visita.sport_id ? array[0]?.id : null;
+            this.prenotazione.visita.listino_id = this.prenotazione.visita.sport_id ? array[0]?.id : null;
             return array;
         },
-        prestazioniNonAgonistiche() {
-            return this.prestazioni.filter(prestazione => prestazione.tipo_visita == 'BS');
+        listiniNonAgonistici() {
+            return this.listini.filter(listino => listino.tipo_visita == 'BS');
         },
         orarioInOrarioMedico() {
             return this.struttura.orari_medici.find(orario => { return dayjs(this.prenotazione.data_inizio).isBetween(orario.data_inizio, orario.data_fine, null, '[]') && orario.ambulatorio_id == this.prenotazione.ambulatorio_id && orario.medico_id == this.prenotazione.medico_id; });
@@ -612,7 +612,7 @@ export default {
                     this.colori = response.data.colori;
                     this.elenco_sport = response.data.elenco_sport;
                     this.struttura = response.data.struttura;
-                    this.prestazioni = response.data.prestazioni;
+                    this.listini = response.data.listini;
                     this.medici = response.data.medici;
                 })
                 .catch(
@@ -629,7 +629,7 @@ export default {
                     this.prenotazione = response.data.prenotazione;
                     this.prenotazione.durata = dayjs(response.data.prenotazione.data_fine).diff(response.data.prenotazione.data_inizio, 'minute');
                     this.struttura = response.data.struttura;
-                    this.prestazioni = response.data.prestazioni;
+                    this.listini = response.data.listini;
                     this.colori = response.data.colori;
                     this.elenco_sport = response.data.elenco_sport;
                     this.medici = response.data.medici;
@@ -681,7 +681,7 @@ export default {
         sportItemTemplate(data) {
             return '<div class="flex justify-between"><span class="uppercase truncate">' + data.nome + '</span><span>' + data.tipo_visita + '</span></div>';
         },
-        prestazioneItemTemplate(data) {
+        listinoItemTemplate(data) {
             return '<div class="flex justify-between"><span class="truncate">' + data.nome + '</span><span>' + data.codice + '</span></div>';
         },
         coloriTemplate(data) {

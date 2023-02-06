@@ -81,8 +81,8 @@ class StrutturaUnoSeeder extends Seeder
             $rand_soc = rand(1 , 4);
             $rand_sport = rand(1204 , 1457);
 
-            $rand_prest_med = rand(1 , 3);
-            $rand_prest_amb = rand(1 , 6);
+            $listino_med_random = rand(1 , 3);
+            $listino_amb_random = rand(1 , 6);
 
             $prenotazione = $struttura->prenotazioni()->create([
                 'user_id' => 1,                
@@ -102,7 +102,7 @@ class StrutturaUnoSeeder extends Seeder
             switch($sezione_visita) {
                 case 'M':                    
                     $visita = $prenotazione->visiteMedsport()->create([
-                        'prestazione_id' => $rand_prest_med, 
+                        'listino_id' => $listino_med_random, 
                         'sport_id' => $rand_sport, 
                         'societa_id' => $prenotazione->societa_id,
                         'paziente_id' => $prenotazione->sezione_visita == 'SM' ? null : $faker->numberBetween(1 , 2000) , 
@@ -112,7 +112,7 @@ class StrutturaUnoSeeder extends Seeder
                 break;
                 case 'SM':                    
                     $visita = $prenotazione->visiteMedsport()->create([
-                        'prestazione_id' => $rand_prest_med, 
+                        'listino_id' => $listino_med_random, 
                         'sport_id' => $rand_sport, 
                         'societa_id' => $prenotazione->societa_id,
                         'paziente_id' => $prenotazione->sezione_visita == 'SM' ? null : $faker->numberBetween(1 , 2000) , 
@@ -121,7 +121,7 @@ class StrutturaUnoSeeder extends Seeder
                     
                     
                     $visita = $prenotazione->visiteMedsport()->create([
-                        'prestazione_id' => $rand_prest_med, 
+                        'listino_id' => $listino_med_random, 
                         'sport_id' => $rand_sport, 
                         'societa_id' => $prenotazione->societa_id,
                         'paziente_id' => $prenotazione->sezione_visita == 'SM' ? null : $faker->numberBetween(1 , 2000) , 
@@ -130,7 +130,7 @@ class StrutturaUnoSeeder extends Seeder
                     
 
                     $visita = $prenotazione->visiteMedsport()->create([
-                        'prestazione_id' => $rand_prest_med, 
+                        'listino_id' => $listino_med_random, 
                         'sport_id' => $rand_sport, 
                         'societa_id' => $prenotazione->societa_id,
                         'paziente_id' => $prenotazione->sezione_visita == 'SM' ? null : $faker->numberBetween(1 , 2000) , 
@@ -140,7 +140,7 @@ class StrutturaUnoSeeder extends Seeder
                 break;
                 case 'A':
                     $prenotazione->visiteAmbulatoriali()->create([
-                        'prestazione_id' => $rand_prest_amb , 
+                        'listino_id' => $listino_amb_random , 
                         'paziente_id' => $faker->numberBetween(1 , 2000) , 
                         'struttura_id' => 1
                     ]);

@@ -13,11 +13,11 @@ class StampeController extends Controller
     {
         /*
         return Inertia::render('Sphere/Stampe/CertificatoNonAgonistico' , [
-            'data' => $visitaMedsport->load('paziente' , 'sport' , 'medico' , 'prestazione')
+            'data' => $visitaMedsport->load('paziente' , 'sport' , 'medico' , 'listino')
         ]);
         */
         return view('certificatoNonAgonistico' , [
-            'data' => $visitaMedsport->load('paziente.localitaNascita' , 'medico' , 'prestazione' , 'societaSportiva')
+            'data' => $visitaMedsport->load('paziente.localitaNascita' , 'medico' , 'listino' , 'societaSportiva')
         ]);        
     }
 
@@ -25,11 +25,11 @@ class StampeController extends Controller
     {
         /*
         return Inertia::render('Sphere/Stampe/CertificatoNonAgonistico' , [
-            'data' => $visitaMedsport->load('paziente' , 'sport' , 'medico' , 'prestazione')
+            'data' => $visitaMedsport->load('paziente' , 'sport' , 'medico' , 'listino')
         ]);
         */
         return view('certificatoRosso' , [
-            'data' => $visitaMedsport->load('paziente.localitaNascita' , 'sport' , 'medico' , 'prestazione' , 'societaSportiva')
+            'data' => $visitaMedsport->load('paziente.localitaNascita' , 'sport' , 'medico' , 'listino' , 'societaSportiva')
         ]);        
     }
 
@@ -37,11 +37,11 @@ class StampeController extends Controller
     {
         /*
         return Inertia::render('Sphere/Stampe/CertificatoNonAgonistico' , [
-            'data' => $visitaMedsport->load('paziente' , 'sport' , 'medico' , 'prestazione')
+            'data' => $visitaMedsport->load('paziente' , 'sport' , 'medico' , 'listino')
         ]);
         */
         return view('certificatoGiallo' , [
-            'data' => $visitaMedsport->load('paziente.localitaNascita' , 'paziente.localitaResidenza' , 'sport' , 'medico' , 'prestazione' , 'societaSportiva')
+            'data' => $visitaMedsport->load('paziente.localitaNascita' , 'paziente.localitaResidenza' , 'sport' , 'medico' , 'listino' , 'societaSportiva')
         ]);        
     }
 

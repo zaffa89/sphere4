@@ -288,8 +288,8 @@
                           </div>
                           <div class="grid grid-cols-1 sm:grid-cols-2 gap-1">
                             <DxTextBox
-                              :value="visita.prestazione.nome"
-                              label="Prestazione"
+                              :value="visita.listino.nome"
+                              label="Listino"
                               label-mode="static"
                               :disabled="true"
                             />
@@ -1981,7 +1981,7 @@ export default {
         'visita.pagamento_a_carico'() { this.calcPosTicket(); },
         'visita.paziente.data_nascita'() { this.calcPosTicket(); },
         'visita.paziente.disabile'() { this.calcPosTicket(); },
-        'visita.prestazione.tipo_visita'() { this.calcPosTicket(); },
+        'visita.listino.tipo_visita'() { this.calcPosTicket(); },
         'visita.visita_privata'() { this.calcPosTicket(); },
     },
     async created() {
@@ -2005,7 +2005,7 @@ export default {
     methods: {
         calcPosTicket() {
             this.visita.posizione_ticket =
-                this.visita.prestazione.tipo_visita == 'BS'
+                this.visita.listino.tipo_visita == 'BS'
                     ? 'BB'
                     : [1, 2, 3].includes(this.visita.pagamento_a_carico) || this.visita.visita_privata
                         ? '40'

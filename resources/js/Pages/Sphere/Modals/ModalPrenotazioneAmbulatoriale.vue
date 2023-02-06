@@ -201,7 +201,7 @@
                         :open-on-field-click="false"
                         :min-search-length="2"
                       />
-                      <!-- prestazione , sport e società -->
+                      <!-- listino , sport e società -->
                       <div class="relative">
                         <div
                           class="absolute inset-0 flex items-center"
@@ -210,21 +210,20 @@
                           <div class="w-full border-t border-gray-300" />
                         </div>
                         <div class="relative flex justify-center">
-                          <span class="bg-white px-2 text-sm text-gray-500">Prestazione
-                            richiesta</span>
+                          <span class="bg-white px-2 text-sm text-gray-500">Listino</span>
                         </div>
                       </div>
-                      <!-- prestazione -->
+                      <!-- listino -->
                       <DxSelectBox
-                        v-model:value="prenotazione.visita.prestazione_id"
-                        label="Prestazione"
-                        :data-source="prestazioni"
+                        v-model:value="prenotazione.visita.listino_id"
+                        label="Listino"
+                        :data-source="listini"
                         value-expr="id"
                         display-expr="nome"
-                        :item-template="prestazioneItemTemplate"
-                        :is-valid="!errorFor('visita.prestazione_id')"
+                        :item-template="listinoItemTemplate"
+                        :is-valid="!errorFor('visita.listino_id')"
                         :disabled="disabledElement"
-                        no-data-text="Nessuna prestazione trovata"
+                        no-data-text="Nessun listino trovato"
                       />
 
                       <DxSelectBox
@@ -505,7 +504,7 @@ export default {
             struttura: [],
             prenotazione: [],
             societa: null,
-            prestazioni: [],
+            listini: [],
             colori: [],
             modalPazienteId: null,
             datiTesseraSanitaria: null,
@@ -560,7 +559,7 @@ export default {
                     this.prenotazione.durata = dayjs(response.data.prenotazione.data_fine).diff(response.data.prenotazione.data_inizio, 'minute');
                     this.colori = response.data.colori;
                     this.struttura = response.data.struttura;
-                    this.prestazioni = response.data.prestazioni;
+                    this.listini = response.data.listini;
                     this.medici = response.data.medici;
                 })
                 .catch(
@@ -577,7 +576,7 @@ export default {
                     this.prenotazione = response.data.prenotazione;
                     this.prenotazione.durata = dayjs(response.data.prenotazione.data_fine).diff(response.data.prenotazione.data_inizio, 'minute');
                     this.struttura = response.data.struttura;
-                    this.prestazioni = response.data.prestazioni;
+                    this.listini = response.data.listini;
                     this.colori = response.data.colori;
                     this.medici = response.data.medici;
                 })
@@ -628,7 +627,7 @@ export default {
         sportItemTemplate(data) {
             return '<div class="flex justify-between"><span class="uppercase truncate">' + data.nome + '</span><span>' + data.tipo_visita + '</span></div>';
         },
-        prestazioneItemTemplate(data) {
+        listinoItemTemplate(data) {
             return '<div class="flex justify-between"><span class="truncate">' + data.nome + '</span><span>' + data.codice + '</span></div>';
         },
         coloriTemplate(data) {

@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('prestazione_sottoprestazione_medsport', function (Blueprint $table) {
+        Schema::create('listino_sottoprestazione_medsport', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('prestazione_medsport_id')->nullable();
+            $table->unsignedBigInteger('listino_medsport_id')->nullable();
             $table->unsignedBigInteger('sottoprestazione_medsport_id')->nullable();
-            $table->unique(['prestazione_medsport_id' , 'sottoprestazione_medsport_id']);
+            $table->unique(['listino_medsport_id' , 'sottoprestazione_medsport_id']);
 
-            $table->foreign('prestazione_medsport_id')->references('id')->on('prestazioni_medsport')->onDelete('cascade');
+            $table->foreign('listino_medsport_id')->references('id')->on('listini_medsport')->onDelete('cascade');
             $table->foreign('sottoprestazione_medsport_id')->references('id')->on('sottoprestazioni_medsport')->onDelete('cascade');
 
             $table->timestamps();
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('prestazione_sottoprestazione_medsport');
+        Schema::dropIfExists('listino_sottoprestazione_medsport');
     }
 };

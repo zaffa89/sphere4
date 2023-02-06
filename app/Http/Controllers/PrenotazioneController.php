@@ -12,13 +12,11 @@ use Illuminate\Http\Request;
 use App\Models\VisitaMedsport;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use App\Models\PrestazioneMedsport;
+use App\Models\ListinoMedsport;
 use App\Models\VisitaAmbulatoriale;
 use App\Events\PrenotazioneEliminata;
 use App\Events\NotificaPrenotazioneModificata;
-use App\Models\PrestazioneAmbulatoriale;
-use function Symfony\Component\String\b;
-
+use App\Models\ListinoAmbulatoriale;
 
 use App\Http\Requests\ValidatePrenotazioneRequest;
 use App\Http\Resources\PrenotazioneCalendarioResource;
@@ -62,25 +60,25 @@ class PrenotazioneController extends Controller
             'sezione_visita' => $request->sezione_visita        
         ]);
 
-        $prestazioni = null;
+        $listini = null;
         $elenco_sport = null;
         switch(true)
         {
             case $prenotazione->sezione_visita == 'M' || $prenotazione->sezione_visita == 'SM':
                 $prenotazione->visita = new VisitaMedsport(['struttura_id' => $request->struttura_id , 'medico_id' => $request->medico_id]);
-                $prestazioni = PrestazioneMedsport::with('sottoprestazioni')->get();
+                $listini = ListinoMedsport::with('sottoprestazioni')->get();
                 $elenco_sport = Sport::orderBy('nome')->get();
             break;
             
             case $prenotazione->sezione_visita == 'A':
                 $prenotazione->visita = new VisitaAmbulatoriale(['struttura_id' => $request->struttura_id , 'medico_id' => $request->medico_id]);
-                $prestazioni = PrestazioneAmbulatoriale::all();
+                $listini = ListinoAmbulatoriale::all();
             break;                        
         }
         
         return [
             'prenotazione' => $prenotazione,          
-            'prestazioni' => $prestazioni,
+            'listini' => $listini,
             'elenco_sport' => $elenco_sport,
             'struttura' => Struttura::with('ambulatori' , 'orariMedici')->where('id' , $request->struttura_id)->first(),
             'medici' => Medico::all()
@@ -114,7 +112,7 @@ class PrenotazioneController extends Controller
             switch($prenotazione->sezione_visita) {
                 case 'M':
                     $prenotazione->visitaMedsport()->create([
-                        'prestazione_id' => $request->visita['prestazione_id'] , 
+                        'listino_id' => $request->visita['listino_id'] , 
                         'sport_id' => $request->visita['sport_id'],
                         'paziente_id' => $request->visita['paziente_id'],
                         'medico_id' => $request->medico_id, //medico esecutore
@@ -127,7 +125,7 @@ class PrenotazioneController extends Controller
                 case 'SM':
                     for($i = 1; $i <= $request->numero_paz; $i++) {
                         $prenotazione->visiteMedsport()->create([
-                            'prestazione_id' => $request->visita['prestazione_id'] , 
+                            'listino_id' => $request->visita['listino_id'] , 
                             'sport_id' => $request->visita['sport_id'],                            
                             'medico_id' => $request->medico_id, //medico esecutore
                             'societa_id' => $request->societa_id,
@@ -138,7 +136,7 @@ class PrenotazioneController extends Controller
                 break;
                 case 'A':
                     $prenotazione->visitaAmbulatoriale()->create([
-                        'prestazione_id' => $request->visita['prestazione_id'],
+                        'listino_id' => $request->visita['listino_id'],
                         'paziente_id' => $request->paziente_id,
                         'medico_id' => $request->medico_id, //medico esecutore
                         'societa_id' => $request->societa_id,
@@ -149,7 +147,7 @@ class PrenotazioneController extends Controller
                 case 'SA':
                     for($i = 1; $i <= $request->numero_paz; $i++) {
                         $prenotazione->visiteAmbulatoriali()->create([
-                            'prestazione_id' => $request->visita['prestazione_id'] , 
+                            'listino_id' => $request->visita['listino_id'] , 
                             'sport_id' => $request->visita['sport_id'],                            
                             'medico_id' => $request->medico_id, //medico esecutore
                             'societa_id' => $request->societa_id
@@ -183,9 +181,9 @@ class PrenotazioneController extends Controller
      */
     public function edit(Prenotazione $prenotazione)
     {
-        $prestazioni = match ($prenotazione->sezione_visita) {
-            'M' , 'SM' => PrestazioneMedsport::with('sottoprestazioni')->get(),
-            'A' , 'SA' => PrestazioneAmbulatoriale::all(),
+        $listini = match ($prenotazione->sezione_visita) {
+            'M' , 'SM' => ListinoMedsport::with('sottoprestazioni')->get(),
+            'A' , 'SA' => ListinoAmbulatoriale::all(),
             default => null
         };
 
@@ -196,10 +194,10 @@ class PrenotazioneController extends Controller
 
         switch($prenotazione->sezione_visita) {
             case 'M':                                
-                $prenotazione->load('visitaMedsport.prestazione' , 'visitaMedsport.paziente' , 'societaSportiva');                
+                $prenotazione->load('visitaMedsport.listino' , 'visitaMedsport.paziente' , 'societaSportiva');                
             break;
             case 'A':
-                $prenotazione->load('visitaAmbulatoriale.prestazione' , 'visitaAmbulatoriale.paziente');
+                $prenotazione->load('visitaAmbulatoriale.listino' , 'visitaAmbulatoriale.paziente');
             break;
             case 'SM':
                 $prenotazione->load('visitaMedsport' , 'societaSportiva')->loadCount('visiteMedsport');
@@ -211,7 +209,7 @@ class PrenotazioneController extends Controller
    
         return [
             'prenotazione' => new PrenotazioneCalendarioResource($prenotazione),
-            'prestazioni' => $prestazioni,
+            'listini' => $listini,
             'elenco_sport' => $elenco_sport,
             'struttura' => Struttura::with('ambulatori' , 'orariMedici')->where('id' , $prenotazione->struttura_id)->first(),
             'medici' => Medico::all()
@@ -242,7 +240,7 @@ class PrenotazioneController extends Controller
                     $prenotazione->visitaMedsport->paziente_id = $request->visita['paziente_id'];
                     $prenotazione->visitaMedsport->medico_id = $request->medico_id;
                     $prenotazione->visitaMedsport->sport_id = $request->visita['sport_id'];
-                    $prenotazione->visitaMedsport->prestazione_id = $request->visita['prestazione_id'];
+                    $prenotazione->visitaMedsport->listino_id = $request->visita['listino_id'];
                     $prenotazione->visitaMedsport->societa_id = $request->societa_id;
                     $prenotazione->push();
 
@@ -250,14 +248,14 @@ class PrenotazioneController extends Controller
                 break;
                 case 'SM':
                     foreach($prenotazione->visiteMedsport as $visita) {
-                        $visita->prestazione_id = $request->visita['prestazione_id'];                        
+                        $visita->listino_id = $request->visita['listino_id'];                        
                     }                   
                     $prenotazione->push();
                     $prenotazione->load('societaSportiva')->loadCount('visiteMedsport');
                 break;
                 case 'A':
                     $prenotazione->visitaAmbulatoriale->paziente_id = $request->visita['paziente_id'];
-                    $prenotazione->visitaAmbulatoriale->prestazione_id = $request->visita['prestazione_id'];
+                    $prenotazione->visitaAmbulatoriale->listino_id = $request->visita['listino_id'];
                     $prenotazione->visitaAmbulatoriale->societa_id = $request->societa_id;
                     $prenotazione->visitaAmbulatoriale->medico_id = $request->medico_id;
                     $prenotazione->push();

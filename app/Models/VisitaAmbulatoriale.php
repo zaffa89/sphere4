@@ -14,7 +14,7 @@ class VisitaAmbulatoriale extends Model
     protected $guarded = [];
     
     protected $attributes = [
-        'prestazione_id' => null,      
+        'listino_id' => null,      
     ];
     
     public function prenotazione() 
@@ -36,9 +36,9 @@ class VisitaAmbulatoriale extends Model
         return $this->morphOne(PreAnamnesi::class , 'visita');
     }
     
-    public function prestazione()
+    public function listino()
     {
-        return $this->belongsTo(PrestazioneAmbulatoriale::class , 'prestazione_id');
+        return $this->belongsTo(ListinoAmbulatoriale::class , 'listino_id');
     }
 
     public function refertoAmbulatoriale() {

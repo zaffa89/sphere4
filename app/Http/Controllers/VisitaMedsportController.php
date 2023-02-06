@@ -73,7 +73,7 @@ class VisitaMedsportController extends Controller
         }
 
         return [
-            'visita' => $visitaMedsport->load('prenotazione' , 'datiClinici' , 'preAnamnesi' , 'medico' , 'prestazione' , 'sport' , 'paziente.localitaNascita' , 'paziente.localitaResidenza'),
+            'visita' => $visitaMedsport->load('prenotazione' , 'datiClinici' , 'preAnamnesi' , 'medico' , 'listino' , 'sport' , 'paziente.localitaNascita' , 'paziente.localitaResidenza'),
             'elenco_sport' => Sport::where('tipo_visita' , $visitaMedsport->sport->tipo_visita)->get(),
             'elenco_medici' => Medico::where('attivo' , true)->orWhere('id' , $visitaMedsport->medico_id)->orderBy('ragione_sociale')->get()
         ];

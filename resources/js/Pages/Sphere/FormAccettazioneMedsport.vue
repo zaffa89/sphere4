@@ -59,8 +59,8 @@
       />
 
       <DxColumn
-        data-field="prestazione.nome"
-        caption="Prestazione"
+        data-field="listino.nome"
+        caption="Listino"
       />
       <DxColumn
         data-field="sport.nome"

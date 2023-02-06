@@ -28,8 +28,8 @@ return new class extends Migration
             $table->unsignedBigInteger('prenotazione_id')->nullable();
             $table->foreign('prenotazione_id')->references('id')->on('prenotazioni');
 
-            $table->unsignedBigInteger('prestazione_id')->nullable();
-            $table->foreign('prestazione_id')->references('id')->on('prestazioni_medsport');
+            $table->unsignedBigInteger('listino_id')->nullable();
+            $table->foreign('listino_id')->references('id')->on('listini_medsport');
 
             $table->unsignedBigInteger('societa_id')->nullable();
             $table->foreign('societa_id')->references('id')->on('societa_sportive');

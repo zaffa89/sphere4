@@ -9,8 +9,8 @@ use App\Models\Medico;
 use App\Models\Struttura;
 use App\Models\SocietaSportiva;
 use Illuminate\Database\Seeder;
-use App\Models\PrestazioneMedsport;
-use App\Models\PrestazioneAmbulatoriale;
+use App\Models\ListinoMedsport;
+use App\Models\ListinoAmbulatoriale;
 use App\Models\SottoprestazioneMedsport;
 use App\Http\Controllers\CalendarController;
 
@@ -43,29 +43,29 @@ class DatabaseSeeder extends Seeder
         $this->call(LocalitaSeeder::class);
         $this->call(SportSeeder::class);
         
-        $prestazioneMedsport = PrestazioneMedsport::create(['nome' => 'Visita B1 ago' , 'tipo_visita' => 'B1' , 'codice' => 'B1' , 'prezzo' => 50.00]);
+        $listinoMedsport = ListinoMedsport::create(['nome' => 'Visita B1 ago' , 'tipo_visita' => 'B1' , 'codice' => 'B1' , 'prezzo' => 50.00]);
         $sottoprestazione = SottoprestazioneMedsport::create(['nome' => 'Spirometria semplice' , 'codice' => 'SPIRO']);        
-        $prestazioneMedsport->sottoprestazioni()->attach($sottoprestazione->id);        
-        $prestazioneMedsport->save();
+        $listinoMedsport->sottoprestazioni()->attach($sottoprestazione->id);        
+        $listinoMedsport->save();
 
-        $prestazioneMedsport = PrestazioneMedsport::create(['nome' => 'Visita A1 ago' , 'tipo_visita' => 'A1' , 'codice' => 'A1' , 'prezzo' => 40.00]);
+        $listinoMedsport = ListinoMedsport::create(['nome' => 'Visita A1 ago' , 'tipo_visita' => 'A1' , 'codice' => 'A1' , 'prezzo' => 40.00]);
         $sottoprestazione = SottoprestazioneMedsport::create(['nome' => 'Spirometria polpetta' , 'codice' => 'SPIRO-POLP']);        
-        $prestazioneMedsport->sottoprestazioni()->attach($sottoprestazione->id);        
-        $prestazioneMedsport->save();
+        $listinoMedsport->sottoprestazioni()->attach($sottoprestazione->id);        
+        $listinoMedsport->save();
 
-        $prestazioneMedsport = PrestazioneMedsport::create(['nome' => 'Visita non ago' , 'tipo_visita' => 'BS' , 'codice' => 'BS' , 'prezzo' => 30.00]);
+        $listinoMedsport = ListinoMedsport::create(['nome' => 'Visita non ago' , 'tipo_visita' => 'BS' , 'codice' => 'BS' , 'prezzo' => 30.00]);
         $sottoprestazione = SottoprestazioneMedsport::create(['nome' => 'ECG a riposo' , 'codice' => 'ECG-EASY']);        
-        $prestazioneMedsport->sottoprestazioni()->attach($sottoprestazione->id);        
-        $prestazioneMedsport->save();
+        $listinoMedsport->sottoprestazioni()->attach($sottoprestazione->id);        
+        $listinoMedsport->save();
 
-        PrestazioneAmbulatoriale::create([ 'nome' => 'Prestazione ambulatoriale 1' , 'codice' => 'AMB-1' , 'prezzo' => 50.00 ]);
-        PrestazioneAmbulatoriale::create([ 'nome' => 'Prestazione ambulatoriale 2' , 'codice' => 'AMB-2' , 'prezzo' => 70.00 ]);
+        ListinoAmbulatoriale::create([ 'nome' => 'Listino ambulatoriale 1' , 'codice' => 'AMB-1' , 'prezzo' => 50.00 ]);
+        ListinoAmbulatoriale::create([ 'nome' => 'Listino ambulatoriale 2' , 'codice' => 'AMB-2' , 'prezzo' => 70.00 ]);
 
-        PrestazioneAmbulatoriale::create(['nome' => 'Massaggio 1' , 'codice' => 'MSG-1' , 'prezzo' => 60.00 ]);
-        PrestazioneAmbulatoriale::create(['nome' => 'Massaggio 2' , 'codice' => 'MSG-1' , 'prezzo' => 80.00 ]);
+        ListinoAmbulatoriale::create(['nome' => 'Massaggio 1' , 'codice' => 'MSG-1' , 'prezzo' => 60.00 ]);
+        ListinoAmbulatoriale::create(['nome' => 'Massaggio 2' , 'codice' => 'MSG-1' , 'prezzo' => 80.00 ]);
 
-        PrestazioneAmbulatoriale::create(['nome' => 'Cardiologico 1' , 'codice' => 'CARDIO-1' , 'prezzo' => 150.00 ]);
-        PrestazioneAmbulatoriale::create(['nome' => 'Cardiologico 2' , 'codice' => 'CARDIO-1' , 'prezzo' => 100.00 ]);
+        ListinoAmbulatoriale::create(['nome' => 'Cardiologico 1' , 'codice' => 'CARDIO-1' , 'prezzo' => 150.00 ]);
+        ListinoAmbulatoriale::create(['nome' => 'Cardiologico 2' , 'codice' => 'CARDIO-1' , 'prezzo' => 100.00 ]);
 
         SocietaSportiva::create( [ 'ragione_sociale' => 'societa 1' , 'indirizzo' => 'Via delle società sportive' , 'civico' => 1 ] );
         SocietaSportiva::create( [ 'ragione_sociale' => 'societa 2' , 'indirizzo' => 'Via delle società sportive lungo' , 'civico' => 2  ] );

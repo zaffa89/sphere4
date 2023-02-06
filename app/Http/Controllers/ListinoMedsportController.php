@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PrestazioneMedsport;
+use App\Models\ListinoMedsport;
 use Illuminate\Http\Request;
 
-class PrestazioneMedsportController extends Controller
+class ListinoMedsportController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class PrestazioneMedsportController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\PrestazioneMedsport  $prestazioneMedsport
+     * @param  \App\Models\ListinoMedsport  $listinoMedsport
      * @return \Illuminate\Http\Response
      */
-    public function show(PrestazioneMedsport $prestazioneMedsport)
+    public function show(ListinoMedsport $listinoMedsport)
     {
         //
     }
@@ -52,10 +52,10 @@ class PrestazioneMedsportController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\PrestazioneMedsport  $prestazioneMedsport
+     * @param  \App\Models\ListinoMedsport  $listinoMedsport
      * @return \Illuminate\Http\Response
      */
-    public function edit(PrestazioneMedsport $prestazioneMedsport)
+    public function edit(ListinoMedsport $listinoMedsport)
     {
         //
     }
@@ -64,10 +64,10 @@ class PrestazioneMedsportController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\PrestazioneMedsport  $prestazioneMedsport
+     * @param  \App\Models\ListinoMedsport  $listinoMedsport
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PrestazioneMedsport $prestazioneMedsport)
+    public function update(Request $request, ListinoMedsport $listinoMedsport)
     {
         //
     }
@@ -75,10 +75,10 @@ class PrestazioneMedsportController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\PrestazioneMedsport  $prestazioneMedsport
+     * @param  \App\Models\ListinoMedsport  $listinoMedsport
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PrestazioneMedsport $prestazioneMedsport)
+    public function destroy(ListinoMedsport $listinoMedsport)
     {
         //
     }

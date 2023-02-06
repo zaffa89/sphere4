@@ -16,8 +16,8 @@ class PrenotazioneCalendarioResource extends JsonResource
     {
         return [            
             'text' => match($this->sezione_visita) {
-                'M' => $this->whenLoaded('visitaMedsport')->paziente->ragione_sociale.' | '.$this->whenLoaded('visitaMedsport')->prestazione->codice,
-                'A' => $this->whenLoaded('visitaAmbulatoriale')->paziente->ragione_sociale.' | '.$this->whenLoaded('visitaAmbulatoriale')->prestazione->codice,
+                'M' => $this->whenLoaded('visitaMedsport')->paziente->ragione_sociale.' | '.$this->whenLoaded('visitaMedsport')->listino->codice,
+                'A' => $this->whenLoaded('visitaAmbulatoriale')->paziente->ragione_sociale.' | '.$this->whenLoaded('visitaAmbulatoriale')->listino->codice,
                 'SM' , 'SA' => $this->whenLoaded('societaSportiva')->ragione_sociale,
                 'N' => 'NOTA',
                 'X' => 'ASSENZA',

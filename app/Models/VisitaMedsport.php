@@ -14,7 +14,7 @@ class VisitaMedsport extends Model
     protected $guarded = [];
     
     protected $attributes = [
-        'prestazione_id' => null,
+        'listino_id' => null,
         'sport_id' => null,
         'societa_id' => null
     ];
@@ -48,9 +48,9 @@ class VisitaMedsport extends Model
         return $this->hasOne(DatiCliniciMedsport::class , 'visita_id');
     }
 
-    public function prestazione()
+    public function listino()
     {
-        return $this->belongsTo(PrestazioneMedsport::class , 'prestazione_id');
+        return $this->belongsTo(ListinoMedsport::class , 'listino_id');
     }
 
     public function sport() 
