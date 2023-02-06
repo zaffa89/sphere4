@@ -3,6 +3,7 @@ const colors = require('tailwindcss/colors')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+    darkMode: 'class',
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './vendor/laravel/jetstream/**/*.blade.php',
@@ -21,8 +22,19 @@ module.exports = {
                 teal: colors.teal,
                 rose: colors.rose,
             },
+            animation: {
+                'spin-slow' : 'spin 4s linear infinite',
+                'spin-slower' : 'spin 6s linear infinite',
+                'spin-reverse-slower' : 'spin-reverse 6s linear infinite'
+            },
+            keyframes: {
+                'spin-reverse': {
+                    to: {
+                        transform: 'rotate(-360deg)',
+                    },
+                },
+            },
         },
     },
-
     plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
 };

@@ -117,7 +117,7 @@ const positions = [
         methods: {
             async update()
             {
-                await axios.put(`/api/sphere/sphere-user/${this.id}` , this.utente)
+                await axios.put(`/api/sphere/user/${this.id}` , this.utente)
                     .then(response => {
                         this.$emit('utenteModificato')
                     })
@@ -127,7 +127,7 @@ const positions = [
             }
         },
         async created() {
-            await axios.get(`/api/sphere/sphere-user/${this.id}`).then(response => {
+            await axios.get(`/api/sphere/user/${this.id}`).then(response => {
                 this.utente = response.data
             }).catch(err => {})
         }

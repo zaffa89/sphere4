@@ -27,7 +27,7 @@ class UserController extends Controller
         return Inertia::render('Sphere/ExternalLoginForm');
     }
 
-    public function doLogin(Request $request) {
+    public function login(Request $request) {
         $request->validate([
             'username' => 'required',
             'password' => 'required'
@@ -46,7 +46,7 @@ class UserController extends Controller
                 foreach($user->permessi as $permesso) {
                     $permessi[$permesso['field']] = true;
                 }                
-                return redirect()->intended('sphere');
+                return redirect()->intended('/');
             }            
         }
         if( $user && !$user->attivo)
@@ -62,44 +62,15 @@ class UserController extends Controller
         ])->onlyInput('username');
     }
 
-    public function authenticate(Request $request)  /* NON UTILIZZARE */
+    public function logout(Request $request)
     {
-        $request->validate([
-            'username' => 'required',
-            'password' => 'required'
-        ]);
+        Auth::logout();
 
-        
-        $user = User::whereRelation('sphereUser' , 'username' , $request->username)->first();
+        $request->session()->invalidate();
 
-        if( $user && $user->sphereUser->attivo )
-        {
-            if( Auth::attempt( ['email' => $user->email , 'password' => $request->password] ) )
-            {
-                $user->tokens()->delete();
-                $token = $user->createToken($request->username , ['sphere-client']);
+        $request->session()->regenerateToken();
 
-                $permessi = [];
-                foreach($user->sphereUser->permessi as $permesso) {
-                    $permessi[$permesso['field']] = true;
-                }
-                
-                return response()->json( [ 'token' => $token->plainTextToken , 'client_uuid' => Str::uuid() , 'permessi' => $permessi ] , 200 );
-            }
-            
-        }
-        if( $user && !$user->sphereUser->attivo)
-        {
-            return response()->json( ['message' => 'Questo utente è stato disabilitato'] , 401 );
-        }
-        return response()->json( ['message' => 'Nome utente o password errati'] , 401 );
-        
-    }
-
-    public function checkAuth(Request $request)
-    {
-        
-        return response()->json( Auth::user()->id , 200 );
+        return redirect()->action([UserController::class , 'clientLoginForm']);
     }
 
     /**

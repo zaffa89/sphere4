@@ -67,10 +67,10 @@ class DatabaseSeeder extends Seeder
         PrestazioneAmbulatoriale::create(['nome' => 'Cardiologico 1' , 'codice' => 'CARDIO-1' , 'prezzo' => 150.00 ]);
         PrestazioneAmbulatoriale::create(['nome' => 'Cardiologico 2' , 'codice' => 'CARDIO-1' , 'prezzo' => 100.00 ]);
 
-        SocietaSportiva::create( [ 'ragione_sociale' => 'societa 1' ] );
-        SocietaSportiva::create( [ 'ragione_sociale' => 'societa 2' ] );
-        SocietaSportiva::create( [ 'ragione_sociale' => 'societa 3' ] );
-        SocietaSportiva::create( [ 'ragione_sociale' => 'societa 4' ] );
+        SocietaSportiva::create( [ 'ragione_sociale' => 'societa 1' , 'indirizzo' => 'Via delle società sportive' , 'civico' => 1 ] );
+        SocietaSportiva::create( [ 'ragione_sociale' => 'societa 2' , 'indirizzo' => 'Via delle società sportive lungo' , 'civico' => 2  ] );
+        SocietaSportiva::create( [ 'ragione_sociale' => 'societa 3' , 'indirizzo' => 'Via delle società sportive molto lungo' , 'civico' => 333  ] );
+        SocietaSportiva::create( [ 'ragione_sociale' => 'societa 4' , 'indirizzo' => 'Via delle società sportive lunghissimissimo che più lungo non si può' , 'civico' => 4444  ] );
         
         /* GENERA STRUTTURE - PAZIENTI E TUTTO IL RESTO  */
         $this->call(StrutturaUnoSeeder::class);

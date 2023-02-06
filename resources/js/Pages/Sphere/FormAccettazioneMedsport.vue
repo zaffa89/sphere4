@@ -82,38 +82,7 @@
         -->
       <DxScrolling mode="infinite" />
     </DxDataGrid>
-    <div class="flex gap-3 h-24 items-end bg-gray-200 border-t border-black px-4 py-4">
-      <div>
-        <label
-          for="ricerca"
-          class="block text-sm font-medium text-gray-700"
-        >Ricerca per nominativo</label>
-        <div class="mt-1">
-          <input
-            id="ricerca"
-            v-model="ricerca"
-            type="text"
-            name="ricerca"
-            :disabled="disabledElement"
-            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            placeholder="Cognome e/o Nome"
-          />
-        </div>
-      </div>
-      <button
-        type="button"
-        :disabled="disabledElement"
-        class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-        @click="ricercaPaziente"
-      >
-        <MagnifyingGlassIcon
-          class="-ml-1 mr-2 h-5 w-5"
-          :class="{ 'animate-bounce': fetching }"
-          aria-hidden="true"
-        />
-        Cerca
-      </button>
-    </div>
+    
     <ModalSchedaMedsport
       v-if="modal_visita_id"
       :visita-id="modal_visita_id"

@@ -1,44 +1,48 @@
 <template>
-    <div>
-        <DxDataGrid id="griglia" ref="griglia" :data-source="pazienti" key-expr="id"
-            :allow-column-reordering="true" :allow-column-resizing="true" :column-auto-width="false"
-            :column-min-width="50" column-resizing-mode="widget" :row-alternation-enabled="true" :show-row-lines="true"
-            :hover-state-enabled="true" @contextMenuPreparing="openContextMenu" @row-prepared="onRowPrepared"
-            @row-dbl-click="onRowDblClick" @row-removing="deletePaziente">
-            <DxSelection mode="single" />
-            <DxColumnChooser :enabled="true" />
-            <DxColumn data-field="id" />
-            <DxColumn data-field="codice" />
-            <DxColumn data-field="ragione_sociale" />
-            <DxColumn data-field="codice_fiscale" />
-            <DxColumn data-field="sesso" />
-            <DxColumn data-field="data_nascita" caption="Data di nascita" />
-            <DxColumn data-field="localita_residenza.nome" caption="Località di residenza" />
-            <DxColumn data-field="localita_residenza.sigla_provincia" caption="Provincia di residenza" />
-            <DxColumn data-field="indirizzo" caption="Indirizzo" />
-            <DxColumn data-field="civico" caption="Numero civico" />
-            <DxColumn data-field="localita_nascita.nome" caption="Località di nascita" />
-            <DxColumn data-field="localita_nascita.sigla_provincia" caption="Provincia di nascita" />
+        <div class="flex flex-col content-between h-full">
+            <div class="grow">
+                <DxDataGrid id="griglia" ref="griglia" :data-source="pazienti" key-expr="id"
+                    :allow-column-reordering="true" :allow-column-resizing="true" :column-auto-width="false"
+                    :column-min-width="50" column-resizing-mode="widget" :row-alternation-enabled="true" :show-row-lines="true"
+                    :hover-state-enabled="true" @contextMenuPreparing="openContextMenu" @row-prepared="onRowPrepared"
+                    @row-dbl-click="onRowDblClick" @row-removing="deletePaziente">
+                    <DxSelection mode="single" />
+                    <DxColumnChooser :enabled="true" />
+                    <DxColumn data-field="id" />
+                    <DxColumn data-field="codice" />
+                    <DxColumn data-field="ragione_sociale" />
+                    <DxColumn data-field="codice_fiscale" />
+                    <DxColumn data-field="sesso" />
+                    <DxColumn data-field="data_nascita" caption="Data di nascita" />
+                    <DxColumn data-field="localita_residenza.nome" caption="Località di residenza" />
+                    <DxColumn data-field="localita_residenza.sigla_provincia" caption="Provincia di residenza" />
+                    <DxColumn data-field="indirizzo" caption="Indirizzo" />
+                    <DxColumn data-field="civico" caption="Numero civico" />
+                    <DxColumn data-field="localita_nascita.nome" caption="Località di nascita" />
+                    <DxColumn data-field="localita_nascita.sigla_provincia" caption="Provincia di nascita" />
 
-            <DxColumn data-field="created_at" />
-            <DxColumn data-field="updated_at" :customize-text="timezoneFixer" />
-            <!-- 
-    <DxPaging
-    :page-size="50"
-    :page-index="0" />
-    -->
-            <DxScrolling mode="infinite" />
-        </DxDataGrid>        
-        
-        <ModalPaziente
-            v-if="modal_paziente_id"
-            :paziente-id="modal_paziente_id"
-            @close="modal_paziente_id = null"
-            @store="pazienteSalvato"
-            @update="pazienteModificato"
-        />
-  
-    </div>
+                    <DxColumn data-field="created_at" />
+                    <DxColumn data-field="updated_at" :customize-text="timezoneFixer" />
+                    <!-- 
+                        <DxPaging
+                        :page-size="50"
+                        :page-index="0" />
+                    -->
+                    <DxScrolling mode="infinite" />
+                </DxDataGrid>
+            </div>
+            
+            <div class="shrink h-20 bg-gray-300">
+                asd
+            </div>
+            <ModalPaziente
+                v-if="modal_paziente_id"
+                :paziente-id="modal_paziente_id"
+                @close="modal_paziente_id = null"
+                @store="pazienteSalvato"
+                @update="pazienteModificato"
+            />
+        </div>
 </template>
 
 <script setup>
@@ -179,6 +183,7 @@ export default {
 /*imposta altezza fissa della griglia dinamicamente ( 216px altezza header + footer ) */
 
 #griglia.dx-widget {
-    height: calc(100vh - 216px) !important;
+    height: 100% !important;
 }
+
 </style>

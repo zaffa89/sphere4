@@ -107,29 +107,30 @@ const disableTwoFactorAuthentication = () => {
 <template>
     <JetActionSection>
         <template #title>
-            Two Factor Authentication
+            Autenticazione a 2 fattori
         </template>
 
         <template #description>
-            Add additional security to your account using two factor authentication.
+            Sicurezza aggiuntiva per il tuo account.
+            <p class="font-medium">L'autenticazione a 2 Fattori è <span class="text-red-500">OBBLIGATORIA</span> per accedere a Sphere tramite browser</p>
         </template>
 
         <template #content>
             <h3 v-if="twoFactorEnabled && ! confirming" class="text-lg font-medium text-gray-900">
-                You have enabled two factor authentication.
+                L'autenticazione a 2 fattori è abilitata.
             </h3>
 
             <h3 v-else-if="twoFactorEnabled && confirming" class="text-lg font-medium text-gray-900">
-                Finish enabling two factor authentication.
+                Attivazione dell'autenticazione a due fattori
             </h3>
 
             <h3 v-else class="text-lg font-medium text-gray-900">
-                You have not enabled two factor authentication.
+                Autenticazione a 2 fattori non abilitata.
             </h3>
 
             <div class="mt-3 max-w-xl text-sm text-gray-600">
                 <p>
-                    When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone's Google Authenticator application.
+                    Quando l'autenticazione a due fattori è attiva, ad ogni tentativo di accesso a Sphere tramite browser ti verrà richiesto un codice di sicurezza. Puoi ottenere il codice dall'applicazione Google Authenticator del tuo telefono.
                 </p>
             </div>
 
@@ -137,11 +138,12 @@ const disableTwoFactorAuthentication = () => {
                 <div v-if="qrCode">
                     <div class="mt-4 max-w-xl text-sm text-gray-600">
                         <p v-if="confirming" class="font-semibold">
-                            To finish enabling two factor authentication, scan the following QR code using your phone's authenticator application or enter the setup key and provide the generated OTP code.
+                            Per attivare l'autenticazione a due fattori, scarica l'App <b>Google Authenticator</b> da Google Play o Apple Store. Poi utilizza <b>Google Authenticator</b> per scansionare il QR code qui sotto. Infine inserisci il codice che appare sul tuo telefono.
+                            <!-- To finish enabling two factor authentication, scan the following QR code using your phone's authenticator application or enter the setup key and provide the generated OTP code. -->
                         </p>
 
                         <p v-else>
-                            Two factor authentication is now enabled. Scan the following QR code using your phone's authenticator application or enter the setup key.
+                            L'autenticazione a due fattori è stata attivata. Scansiona il seguente QR code con Google Authenticator oppure utilizza il <b>Setup Key</b>
                         </p>
                     </div>
 
@@ -154,7 +156,7 @@ const disableTwoFactorAuthentication = () => {
                     </div>
 
                     <div v-if="confirming" class="mt-4">
-                        <JetLabel for="code" value="Code" />
+                        <JetLabel for="code" value="Codice" />
 
                         <JetInput
                             id="code"
@@ -175,7 +177,7 @@ const disableTwoFactorAuthentication = () => {
                 <div v-if="recoveryCodes.length > 0 && ! confirming">
                     <div class="mt-4 max-w-xl text-sm text-gray-600">
                         <p class="font-semibold">
-                            Store these recovery codes in a secure password manager. They can be used to recover access to your account if your two factor authentication device is lost.
+                            Salva questi codici di recupero in un posto sicuro. Possono essere utilizzati per recuperare l'accesso al tuo account se il dispositivo utilizzato per l'autenticazione a 2 fattori venga perso o sia inutilizzabile.
                         </p>
                     </div>
 
@@ -191,7 +193,7 @@ const disableTwoFactorAuthentication = () => {
                 <div v-if="! twoFactorEnabled">
                     <JetConfirmsPassword @confirmed="enableTwoFactorAuthentication">
                         <JetButton type="button" :class="{ 'opacity-25': enabling }" :disabled="enabling">
-                            Enable
+                            Abilita
                         </JetButton>
                     </JetConfirmsPassword>
                 </div>
@@ -205,7 +207,7 @@ const disableTwoFactorAuthentication = () => {
                             :class="{ 'opacity-25': enabling }"
                             :disabled="enabling"
                         >
-                            Confirm
+                            Conferma
                         </JetButton>
                     </JetConfirmsPassword>
 
@@ -214,7 +216,7 @@ const disableTwoFactorAuthentication = () => {
                             v-if="recoveryCodes.length > 0 && ! confirming"
                             class="mr-3"
                         >
-                            Regenerate Recovery Codes
+                            Rigenera codici di recupero
                         </JetSecondaryButton>
                     </JetConfirmsPassword>
 
@@ -223,7 +225,7 @@ const disableTwoFactorAuthentication = () => {
                             v-if="recoveryCodes.length === 0 && ! confirming"
                             class="mr-3"
                         >
-                            Show Recovery Codes
+                            Mostra Codici di Recupero
                         </JetSecondaryButton>
                     </JetConfirmsPassword>
 
@@ -233,7 +235,7 @@ const disableTwoFactorAuthentication = () => {
                             :class="{ 'opacity-25': disabling }"
                             :disabled="disabling"
                         >
-                            Cancel
+                            Annulla
                         </JetSecondaryButton>
                     </JetConfirmsPassword>
 
@@ -243,7 +245,7 @@ const disableTwoFactorAuthentication = () => {
                             :class="{ 'opacity-25': disabling }"
                             :disabled="disabling"
                         >
-                            Disable
+                            Disabilita
                         </JetDangerButton>
                     </JetConfirmsPassword>
                 </div>

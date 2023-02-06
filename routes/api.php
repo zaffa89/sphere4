@@ -1,20 +1,21 @@
 <?php
 
-use App\Http\Controllers\AccettazioneMedsportController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AmbulatorioController;
-use App\Http\Controllers\CalendarController;
-use App\Http\Controllers\Controller;
-use App\Http\Controllers\LocalitaController;
-use App\Http\Controllers\MedicoController;
-use App\Http\Controllers\PazienteController;
-use App\Http\Controllers\PrenotazioneController;
-use App\Http\Controllers\SocietaSportivaController;
-use App\Http\Controllers\SportController;
-use App\Http\Controllers\StrutturaController;
-use App\Http\Controllers\VisitaMedsportController;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\SportController;
+use App\Http\Controllers\MedicoController;
+use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\LocalitaController;
+use App\Http\Controllers\PazienteController;
+use App\Http\Controllers\StrutturaController;
+use App\Http\Controllers\AmbulatorioController;
+use App\Http\Controllers\PrenotazioneController;
+use App\Http\Controllers\VisitaMedsportController;
+use App\Http\Controllers\SocietaSportivaController;
+use App\Http\Controllers\AccettazioneMedsportController;
 
 
 /*
@@ -38,7 +39,6 @@ Route::get('asd' , [Controller::class , 'asd']);
 Route::prefix('test')->group(function() {
     
 });
-
 
 // API SPHERE
 Route::prefix('sphere')->group(function() {
@@ -99,7 +99,7 @@ Route::prefix('sphere')->group(function() {
     //API PANNELLO AMMINISTRAZIONE WEB
     Route::middleware([ 'auth:sanctum' , 'solutionmed' ])->group(function() {
         
-        
+        Route::resource('user', UserController::class);
     });
 
     Route::put('save-setting/{setting}' , [AdminController::class , 'saveSetting']);

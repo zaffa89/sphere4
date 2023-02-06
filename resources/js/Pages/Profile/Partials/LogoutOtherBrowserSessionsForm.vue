@@ -45,16 +45,16 @@ const closeModal = () => {
 <template>
     <JetActionSection>
         <template #title>
-            Browser Sessions
+            Sessioni
         </template>
 
         <template #description>
-            Manage and log out your active sessions on other browsers and devices.
+            Qui sono elencati i dispositivi da cui hai effettuato l'accesso
         </template>
 
         <template #content>
             <div class="max-w-xl text-sm text-gray-600">
-                If necessary, you may log out of all of your other browser sessions across all of your devices. Some of your recent sessions are listed below; however, this list may not be exhaustive. If you feel your account has been compromised, you should also update your password.
+                Se necessario, puoi disconnetterti da tutti gli altri dispositivi da cui hai effettuato l'accesso.                
             </div>
 
             <!-- Other Browser Sessions -->
@@ -97,15 +97,15 @@ const closeModal = () => {
 
                     <div class="ml-3">
                         <div class="text-sm text-gray-600">
-                            {{ session.agent.platform ? session.agent.platform : 'Unknown' }} - {{ session.agent.browser ? session.agent.browser : 'Unknown' }}
+                            {{ session.agent.platform ? session.agent.platform : 'Sconosciuto' }} - {{ session.agent.browser ? session.agent.browser : 'Sconosciuto' }}
                         </div>
 
                         <div>
                             <div class="text-xs text-gray-500">
                                 {{ session.ip_address }},
 
-                                <span v-if="session.is_current_device" class="text-green-500 font-semibold">This device</span>
-                                <span v-else>Last active {{ session.last_active }}</span>
+                                <span v-if="session.is_current_device" class="text-green-500 font-semibold">Questo dispositivo</span>
+                                <span v-else>Ultima attività {{ session.last_active }}</span>
                             </div>
                         </div>
                     </div>
@@ -114,22 +114,22 @@ const closeModal = () => {
 
             <div class="flex items-center mt-5">
                 <JetButton @click="confirmLogout">
-                    Log Out Other Browser Sessions
+                    Disconnettiti da tutti gli altri dispositivi
                 </JetButton>
 
                 <JetActionMessage :on="form.recentlySuccessful" class="ml-3">
-                    Done.
+                    Fatto.
                 </JetActionMessage>
             </div>
 
             <!-- Log Out Other Devices Confirmation Modal -->
             <JetDialogModal :show="confirmingLogout" @close="closeModal">
                 <template #title>
-                    Log Out Other Browser Sessions
+                    Disconnetti tutti gli altri dispositivi
                 </template>
 
                 <template #content>
-                    Please enter your password to confirm you would like to log out of your other browser sessions across all of your devices.
+                    Inserisci la tua password per confermare.
 
                     <div class="mt-4">
                         <JetInput
@@ -147,7 +147,7 @@ const closeModal = () => {
 
                 <template #footer>
                     <JetSecondaryButton @click="closeModal">
-                        Cancel
+                        Annulla
                     </JetSecondaryButton>
 
                     <JetButton
@@ -156,7 +156,7 @@ const closeModal = () => {
                         :disabled="form.processing"
                         @click="logoutOtherBrowserSessions"
                     >
-                        Log Out Other Browser Sessions
+                        Disconnetti tutti gli altri dispositivi
                     </JetButton>
                 </template>
             </JetDialogModal>

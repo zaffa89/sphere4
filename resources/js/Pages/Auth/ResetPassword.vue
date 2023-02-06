@@ -50,7 +50,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <JetLabel for="password" value="Password" />
+                <JetLabel for="password" value="Nuova Password" />
                 <JetInput
                     id="password"
                     v-model="form.password"
@@ -62,7 +62,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <JetLabel for="password_confirmation" value="Confirm Password" />
+                <JetLabel for="password_confirmation" value="Conferma Password" />
                 <JetInput
                     id="password_confirmation"
                     v-model="form.password_confirmation"

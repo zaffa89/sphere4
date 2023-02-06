@@ -17,10 +17,10 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-Broadcast::channel('notifiche' , function() {
-    return true;  //mettere controllo autenticazione
+Broadcast::channel('notifiche' , function($user) {
+    return $user->id;  //mettere controllo autenticazione
 });
 
-Broadcast::channel('calendario' , function() {
-    return true;
+Broadcast::channel('calendario' , function($user) {
+    return $user->id;
 });

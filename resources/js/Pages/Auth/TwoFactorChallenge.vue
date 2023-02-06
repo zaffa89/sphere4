@@ -42,16 +42,19 @@ const submit = () => {
 
     <JetAuthenticationCard>
         <template #logo>
-            <JetAuthenticationCardLogo />
+            <img class="mx-auto h-12 w-auto" src="/storage/header_logo.png" />
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Autenticazione a 2 Fattori</h2>
         </template>
 
         <div class="mb-4 text-sm text-gray-600">
             <template v-if="! recovery">
-                Please confirm access to your account by entering the authentication code provided by your authenticator application.
+                Conferma l'accesso inserendo il codice che appare sul tuo Authenticator
+                <!-- Please confirm access to your account by entering the authentication code provided by your authenticator application. -->
             </template>
 
             <template v-else>
-                Please confirm access to your account by entering one of your emergency recovery codes.
+                Conferma l'accesso inserendo uno dei tuoi codici di recupero
+                <!-- Please confirm access to your account by entering one of your emergency recovery codes. -->
             </template>
         </div>
 
@@ -59,7 +62,7 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div v-if="! recovery">
-                <JetLabel for="code" value="Code" />
+                <JetLabel for="code" value="Codice di autenticazione" />
                 <JetInput
                     id="code"
                     ref="codeInput"
@@ -73,7 +76,7 @@ const submit = () => {
             </div>
 
             <div v-else>
-                <JetLabel for="recovery_code" value="Recovery Code" />
+                <JetLabel for="recovery_code" value="Codice di recupero" />
                 <JetInput
                     id="recovery_code"
                     ref="recoveryCodeInput"
@@ -87,16 +90,16 @@ const submit = () => {
             <div class="flex items-center justify-end mt-4">
                 <button type="button" class="text-sm text-gray-600 hover:text-gray-900 underline cursor-pointer" @click.prevent="toggleRecovery">
                     <template v-if="! recovery">
-                        Use a recovery code
+                        Usa un codice di recupero
                     </template>
 
                     <template v-else>
-                        Use an authentication code
+                        Usa un codice di autenticazione
                     </template>
                 </button>
 
                 <JetButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
+                    Entra
                 </JetButton>
             </div>
         </form>

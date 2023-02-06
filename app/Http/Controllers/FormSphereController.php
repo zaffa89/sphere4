@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Paziente;
 use App\Models\Ambulatorio;
@@ -10,7 +11,6 @@ use Illuminate\Http\Request;
 class FormSphereController extends Controller
 {
     public function mainForm() {
-
         return Inertia::render('Sphere/FormContainer');
     }
 

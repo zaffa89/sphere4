@@ -40,7 +40,6 @@ defineProps({
                         :requires-confirmation="confirmsTwoFactorAuthentication"
                         class="mt-10 sm:mt-0" 
                     />
-
                     <JetSectionBorder />
                 </div>
 

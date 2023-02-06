@@ -5,11 +5,11 @@
 /* CALENDARIO */
 /* IMPOSTAZIONI CSS AGENDA */
 #calendario {
-    height: calc(100vh - 230px);
+    height: calc(100vh - 231px);
 }
 
 .dx-scheduler.dx-widget {
-    height: calc(100vh - 230px);
+    height: calc(100vh - 231px);
 }
 
 
@@ -18,7 +18,7 @@
 }
 
 .dx-scheduler-all-day-title {
-    display: none !important;
+    display: none !important;    
 }
 .dx-scheduler-all-day-panel {
     display: none !important;

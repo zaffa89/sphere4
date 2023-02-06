@@ -42,29 +42,37 @@ Route::get('/anagrafiche/pazienti' , [FormSphereController::class , 'formPazient
 Route::get('/anagrafiche/ambulatori' , [FormSphereController::class , 'formAmbulatori'])->middleware('auth')->name('sphere.anagrafiche.ambulatori');
 Route::get('/calendario' , [CalendarController::class , 'caricaCalendario'])->middleware('auth')->name('sphere.calendario');
 
-Route::prefix('sphere')->group(function() {
+Route::prefix('sphere')->group(function() {    
     Route::get('client/login' , [UserController::class , 'clientLoginForm'])  //FORM DI LOGIN PER CLIENT ELECTRON
-        //->middleware('electron')
+        ->middleware('electron')
         ->name('sphere.login.form');
 
-    Route::post('login' , [UserController::class , 'doLogin'])    //LOGIN HANDLER PER CLIENT ELECTRON
-        //->middleware('electron')
+    Route::post('login' , [UserController::class , 'login'])    //LOGIN HANDLER PER CLIENT ELECTRON
+        ->middleware('electron')
         ->name('sphere.login');
 
-    //STAMPE
-    Route::get('stampe/maschera-stampa' , function() {
-        return Inertia::render('Sphere/Stampe/MascheraStampa');
-    });
-    
-    Route::get('stampe/certificati/agonistico/{visitaMedsport}' , [StampeController::class , 'stampaCertificatoAgonistico']);
+    Route::post('logout' , [UserController::class , 'logout'])       
+        ->name('sphere.logout');
 
-    Route::middleware(['auth' , 'solutionmed'])->group(function () {
-        Route::get('/' , [AdminController::class , 'generale'])->name('admin');
-        Route::get('utenti' , [AdminController::class , 'utenti'])->name('admin.utenti');
-        Route::get('impostazioni' , [AdminController::class , 'impostazioni'])->name('admin.impostazioni');
-        Route::get('notifiche' , [AdminController::class , 'notifiche'])->name('admin.notifiche');
-        Route::get('pagamenti' , [AdminController::class , 'pagamenti'])->name('admin.pagamenti');
-        Route::get('integrazioni' , [AdminController::class , 'integrazioni'])->name('admin.integrazioni');    
+    Route::middleware(['auth'])->group(function () {
+        //STAMPE
+        Route::prefix('stampe')->group(function() {
+            Route::get('certificati/non-agonistico/{visitaMedsport}' , [StampeController::class , 'certificatoNonAgonistico']);
+            Route::get('certificati/agonistico-rosso/{visitaMedsport}' , [StampeController::class , 'certificatoRosso']);
+            Route::get('certificati/agonistico-giallo/{visitaMedsport}' , [StampeController::class , 'certificatoGiallo']);
+            Route::get('scheda-atleta/{visitaMedsport}' , [StampeController::class , 'schedaAtleta']);
+        });
+
+        Route::prefix('admin')->group(function() {
+            Route::middleware(['solutionmed'])->group(function () {
+                Route::get('/' , [AdminController::class , 'generale'])->name('admin');
+                Route::get('utenti' , [AdminController::class , 'utenti'])->name('admin.utenti');
+                Route::get('impostazioni' , [AdminController::class , 'impostazioni'])->name('admin.impostazioni');
+                Route::get('notifiche' , [AdminController::class , 'notifiche'])->name('admin.notifiche');
+                Route::get('pagamenti' , [AdminController::class , 'pagamenti'])->name('admin.pagamenti');
+                Route::get('integrazioni' , [AdminController::class , 'integrazioni'])->name('admin.integrazioni');    
+            });
+        });
     });
 });
 

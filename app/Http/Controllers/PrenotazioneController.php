@@ -2,28 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotificaPrenotazioneCreata;
+use App\Events\NotificaPrenotazioneEliminata;
 use App\Models\Sport;
 use App\Models\Medico;
 use App\Models\Struttura;
-use App\Models\Ambulatorio;
-use App\Models\OrarioMedico;
 use App\Models\Prenotazione;
 use Illuminate\Http\Request;
 use App\Models\VisitaMedsport;
 use Illuminate\Support\Carbon;
-use App\Events\PrenotazioneCreata;
 use Illuminate\Support\Facades\DB;
 use App\Models\PrestazioneMedsport;
 use App\Models\VisitaAmbulatoriale;
 use App\Events\PrenotazioneEliminata;
-use App\Events\PrenotazioneModificata;
-use App\Events\PrenotazioneVisualizzata;
+use App\Events\NotificaPrenotazioneModificata;
+use App\Models\PrestazioneAmbulatoriale;
+use function Symfony\Component\String\b;
+
+
 use App\Http\Requests\ValidatePrenotazioneRequest;
 use App\Http\Resources\PrenotazioneCalendarioResource;
-use App\Models\PrestazioneAmbulatoriale;
-
-
-use function Symfony\Component\String\b;
 
 class PrenotazioneController extends Controller
 {
@@ -77,11 +75,7 @@ class PrenotazioneController extends Controller
             case $prenotazione->sezione_visita == 'A':
                 $prenotazione->visita = new VisitaAmbulatoriale(['struttura_id' => $request->struttura_id , 'medico_id' => $request->medico_id]);
                 $prestazioni = PrestazioneAmbulatoriale::all();
-            break;
-
-            
-
-            
+            break;                        
         }
         
         return [
@@ -150,6 +144,7 @@ class PrenotazioneController extends Controller
                         'societa_id' => $request->societa_id,
                         'struttura_id' => $request->struttura_id
                     ]);
+                    
                 break;
                 case 'SA':
                     for($i = 1; $i <= $request->numero_paz; $i++) {
@@ -163,12 +158,8 @@ class PrenotazioneController extends Controller
                 break;
             }
             
-            
-            
-            
-            //PrenotazioneCreata::dispatchIf($prenotazione , $prenotazione , auth()->user() , $request->header('Electron-Client-UUID'));
+            broadcast(new NotificaPrenotazioneCreata($prenotazione , auth()->user()->username))->toOthers();
 
-            //return new PrenotazioneCalendarioResource($prenotazione);
             return new PrenotazioneCalendarioResource($prenotazione);
         });
     }
@@ -238,11 +229,6 @@ class PrenotazioneController extends Controller
     {
        
         return DB::transaction(function () use ($request , $prenotazione) {
-            //nuovo metodo:
-            //duplica in tabella backup
-            //esegui update
-            //manda notifica usando sia vecchio che nuovo
-            //ritorna risposta
 
             $prenotazione->data_inizio = Carbon::parse($request->data_inizio)->format('Y-m-d H:i:s');
             $prenotazione->data_fine = Carbon::parse($request->data_inizio)->addMinutes($request->durata)->format('Y-m-d H:i:s');            
@@ -260,14 +246,14 @@ class PrenotazioneController extends Controller
                     $prenotazione->visitaMedsport->societa_id = $request->societa_id;
                     $prenotazione->push();
 
-                    return new PrenotazioneCalendarioResource($prenotazione->load('visitaMedsport'));
+                    $prenotazione->load('visitaMedsport');
                 break;
                 case 'SM':
                     foreach($prenotazione->visiteMedsport as $visita) {
                         $visita->prestazione_id = $request->visita['prestazione_id'];                        
                     }                   
                     $prenotazione->push();
-                    return new PrenotazioneCalendarioResource($prenotazione->load('societaSportiva')->loadCount('visiteMedsport'));
+                    $prenotazione->load('societaSportiva')->loadCount('visiteMedsport');
                 break;
                 case 'A':
                     $prenotazione->visitaAmbulatoriale->paziente_id = $request->visita['paziente_id'];
@@ -276,14 +262,15 @@ class PrenotazioneController extends Controller
                     $prenotazione->visitaAmbulatoriale->medico_id = $request->medico_id;
                     $prenotazione->push();
 
-                    return new PrenotazioneCalendarioResource($prenotazione->load('visitaAmbulatoriale'));
+                    $prenotazione->load('visitaAmbulatoriale');
                 break;
                 case 'SA':
 
                 break;
-            }                                    
-            
-            //PrenotazioneModificata::dispatchIf($isDirty , $prenotazione , $oldPrenotazione , auth()->user() , $request->header('Electron-Client-UUID'));                        
+            }
+
+            broadcast(new NotificaPrenotazioneModificata($prenotazione , auth()->user()->username))->toOthers();
+            return new PrenotazioneCalendarioResource($prenotazione);
         });
     }
 
@@ -294,9 +281,9 @@ class PrenotazioneController extends Controller
             'ambulatorio_id' => 'required',
             'medico_id' => 'nullable'
         ]);
+        
 
-        return DB::transaction(function () use ($request , $prenotazione) {
-            //sistema di backup da rifare come in update
+        return DB::transaction(function () use ($request , $prenotazione) {         
 
             $prenotazione->update([
                'data_inizio' => Carbon::parse($request->data_inizio),
@@ -304,6 +291,9 @@ class PrenotazioneController extends Controller
                'ambulatorio_id' => $request->ambulatorio_id,
                'medico_id' => $request->medico_id 
             ]);
+            //$isDirty = true;
+            //PrenotazioneModificata::dispatchIf($isDirty , $prenotazione , auth()->user()->id); 
+            broadcast(new NotificaPrenotazioneModificata($prenotazione , auth()->user()->username))->toOthers();
             //return new PrenotazioneCalendarioResource($prenotazione);
             return $prenotazione;
         });
@@ -319,7 +309,7 @@ class PrenotazioneController extends Controller
     {
         
         DB::transaction(function() use ($prenotazione , $request) {
-            PrenotazioneEliminata::dispatchIf($prenotazione , $prenotazione , auth()->user()->id , $request->header('Electron-Client-UUID'));
+            broadcast(new NotificaPrenotazioneEliminata($prenotazione , auth()->user()->username))->toOthers();
             $prenotazione->delete();
         });
         

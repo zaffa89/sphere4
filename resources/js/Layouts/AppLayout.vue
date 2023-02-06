@@ -31,8 +31,7 @@
                                 <Link href="/calendario" preserveState
                                     class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Calendario</Link>                            
                             </div>
-                        </slot>
-                        
+                        </slot>                        
                     </div>
                     <div class="flex items-center">
                         <slot name="bottoneChiusuraForm">
@@ -66,18 +65,25 @@
                                 <MenuItems
                                     class="absolute right-0 z-50 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                     <MenuItem v-slot="{ active }">
-                                    <a href="#"
-                                        :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Your
-                                        Profile</a>
+                                        <a href="#"
+                                            :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">
+                                            <UserIcon class="inline h-6 w-6" aria-hidden="true" />
+                                            Profilo utente
+                                        </a>
                                     </MenuItem>
                                     <MenuItem v-slot="{ active }">
-                                    <a href="#"
-                                        :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Settings</a>
+                                        <a href="#"
+                                            :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">
+                                            <CogIcon class="inline h-6 w-6" aria-hidden="true" />
+                                            Preferenze
+                                        </a>
                                     </MenuItem>
                                     <MenuItem v-slot="{ active }">
-                                    <button @click="logout"
-                                        :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Sign
-                                        out</button>
+                                        <button @click="logout"
+                                            :class="[active ? 'bg-gray-100' : '', 'w-full text-left block px-4 py-2 text-sm text-gray-700']">
+                                            <ArrowLeftOnRectangleIcon class="inline h-6 w-6" aria-hidden="true" />
+                                            Esci                                        
+                                        </button>
                                     </MenuItem>
                                 </MenuItems>
                             </transition>
@@ -104,13 +110,11 @@
                 </div>
             </DisclosurePanel>
         </Disclosure>
-        <main class="w-full mx-auto p-4 mb-10 overflow-hidden">
+        <main class="w-full mx-auto p-4 overflow-hidden">
             <slot />          
         </main>
-        <footer class="w-full mx-auto px-4 fixed bottom-0 border-t border-gray-200 text-gray-500 text-center text-sm h-10 items-center flex justify-center">           
-          
-                <span class="block sm:inline">&copy; 2023 Solution Med Srl.</span> <span class="block sm:inline">All rights reserved.</span>
-              
+        <footer class="w-full mx-auto px-4 fixed bottom-0 border-t border-gray-200 text-gray-500 text-center text-sm h-10 items-center flex justify-center">          
+            <span class="block sm:inline">&copy; 2023 Solution Med Srl.</span> <span class="block sm:inline">All rights reserved.</span>              
         </footer>
 </template>
 
@@ -119,35 +123,39 @@ import { router } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3'
 
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
-
-/* FORM APPLICAZIONE */
-
-
+import { Bars3Icon, BellIcon, XMarkIcon , ArrowLeftOnRectangleIcon , CogIcon , UserIcon } from '@heroicons/vue/24/outline'
 </script>
 
 <script>
-export default {
-    
+export default {    
     data() {
         return {
             guestNavigation: [
                 { name: 'Entra', href: '/login' },
                 { name: 'Registrati', href: '/register' },
-            ],
-            
+            ],            
         }
     },
     computed() {
 
     },
-    methods: {
-        
+    methods: {        
         logout() {
-            if(window.electron) window.electron.eliminaMenu();
-            router.post(route('logout'));
+            if(window.electron) {
+                window.electron.eliminaMenu();
+                //router.post(route('sphere.logout'))
+            }
+            else {
+                router.post(route('logout'));
+            }
             
         }
     }
 }
 </script>
+
+<style scoped>
+    main {
+        height: calc(100vh - 104px) !important;
+    }
+</style>

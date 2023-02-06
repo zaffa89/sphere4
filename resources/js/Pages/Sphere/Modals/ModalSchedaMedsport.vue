@@ -417,6 +417,18 @@
                             styling-mode="contained"
                             :disabled="!accettabile"
                           />
+
+                          <DxButton
+                            width="100%"
+                            height="80px"
+                            text="Anteprima"
+                            type="normal"
+                            icon="activefolder"
+                            styling-mode="contained"
+                            :disabled="false"
+                            @click="anteprimaCertificato(visita.id)"
+                          />
+
                         </div>
                       </div>
                     </div>
@@ -2037,6 +2049,10 @@ export default {
             //await axios.put()
             this.fetching = false;
         },
+
+        anteprimaCertificato() {           
+           window.electron.anteprimaCertificatoAgonisticoGiallo(this.visita.id)
+        }
     },
 };
 </script>

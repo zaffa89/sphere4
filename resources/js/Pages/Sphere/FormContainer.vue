@@ -31,6 +31,31 @@
         >            
         </component>
         <FormHome v-if="activeTabs.length === 0" />
+        <!-- notifiche -->
+        <div
+            aria-live="assertive"
+            class="z-50 pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-end sm:p-6"
+        >
+            <div class="flex w-full flex-col items-center space-y-4 sm:items-end">
+            <!-- Notification panel, dynamically insert this into the live region when it needs to be displayed -->
+            <transition
+                v-for="notification in notifications"
+                :key="notification"
+                enter-active-class="transform ease-out duration-300 transition"
+                enter-from-class="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
+                enter-to-class="translate-y-0 opacity-100 sm:translate-x-0"
+                leave-active-class="transition ease-in duration-100"
+                leave-from-class="opacity-100"
+                leave-to-class="opacity-0"
+            >
+                <GeneralNotification
+                :data="notification"
+                :timeout="3"
+                @dismiss="dismissNotification"
+                />
+            </transition>
+            </div>
+        </div>
     </AppLayout>    
 </template>
 
@@ -38,6 +63,7 @@
     import AppLayout from '../../Layouts/AppLayout.vue';
 
     import { BuildingOfficeIcon, CreditCardIcon, UserIcon, UsersIcon , XMarkIcon } from '@heroicons/vue/20/solid'
+    import GeneralNotification from './Components/GeneralNotification.vue';
     
     import FormPazienti from './FormPazienti.vue';
     import FormAmbulatori from './FormAmbulatori.vue';
@@ -73,10 +99,27 @@
 
                 browserTabs: [
                     {
+                        name: 'Home',
+                        component: FormHome,
+                        icon: null,
+                    },
+                    {
                         name: 'Calendario',
                         component: FormCalendario,
                         icon: null
-                    }
+                    },
+                    {
+                        name: 'Accettazioni MS',
+                        component: FormAccettazioneMedsport,
+                        icon: null
+                    },
+                    {
+                        name: 'Pazienti',
+                        component: FormPazienti,
+                        icon: null
+                    },
+                    
+                    
                 ]
             };
         },

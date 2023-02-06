@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\PrenotazioneModificata;
+use App\Events\NotificaPrenotazioneModificata;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -21,10 +21,10 @@ class LogModificaPrenotazione implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  \App\Events\PrenotazioneModificata  $event
+     * @param  \App\Events\NotificaPrenotazioneModificata  $event
      * @return void
      */
-    public function handle(PrenotazioneModificata $event)
+    public function handle(NotificaPrenotazioneModificata $event)
     {        
         
     }

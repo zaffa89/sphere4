@@ -1,11 +1,27 @@
 <script setup>
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import JetValidationErrors from '@/Jetstream/ValidationErrors.vue';
+import { Switch } from '@headlessui/vue'
+import { ref , watch } from 'vue'
+import { SunIcon , MoonIcon } from '@heroicons/vue/24/outline'
 
 defineProps({
     canResetPassword: Boolean,
-    status: String,
+    status: String
 });
+
+const darkMode = ref(localStorage.theme == 'dark');
+
+watch(darkMode , (newValue) => {
+    if(newValue) {
+        localStorage.setItem('theme' , 'dark')
+        document.documentElement.classList.add('dark')
+    } 
+    else {
+        localStorage.setItem('theme' , 'light')
+        document.documentElement.classList.remove('dark')
+    }
+})
 
 const form = useForm({
     username: '',
@@ -25,24 +41,38 @@ const submit = () => {
 
 <template>
     <Head title="Accesso" />
-
-    <div class="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div class="sm:mx-auto sm:w-full sm:max-w-md">
-            <img class="mx-auto h-12 w-auto" src="/storage/header_logo.png" />
-            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Entra con il tuo profilo</h2>
-            <p class="mt-2 text-center text-sm text-gray-600">
-                Oppure
-                {{ ' ' }}
-                <Link href="/register" class="font-medium text-indigo-600 hover:text-indigo-500"> registrati </Link>
-            </p>
-        </div>
-
-        <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="absolute top-8 left-1/2 -translate-x-1/2 overflow-hidden z-10">
+        <svg viewBox="0 0 558 558" width="100%" height="558" fill="none" aria-hidden="true" class="animate-spin-slower">
+            <defs>
+                <linearGradient id=":R3b9m:" x1="79" y1="16" x2="105" y2="237" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#13B5C8"></stop>
+                    <stop offset="1" stop-color="#13B5C8" stop-opacity="0"></stop>
+                </linearGradient>
+            </defs>
+            <path opacity=".2" d="M1 279C1 125.465 125.465 1 279 1s278 124.465 278 278-124.465 278-278 278S1 432.535 1 279Z" stroke="#13B5C8"></path>
+            <path d="M1 279C1 125.465 125.465 1 279 1" stroke="url(#:R3b9m:)" stroke-linecap="round"></path>
+        </svg>
+    </div>
+    <div class="min-h-full flex flex-col py-12 sm:px-6 lg:px-8">        
+        <div class="sm:mx-auto sm:w-full sm:max-w-md z-20">
+            <img class="mx-auto h-16 w-auto" src="/storage/header_logo.png" />
+             <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">Accesso Sphere - Cloud</h2>                 
+        </div>        
+        <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md z-20">
             <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
                 <JetValidationErrors class="mb-4" />
 
                 <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
                     {{ status }}
+                </div>
+                <div class="flex justify-end mb-4">
+                    <SunIcon class="h-5 w-5"  />
+                    <Switch v-model="darkMode" class="group mx-2 relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">                        
+                        <span aria-hidden="true" class="pointer-events-none absolute h-full w-full rounded-md bg-white" />
+                        <span aria-hidden="true" :class="[darkMode ? 'bg-gray-800' : 'bg-gray-200', 'pointer-events-none absolute mx-auto h-4 w-9 rounded-full transition-colors duration-200 ease-in-out']" />
+                        <span aria-hidden="true" :class="[darkMode ? 'translate-x-5' : 'translate-x-0', 'pointer-events-none absolute left-0 inline-block h-5 w-5 transform rounded-full border border-gray-200 bg-white shadow ring-0 transition-transform duration-200 ease-in-out']" />
+                    </Switch>
+                    <MoonIcon class="h-5 w-5" />
                 </div>
                 <form class="space-y-6" @submit.prevent="submit">
                     <div>
@@ -66,15 +96,15 @@ const submit = () => {
                         </div>
 
                         <div class="text-sm" v-if="canResetPassword">
-                            <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"> Password dimenticata? </a>
+                            <a href="#" class="font-medium text-gray-700 hover:text-indigo-500"> Password dimenticata? </a>
                         </div>
                     </div>
 
                     <div>
-                        <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Entra</button>
+                        <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-cyan-500 hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">Entra</button>
                     </div>
                 </form>                
             </div>
-        </div>
+        </div>        
     </div>
 </template>

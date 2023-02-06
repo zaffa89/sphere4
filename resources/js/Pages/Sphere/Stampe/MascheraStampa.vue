@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-    
+
 </script>
 
 <script>
@@ -18,13 +18,13 @@
                 elencoStampanti: []
             }
         },
+        methods: {
+            getElenco() {
+             
+            }
+        },
         created() {
-            if(window.electron) {
-                    window.electron.getElencoStampanti().then(response => {
-                        this.elencoStampanti = response;
-                        console.log(this.elencoStampanti);
-                    });
-                }
+
         }
     }
 </script>

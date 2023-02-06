@@ -68,8 +68,8 @@
       class="flex"
     >
       <div
-        class="lg:inset-y-0 lg:flex lg:w-80 lg:flex-col hidden"
-        :class="{ 'lg:hidden': !sidebarOpen }"
+        class="xl:inset-y-0 xl:flex xl:w-80 xl:flex-col hidden"
+        :class="{ 'xl:hidden': !sidebarOpen }"
       >
         <div class="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5 pb-4 px-4">
           <div class="flex-none">
@@ -92,7 +92,7 @@
           v-model:current-view="currentView"
           :data-source="prenotazioni"
           :current-date="currentDate"
-          :adaptivity-enabled="true"
+          :adaptivity-enabled="false"
           :shade-until-current-time="true"
           :start-day-hour="parseInt(oraInizioCalendario)"
           :end-day-hour="parseInt(oraFineCalendario)"
@@ -261,7 +261,7 @@ import ModalConfermaEliminazione from './Modals/ModalConfermaEliminazione.vue';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/20/solid';
 
-import Pusher from 'pusher-js';
+//import Pusher from 'pusher-js';
 
 import { nextTick } from 'vue';
 import { timeFormat } from '../../utilities/dateUtilities';
@@ -313,7 +313,7 @@ export default {
 
             modalData: null,   
 
-            broadcast: false,
+            isBroadcastUpdate: false,
             sidebarOpen: true
         };
     },
@@ -338,33 +338,28 @@ export default {
         this.caricaCalendario();
         //this.selezionaStruttura(1)
 
-        var pusher = new Pusher('a90f0bb38b5492dcc9d1', { cluster: 'eu' });
-        var channel = pusher.subscribe('calendario');
-
-        channel.bind('prenotazione.store', (data) => {
-            if (data.client_uuid !== localStorage.getItem('client_uuid')) {
-                this.broadcast = true;
+        //var pusher = new Pusher('a90f0bb38b5492dcc9d1', { cluster: 'eu' });
+        //var channel = pusher.subscribe('calendario');
+        
+        Echo.channel('calendario').listen('.prenotazione.store', (data) => {
+            
+                this.isBroadcastUpdate = true;
                 this.$refs.schedulerRef.instance.addAppointment(data.prenotazione);
-                this.$emit('notify', 'success', 'Prenotazione creata', 'è stata aggiunta la prenotazione con ID:' + data.prenotazione.id);
-            }
+                this.$emit('notify', 'success', 'Prenotazione creata', data.message);
+            
         });
 
-        channel.bind('prenotazione.update', (data) => {
-
-            if (data.client_uuid !== localStorage.getItem('client_uuid')) {
-                this.broadcast = true;
+        Echo.channel('calendario').listen('.prenotazione.update', (data) => {                       
+                this.isBroadcastUpdate = true;
                 this.$refs.schedulerRef.instance.updateAppointment(this.prenotazioni[this.prenotazioni.findIndex(element => element.id === data.prenotazione.id)], data.prenotazione);
-                this.$emit('notify', 'success', 'Prenotazione modificata', 'è stata modificata la prenotazione con ID:' + data.prenotazione.id);
-            }
+                this.$emit('notify', 'success', 'Prenotazione modificata', data.message);
+            
         });
 
-        channel.bind('prenotazione.delete', (data) => {
-         
-            if (data.client_uuid !== localStorage.getItem('client_uuid')) {
-                this.broadcast = true;
+        Echo.channel('calendario').listen('.prenotazione.delete', (data) => {
+                this.isBroadcastUpdate = true;
                 this.$refs.schedulerRef.instance.deleteAppointment(this.prenotazioni[this.prenotazioni.findIndex(element => element.id === data.prenotazione.id)]);
-                this.$emit('notify', 'error', 'Prenotazione eliminata', 'è stata eliminata la prenotazione con ID:' + data.prenotazione.id);
-            }
+                this.$emit('notify', 'error', 'Prenotazione eliminata', data.message);            
         });
 
 
@@ -433,7 +428,7 @@ export default {
         },
 
         updatePrenotazione(e) {
-            this.broadcast = true;
+            this.isBroadcastUpdate = true;
             this.$refs.schedulerRef.instance.updateAppointment(this.prenotazioni[this.prenotazioni.findIndex(element => element.id === e.id)], e);
             this.modalData = null;
         
@@ -441,7 +436,7 @@ export default {
         spostaPrenotazione(e) {
             if (e.newData.accettata === 'S') { e.cancel = true; }
             else {
-                if (this.broadcast) { this.broadcast = false; }
+                if (this.isBroadcastUpdate) { this.isBroadcastUpdate = false; }
                 else {
                     e.newData.data_inizio = dayjs(e.newData.data_inizio).format('YYYY-MM-DD HH:mm:ss');
                     e.newData.data_fine = dayjs(e.newData.data_fine).format('YYYY-MM-DD HH:mm:ss');
@@ -455,11 +450,11 @@ export default {
             this.prenotazioneDaEliminare = appointmentData;
         },
         confermaEliminazionePrenotazione() {
-            this.broadcast = false;
+            this.isBroadcastUpdate = false;
             this.$refs.schedulerRef.instance.deleteAppointment(this.prenotazioneDaEliminare);
         },
         deletePrenotazione(e) {
-            if (!this.broadcast) {
+            if (!this.isBroadcastUpdate) {
                 return e.cancel = axios.delete(`api/sphere/prenotazione/${e.appointmentData.id}`).then(() => {
                     this.prenotazioneDaEliminare = null;
                     return false;

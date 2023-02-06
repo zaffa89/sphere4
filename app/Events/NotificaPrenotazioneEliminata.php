@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+
 use App\Models\User;
 use App\Models\Prenotazione;
 use Illuminate\Broadcasting\Channel;
@@ -12,31 +13,29 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class PrenotazioneModificata implements ShouldBroadcast
+class NotificaPrenotazioneEliminata implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $oldPrenotazione;
     public $prenotazione;
-    public $user;
-    public $client_uuid;
+    public $message;
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Prenotazione $prenotazione , $oldPrenotazione , User $user , $client_uuid)
-    {        
-        $this->oldPrenotazione = $oldPrenotazione;
+    public function __construct(Prenotazione $prenotazione , $username)
+    {
         $this->prenotazione = $prenotazione;
-        $this->client_uuid = $client_uuid;
-        $this->user = $user;
+        $this->message = $username.' ha eliminato la prenotazione con ID '.$prenotazione->id;
     }
 
     public function broadcastAs()
     {
-        return 'prenotazione.update';
+        return 'prenotazione.delete';
     }
+
     /**
      * Get the channels the event should broadcast on.
      *
