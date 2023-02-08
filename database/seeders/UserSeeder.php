@@ -48,7 +48,7 @@ class UserSeeder extends Seeder
         ]);
 
         $role = UserRole::find(2); //ruolo segreteria
-        foreach($role->permessi as $permessi) {
+        foreach($role->permessi as $permesso) {
             $user->permessi()->attach($permesso->id);
         }
 

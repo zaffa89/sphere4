@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ListinoAmbulatoriale extends Model
+class PrestazioneAmbulatoriale extends Model
 {
     use HasFactory;
 
-    protected $table = 'listini_ambulatoriali';
+    protected $table = 'prestazioni_ambulatoriali';
     
     protected $guarded = [];
-    
-    public function visita()
+
+    public function listini()
     {
-        return $this->hasMany(VisitaAmbulatoriale::class);
+        return $this->belongsToMany(ListinoAmbulatoriale::class , 'listino_prestazione_ambulatoriale' , 'prestazione_ambulatoriale_id' , 'listino_ambulatoriale_id');
     }
 }

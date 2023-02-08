@@ -3,11 +3,11 @@
     <DxDataGrid
       id="griglia"
       ref="griglia"
-      :data-source="sport"
+      :data-source="ambulatori"
       key-expr="id"
       :allow-column-reordering="true"
       :allow-column-resizing="true"
-      :column-auto-width="true"
+      :column-auto-width="false"
       :column-min-width="50"
       column-resizing-mode="widget"
       :row-alternation-enabled="true"
@@ -16,37 +16,20 @@
       @contextMenuPreparing="openContextMenu"
       @row-prepared="onRowPrepared"
       @row-dbl-click="onRowDblClick"
-      @row-removing="deleteSport"
+      @row-removing="deleteAmbulatorio"
     >
-      <DxSearchPanel
-        :visible="true"
-        :width="240"
-        placeholder="Cerca..."
-      />
       <DxSelection mode="single" />
       <DxColumnChooser :enabled="true" />
       <DxColumn data-field="id" />
       <DxColumn
         data-field="nome"
-        caption="Nome sport"
+        caption="Nome ambulatorio"
       />
-      <DxColumn data-field="tipo_visita" />
-      <DxColumn data-field="mesi_scadenza" />
-      <DxColumn data-field="eta_minima_maschi" />
-      <DxColumn data-field="eta_massima_maschi" />
-      <DxColumn data-field="eta_minima_tem_maschi" />
-
-      <DxColumn data-field="eta_minima_femmine" />
-      <DxColumn data-field="eta_massima_femmine" />
-      <DxColumn data-field="eta_minima_tem_femmine" />
-
-      <DxColumn data-field="anno_di_riferimento" />
-      <DxColumn data-field="inizio_anno_riferimento" />
-      <DxColumn data-field="fine_anno_riferimento" />
-
-      <DxColumn data-field="disabili" />
-
-
+      <DxColumn
+        data-field="struttura_id"
+        caption="Struttura"
+      />
+      <DxColumn data-field="attivo" />
 
 
       <DxColumn
@@ -57,67 +40,58 @@
         data-field="updated_at"
         :customize-text="timezoneFixer"
       />
-
-
-      <DxPaging :page-size="20" />
-      <DxPager
-        :visible="true"
-        :allowed-page-sizes="[10, 20, 100, 'all']"
-        display-mode="full"
-        :show-page-size-selector="true"
-        :show-info="true"
-        :show-navigation-buttons="true"
-      />
-
-      <DxScrolling row-rendering-mode="virtual" />
-      <!--
-			<DxScrolling mode="infinite" />
-    -->
+      <!-- 
+			<DxPaging
+				:page-size="50"
+				:page-index="0" />
+			-->
+      <DxScrolling mode="infinite" />
     </DxDataGrid>
-
-    <ModalSport
-      v-if="modal_sport_id"
-      :sport-id="modal_sport_id"
-      @close="modal_sport_id = null"
-      @store="sportSalvato"
-      @update="sportModificato"
+    <!-- 
+    <ModalAmbulatorio
+      v-if="modal_ambulatorio_id"
+      :ambulatorio-id="modal_ambulatorio_id"
+      @close="modal_ambulatorio_id = null"
+      @store="ambulatorioSalvato"
+      @update="ambulatorioModificato"
     />
+    -->
   </div>
 </template>
-  
+
 <script setup>
-import ModalSport from './Modals/ModalSport.vue';
+import AppLayout from '../../../Layouts/AppLayout.vue';
+import ModalAmbulatorio from '../Modals/ModalAmbulatorio.vue';
 import {
     DxDataGrid,
     DxColumn,
     DxColumnChooser,
     DxSelection,
     DxScrolling,
-    DxPager,
     DxPaging,
-    DxSearchPanel,
 } from 'devextreme-vue/data-grid';
-
 import { locale } from 'devextreme/localization';
 
-import { dateFormat, dateAndTimeFormat } from '../../utilities/dateUtilities';
-import dayjs from 'dayjs';
+import { DxTextBox } from 'devextreme-vue/text-box';
+import { MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
+
+import { dateFormat, dateAndTimeFormat } from '../../../utilities/dateUtilities';
 </script>
-  
+
 <script>
 export default {
     emits: ['notify'],
+    //layout: AppLayout,
     data() {
         return {
             //flags
             fetching: false,
-            modal_sport_id: null,
+            modal_ambulatorio_id: null,
             ricerca: null,
             errors: null,
 
-
             //data
-            sport: [],
+            ambulatori: [],
         };
     },
     computed: {
@@ -127,25 +101,22 @@ export default {
     },
     async created() {
         locale('it-IT');
-        await axios.get('api/sphere/sport').then(response => { this.sport = response.data; }).catch(err => { });
+        await axios.get('api/sphere/ambulatorio').then(response => { this.ambulatori = response.data; });
     },
     methods: {
         timezoneFixer(data) {
             return dateAndTimeFormat(data.value);
         },
-        dateFixer(data) {
-            return dateFormat(data.value);
-        },
-        sportSalvato(sport) {
-            this.sport.push(sport);
+        ambulatorioSalvato(ambulatorio) {
+            this.ambulatori.push(ambulatorio);
             this.$refs.griglia.instance.refresh();
-            this.$emit('notify', 'success', 'Sport salvato con successo');
-            this.modal_sport_id = null;
+            this.$emit('notify', 'success', 'Ambulatorio salvato con successo');
+            this.modal_ambulatorio_id = null;
         },
-        async sportModificato() {
-            await axios.get('api/sphere/sport').then(response => { this.sport = response.data; });
-            this.$emit('notify', 'success', 'Sport modificato con successo');
-            this.modal_sport_id = null;
+        async ambulatorioModificato(ambulatorio) {
+            await axios.get('api/sphere/ambulatorio').then(response => { this.ambulatori = response.data; });
+            this.$emit('notify', 'success', 'Ambulatorio modificato con successo');
+            this.modal_ambulatorio_id = null;
         },
         errorFor(field) {
             return null !== this.errors && this.errors[field]
@@ -156,7 +127,7 @@ export default {
             e.rowElement.className += ' hover:bg-gray-300';
         },
         openContextMenu(e) {
-          
+         
             if (e.row) this.$refs.griglia.instance.selectRows([e.row.key]);
 
             e.items = [
@@ -164,18 +135,18 @@ export default {
                     visible: e.rowIndex > -1,
                     text: 'Apri',
                     icon: 'showpanel',
-                    onItemClick: () => { this.apriSport(e.row.data.id); },
+                    onItemClick: () => { this.apriAmbulatorio(e.row.data.id); },
                 },
                 {
                     visible: e.rowIndex > -1,
                     text: 'Elimina',
                     icon: 'trash',
-                    onItemClick: () => { this.confermaEliminaSport(e.rowIndex); },
+                    onItemClick: () => { this.confermaEliminaAmbulatorio(e.rowIndex); },
                 },
                 {
                     text: 'Nuovo',
                     icon: 'plus',
-                    onItemClick: () => { this.nuovoSport(); },
+                    onItemClick: () => { this.nuovoAmbulatorio(); },
                 },
             ];
         },
@@ -183,16 +154,16 @@ export default {
 
         },
         onRowDblClick(e) {
-            this.apriSport(e.data.id);
+            this.apriAmbulatorio(e.data.id);
         },
-        confermaEliminaSport(rowIndex) {
-            this.$refs.griglia.instance.option({ 'editing.texts.confirmDeleteMessage': 'Sei sicuro di voler eliminare lo sport selezionato?' });
+        confermaEliminaAmbulatorio(rowIndex) {
+            this.$refs.griglia.instance.option({ 'editing.texts.confirmDeleteMessage': "Sei sicuro di voler eliminare l'ambulatorio selezionato?" });
             this.$refs.griglia.instance.deleteRow(rowIndex);
         },
-        deleteSport(e) {
-            e.cancel = axios.delete(`api/sphere/sport/${e.data.id}`)
+        deleteAmbulatorio(e) {
+            e.cancel = axios.delete(`api/sphere/ambulatorio/${e.data.id}`)
                 .then(response => {
-                    this.$emit('notify', 'success', 'Sport eliminato');
+                    this.$emit('notify', 'success', 'Ambulatorio eliminato');
                     return false;
                 })
                 .catch(err => {
@@ -200,11 +171,20 @@ export default {
                     return true;
                 });
         },
-        nuovoSport() {
-            this.modal_sport_id = 'new';
+        nuovoAmbulatorio() {
+            this.modal_ambulatorio_id = 'new';
         },
-        apriSport(id) {
-            this.modal_sport_id = id;
+        apriAmbulatorio(id) {
+            this.modal_ambulatorio_id = id;
+        },
+        async ricercaAmbulatorio() {
+            this.fetching = true;
+            await axios.post('api/sphere/ricerca-ambulatorio', { ricerca: this.ricerca }).then(response => {
+                this.ambulatori = response.data;
+            }).catch(err => {
+
+            });
+            this.fetching = false;
         },
     },
 
@@ -214,6 +194,6 @@ export default {
 /*imposta altezza fissa della griglia dinamicamente ( -64px della toolbar in alto -64px toolbar in basso) */
 
 #griglia.dx-widget {
-    height: calc(100vh - 54px) !important;
+    height: calc(100vh - 149px) !important;
 }
 </style>

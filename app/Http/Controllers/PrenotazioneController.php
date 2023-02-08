@@ -66,7 +66,7 @@ class PrenotazioneController extends Controller
         {
             case $prenotazione->sezione_visita == 'M' || $prenotazione->sezione_visita == 'SM':
                 $prenotazione->visita = new VisitaMedsport(['struttura_id' => $request->struttura_id , 'medico_id' => $request->medico_id]);
-                $listini = ListinoMedsport::with('sottoprestazioni')->get();
+                $listini = ListinoMedsport::with('prestazioni')->get();
                 $elenco_sport = Sport::orderBy('nome')->get();
             break;
             
@@ -182,7 +182,7 @@ class PrenotazioneController extends Controller
     public function edit(Prenotazione $prenotazione)
     {
         $listini = match ($prenotazione->sezione_visita) {
-            'M' , 'SM' => ListinoMedsport::with('sottoprestazioni')->get(),
+            'M' , 'SM' => ListinoMedsport::with('prestazioni')->get(),
             'A' , 'SA' => ListinoAmbulatoriale::all(),
             default => null
         };

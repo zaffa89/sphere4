@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('listini_medsport', function (Blueprint $table) {
+        Schema::create('prestazioni_medsport', function (Blueprint $table) {
             $table->id();
 
             $table->string('nome');
             $table->string('codice');
-            $table->string('tipo_visita');
-            $table->decimal('prezzo');
+            $table->decimal('prezzo')->default(0);
             $table->integer('durata')->default(10);
             
             $table->timestamps();
@@ -33,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('listini_medsport');
+        Schema::dropIfExists('prestazioni_medsport');
     }
 };

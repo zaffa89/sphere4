@@ -238,7 +238,7 @@
 </template>
 
 <script setup>
-import AppLayout from '../../Layouts/AppLayout.vue';
+import AppLayout from '../../../Layouts/AppLayout.vue';
 //import 'devextreme/dist/css/dx.light.css';
 import { locale } from 'devextreme/localization';
 
@@ -248,15 +248,15 @@ import DxCalendar from 'devextreme-vue/calendar';
 
 import { CogIcon, ArrowPathIcon, EyeIcon, EyeSlashIcon } from '@heroicons/vue/24/outline';
 
-import ModalPrenotazioneMedsport from './Modals/ModalPrenotazioneMedsport.vue';
-import ModalPrenotazioneAmbulatoriale from './Modals/ModalPrenotazioneAmbulatoriale.vue';
-import ModalPrenotazioneMedsportSocieta from './Modals/ModalPrenotazioneMedsportSocieta.vue';
+import ModalPrenotazioneMedsport from '../Modals/ModalPrenotazioneMedsport.vue';
+import ModalPrenotazioneAmbulatoriale from '../Modals/ModalPrenotazioneAmbulatoriale.vue';
+import ModalPrenotazioneMedsportSocieta from '../Modals/ModalPrenotazioneMedsportSocieta.vue';
 
-import ModalNotaCalendario from './Modals/ModalNotaCalendario.vue';
-import ModalAssenzaCalendario from './Modals/ModalAssenzaCalendario.vue';
+import ModalNotaCalendario from '../Modals/ModalNotaCalendario.vue';
+import ModalAssenzaCalendario from '../Modals/ModalAssenzaCalendario.vue';
 
-import ModalImpostazioniCalendario from './Modals/ModalImpostazioniCalendario.vue';
-import ModalConfermaEliminazione from './Modals/ModalConfermaEliminazione.vue';
+import ModalImpostazioniCalendario from '../Modals/ModalImpostazioniCalendario.vue';
+import ModalConfermaEliminazione from '../Modals/ModalConfermaEliminazione.vue';
 
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/20/solid';
@@ -264,7 +264,7 @@ import { ChevronDownIcon } from '@heroicons/vue/20/solid';
 //import Pusher from 'pusher-js';
 
 import { nextTick } from 'vue';
-import { timeFormat } from '../../utilities/dateUtilities';
+import { timeFormat } from '../../../utilities/dateUtilities';
 import dayjs from 'dayjs';
 
 

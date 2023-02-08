@@ -15,7 +15,7 @@ class ListinoMedsport extends Model
     
     public function prestazioni()
     {
-        return $this->belongsToMany(SottoprestazioneMedsport::class , 'listino_sottoprestazione_medsport' , 'listino_medsport_id' , 'sottoprestazione_medsport_id');
+        return $this->belongsToMany(PrestazioneMedsport::class , 'listino_prestazione_medsport' , 'listino_medsport_id' , 'prestazione_medsport_id');
     }
 
     public function visita()

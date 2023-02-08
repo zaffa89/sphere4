@@ -94,7 +94,7 @@
 </template>
   
 <script setup>
-import ModalSchedaMedsport from './Modals/ModalSchedaMedsport.vue';
+import ModalSchedaMedsport from '../Modals/ModalSchedaMedsport.vue';
 import {
     DxDataGrid,
     DxColumn,
@@ -107,7 +107,7 @@ import { locale } from 'devextreme/localization';
 
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 
-import { dateFormat, dateAndTimeFormat } from '../../utilities/dateUtilities';
+import { dateFormat, dateAndTimeFormat } from '../../../utilities/dateUtilities';
 import dayjs from 'dayjs';
 </script>
   

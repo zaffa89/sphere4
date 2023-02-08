@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('nome');
             $table->string('codice');
             $table->decimal('prezzo');
+            $table->integer('durata')->default(10);
             
             $table->timestamps();
         });

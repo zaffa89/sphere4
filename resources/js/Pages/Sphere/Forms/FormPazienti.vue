@@ -46,7 +46,7 @@
 </template>
 
 <script setup>
-import ModalPaziente from './Modals/ModalPaziente.vue';
+import ModalPaziente from '../Modals/ModalPaziente.vue';
 import {
     DxDataGrid,
     DxColumn,
@@ -60,8 +60,8 @@ import { locale } from 'devextreme/localization';
 import { DxTextBox } from 'devextreme-vue/text-box';
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 
-import { dateFormat, dateAndTimeFormat } from '../../utilities/dateUtilities';
-import AppLayout from '../../Layouts/AppLayout.vue';
+import { dateFormat, dateAndTimeFormat } from '../../../utilities/dateUtilities';
+import AppLayout from '../../../Layouts/AppLayout.vue';
 
 </script>
 

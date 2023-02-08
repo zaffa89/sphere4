@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PrestazioneAmbulatoriale;
+use App\Models\ListinoAmbulatoriale;
 use Illuminate\Http\Request;
 
-class PrestazioneAmbulatorialeController extends Controller
+class ListinoAmbulatorialeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class PrestazioneAmbulatorialeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\PrestazioneAmbulatoriale  $prestazioneAmbulatoriale
+     * @param  \App\Models\ListinoAmbulatoriale  $listinoAmbulatoriale
      * @return \Illuminate\Http\Response
      */
-    public function show(PrestazioneAmbulatoriale $prestazioneAmbulatoriale)
+    public function show(ListinoAmbulatoriale $listinoAmbulatoriale)
     {
         //
     }
@@ -52,10 +52,10 @@ class PrestazioneAmbulatorialeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\PrestazioneAmbulatoriale  $prestazioneAmbulatoriale
+     * @param  \App\Models\ListinoAmbulatoriale  $listinoAmbulatoriale
      * @return \Illuminate\Http\Response
      */
-    public function edit(PrestazioneAmbulatoriale $prestazioneAmbulatoriale)
+    public function edit(ListinoAmbulatoriale $listinoAmbulatoriale)
     {
         //
     }
@@ -64,10 +64,10 @@ class PrestazioneAmbulatorialeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\PrestazioneAmbulatoriale  $prestazioneAmbulatoriale
+     * @param  \App\Models\ListinoAmbulatoriale  $listinoAmbulatoriale
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PrestazioneAmbulatoriale $prestazioneAmbulatoriale)
+    public function update(Request $request, ListinoAmbulatoriale $listinoAmbulatoriale)
     {
         //
     }
@@ -75,10 +75,10 @@ class PrestazioneAmbulatorialeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\PrestazioneAmbulatoriale  $prestazioneAmbulatoriale
+     * @param  \App\Models\ListinoAmbulatoriale  $listinoAmbulatoriale
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PrestazioneAmbulatoriale $prestazioneAmbulatoriale)
+    public function destroy(ListinoAmbulatoriale $listinoAmbulatoriale)
     {
         //
     }

@@ -3,7 +3,7 @@
     <DxDataGrid
       id="griglia"
       ref="griglia"
-      :data-source="societaSportive"
+      :data-source="medici"
       key-expr="id"
       :allow-column-reordering="true"
       :allow-column-resizing="true"
@@ -16,34 +16,27 @@
       @contextMenuPreparing="openContextMenu"
       @row-prepared="onRowPrepared"
       @row-dbl-click="onRowDblClick"
-      @row-removing="deleteSocieta"
+      @row-removing="deleteMedico"
     >
       <DxSelection mode="single" />
       <DxColumnChooser :enabled="true" />
       <DxColumn data-field="id" />
       <DxColumn
         data-field="ragione_sociale"
-        caption="Ragione sociale"
-      />
-      <DxColumn data-field="indirizzo" />
-      <DxColumn data-field="civico" />
-      <DxColumn
-        data-field="localita.nome"
-        caption="Località"
-      />
-      <DxColumn
-        data-field="localita.sigla_provincia"
-        caption="Provincia"
-      />
-      <DxColumn
-        data-field="partita_iva"
-        caption="P. IVA"
+        caption="Ragione Sociale"
       />
       <DxColumn
         data-field="codice_fiscale"
-        caption="Codice Fiscale"
+        caption="Codice fiscale"
       />
-
+      <DxColumn
+        data-field="sphere_user_id"
+        caption="Utente Sphere associato"
+      />
+      <DxColumn
+        data-field="struttura"
+        caption="Struttura"
+      />
 
       <DxColumn
         data-field="created_at"
@@ -61,18 +54,18 @@
       <DxScrolling mode="infinite" />
     </DxDataGrid>
     
-    <ModalSocietaSportiva
-      v-if="modal_societa_id"
-      :societa-id="modal_societa_id"
-      @close="modal_societa_id = null"
-      @store="societaSalvata"
-      @update="societaModificata"
+    <ModalMedico
+      v-if="modal_medico_id"
+      :medico-id="modal_medico_id"
+      @close="modal_medico_id = null"
+      @store="medicoSalvato"
+      @update="medicoModificato"
     />
   </div>
 </template>
 
 <script setup>
-import ModalSocietaSportiva from './Modals/ModalSocietaSportiva.vue';
+import ModalMedico from '../Modals/ModalMedico.vue';
 import {
     DxDataGrid,
     DxColumn,
@@ -85,7 +78,7 @@ import { locale } from 'devextreme/localization';
 
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 
-import { dateFormat, dateAndTimeFormat } from '../../utilities/dateUtilities';
+import { dateFormat, dateAndTimeFormat } from '../../../utilities/dateUtilities';
 </script>
 
 <script>
@@ -95,12 +88,13 @@ export default {
         return {
             //flags
             fetching: false,
-            modal_societa_id: null,
+            modal_medico_id: null,
             ricerca: null,
             errors: null,
 
+
             //data
-            societaSportive: [],
+            medici: [],
         };
     },
     computed: {
@@ -110,22 +104,22 @@ export default {
     },
     async created() {
         locale('it-IT');
-        await axios.get('api/sphere/societa-sportiva').then(response => { this.societaSportive = response.data; });
+        await axios.get('api/sphere/medico').then(response => { this.medici = response.data; });
     },
     methods: {
         timezoneFixer(data) {
             return dateAndTimeFormat(data.value);
         },
-        societaSalvata(societa) {
-            this.societaSportive.push(societa);
+        medicoSalvato(medico) {
+            this.medici.push(medico);
             this.$refs.griglia.instance.refresh();
-            this.$emit('notify', 'success', 'Società salvata con successo');
-            this.modal_societa_id = null;
+            this.$emit('notify', 'success', 'Medico salvato con successo');
+            this.modal_medico_id = null;
         },
-        async societaModificata(societa) {
-            await axios.get('api/sphere/societa-sportiva').then(response => { this.societaSportive = response.data; });
-            this.$emit('notify', 'success', 'Società modificata con successo');
-            this.modal_societa_id = null;
+        async medicoModificato(medico) {
+            await axios.get('medico').then(response => { this.medici = response.data; });
+            this.$emit('notify', 'success', 'Medico modificato con successo');
+            this.modal_medico_id = null;
         },
         errorFor(field) {
             return null !== this.errors && this.errors[field]
@@ -136,7 +130,7 @@ export default {
             e.rowElement.className += ' hover:bg-gray-300';
         },
         openContextMenu(e) {
-        
+            
             if (e.row) this.$refs.griglia.instance.selectRows([e.row.key]);
 
             e.items = [
@@ -144,18 +138,18 @@ export default {
                     visible: e.rowIndex > -1,
                     text: 'Apri',
                     icon: 'showpanel',
-                    onItemClick: () => { this.apriSocieta(e.row.data.id); },
+                    onItemClick: () => { this.apriMedico(e.row.data.id); },
                 },
                 {
                     visible: e.rowIndex > -1,
                     text: 'Elimina',
                     icon: 'trash',
-                    onItemClick: () => { this.confermaEliminaSocieta(e.rowIndex); },
+                    onItemClick: () => { this.confermaEliminaMedico(e.rowIndex); },
                 },
                 {
                     text: 'Nuovo',
                     icon: 'plus',
-                    onItemClick: () => { this.nuovaSocieta(); },
+                    onItemClick: () => { this.nuovoMedico(); },
                 },
             ];
         },
@@ -163,16 +157,16 @@ export default {
 
         },
         onRowDblClick(e) {
-            this.apriSocieta(e.data.id);
+            this.apriMedico(e.data.id);
         },
-        confermaEliminaSocieta(rowIndex) {
-            this.$refs.griglia.instance.option({ 'editing.texts.confirmDeleteMessage': 'Sei sicuro di voler eliminare la società selezionata?' });
+        confermaEliminaMedico(rowIndex) {
+            this.$refs.griglia.instance.option({ 'editing.texts.confirmDeleteMessage': 'Sei sicuro di voler eliminare il medico selezionato?' });
             this.$refs.griglia.instance.deleteRow(rowIndex);
         },
-        deleteSocieta(e) {
-            e.cancel = axios.delete(`api/sphere/societa-sportiva/${e.data.id}`)
+        deleteMedico(e) {
+            e.cancel = axios.delete(`api/sphere/medico/${e.data.id}`)
                 .then(response => {
-                    this.$emit('notify', 'success', 'Società eliminata');
+                    this.$emit('notify', 'success', 'Medico eliminato');
                     return false;
                 })
                 .catch(err => {
@@ -180,16 +174,16 @@ export default {
                     return true;
                 });
         },
-        nuovaSocieta() {
-            this.modal_societa_id = 'new';
+        nuovoMedico() {
+            this.modal_medico_id = 'new';
         },
-        apriSocieta(id) {
-            this.modal_societa_id = id;
+        apriMedico(id) {
+            this.modal_medico_id = id;
         },
-        async ricercaSocieta() {
+        async ricercaMedico() {
             this.fetching = true;
-            await axios.post('api/sphere/ricerca-societa', { ricerca: this.ricerca }).then(response => {
-                this.societaSportive = response.data;
+            await axios.post('api/sphere/ricerca-medico', { ricerca: this.ricerca }).then(response => {
+                this.medici = response.data;
             }).catch(err => {
 
             });
