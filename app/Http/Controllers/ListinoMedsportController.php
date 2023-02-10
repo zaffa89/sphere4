@@ -7,6 +7,24 @@ use Illuminate\Http\Request;
 
 class ListinoMedsportController extends Controller
 {
+
+    /* METODI PER LE PRESTAZIONI ASSOCIATE */
+
+    public function prestazioniListino(ListinoMedsport $listinoMedsport)
+    {
+        return $listinoMedsport->prestazioni;
+    }
+
+    public function attachPrestazione(ListinoMedsport $listinoMedsport , $id)
+    {
+        $listinoMedsport->prestazioni()->syncWithoutDetaching($id);
+    }
+
+    public function detachPrestazione(ListinoMedsport $listinoMedsport , $id)
+    {
+        $listinoMedsport->prestazioni()->detach($id);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +32,7 @@ class ListinoMedsportController extends Controller
      */
     public function index()
     {
-        //
+        return ListinoMedsport::with('prestazioni')->orderBy('codice')->get();
     }
 
     /**
@@ -35,7 +53,7 @@ class ListinoMedsportController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        ListinoMedsport::create($request->all());
     }
 
     /**
@@ -46,7 +64,7 @@ class ListinoMedsportController extends Controller
      */
     public function show(ListinoMedsport $listinoMedsport)
     {
-        //
+        return $listinoMedsport;
     }
 
     /**
@@ -69,7 +87,11 @@ class ListinoMedsportController extends Controller
      */
     public function update(Request $request, ListinoMedsport $listinoMedsport)
     {
-        //
+        $request->validate([
+
+        ]);
+
+        $listinoMedsport->update($request->all());
     }
 
     /**
@@ -79,7 +101,7 @@ class ListinoMedsportController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(ListinoMedsport $listinoMedsport)
-    {
-        //
+    {       
+        $listinoMedsport->delete();
     }
 }

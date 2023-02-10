@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('codice');
             $table->decimal('prezzo');
             $table->integer('durata')->default(10);
+            $table->boolean('referto_ambulatoriale')->default(true);
+            $table->boolean('referto_cardiologia')->default(false);
+            $table->boolean('referto_fisioterapia')->default(false);
             
             $table->timestamps();
         });

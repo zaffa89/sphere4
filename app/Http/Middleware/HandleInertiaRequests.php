@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -47,6 +48,8 @@ class HandleInertiaRequests extends Middleware
                 ? $request->user()->permessi
                 : null,
             */
+
+            'settings' => config('settings')
         ]);
     }
 }

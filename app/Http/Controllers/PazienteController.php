@@ -42,7 +42,7 @@ class PazienteController extends Controller
      */
     public function index()
     {
-        return Paziente::with('localitaNascita' , 'localitaResidenza')->orderBy('id')->limit(5)->get(); //per le prove
+        return Paziente::with('localitaNascita' , 'localitaResidenza')->orderBy('id')->limit(50)->get(); //per le prove
     }
 
     /**

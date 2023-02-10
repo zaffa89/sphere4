@@ -16,38 +16,7 @@ class CalendarController extends Controller
     {
         return [                        
             'prenotazioni' => PrenotazioneCalendarioResource::collection(Prenotazione::with('societaSportiva' , 'visitaMedsport.paziente' , 'visitaMedsport.listino' , 'visitaAmbulatoriale.paziente' , 'visitaAmbulatoriale.listino')->withCount('visiteMedsport' , 'visiteAmbulatoriali')->whereBetween('data_inizio' , [Carbon::now()->subMonth() , Carbon::now()->addMonths(1)])->get()),            
-            'strutture' => Struttura::with('ambulatori' , 'orariMedici')->get(),
-            
-            //da spostare in global
-            'impostazioni' => [
-                'medsport' => true,
-                'ambulatoriale' => true,               
-                'medico_default_fuori_orario' => null,
-                'avviso_presenza_orario_medico' => true,
-                'limita_medici_con_orario_medico' => false,
-            ],
-            'colori' => [
-                [
-                    'codice' => '#22c55e',
-                    'nome' => 'verde'
-                ],
-                [
-                    'codice' => '#f87171',
-                    'nome' => 'rosso'
-                ],
-                [
-                    'codice' => '#22d3ee',
-                    'nome' => 'blu'
-                ],
-                [
-                    'codice' => '#facc15',
-                    'nome' => 'giallo'
-                ],
-                [
-                    'codice' => '#a3a3a3',
-                    'nome' => 'grigio'
-                ]
-            ]
+            'strutture' => Struttura::with('ambulatori' , 'orariMedici')->get()             
         ];
     }    
 

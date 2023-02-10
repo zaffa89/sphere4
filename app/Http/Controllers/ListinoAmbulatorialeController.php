@@ -7,6 +7,22 @@ use Illuminate\Http\Request;
 
 class ListinoAmbulatorialeController extends Controller
 {
+
+    public function prestazioniListino(ListinoAmbulatoriale $listinoAmbulatoriale)
+    {
+        return $listinoAmbulatoriale->prestazioni;
+    }
+
+    public function attachPrestazione(ListinoAmbulatoriale $listinoAmbulatoriale , $id)
+    {
+        $listinoAmbulatoriale->prestazioni()->syncWithoutDetaching($id);
+    }
+
+    public function detachPrestazione(ListinoAmbulatoriale $listinoAmbulatoriale , $id)
+    {
+        $listinoAmbulatoriale->prestazioni()->detach($id);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +30,7 @@ class ListinoAmbulatorialeController extends Controller
      */
     public function index()
     {
-        //
+        return ListinoAmbulatoriale::orderBy('codice')->get();
     }
 
     /**
@@ -46,7 +62,7 @@ class ListinoAmbulatorialeController extends Controller
      */
     public function show(ListinoAmbulatoriale $listinoAmbulatoriale)
     {
-        //
+        return $listinoAmbulatoriale->load('prestazioni');
     }
 
     /**

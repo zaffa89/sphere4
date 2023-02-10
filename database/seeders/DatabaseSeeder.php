@@ -57,7 +57,7 @@ class DatabaseSeeder extends Seeder
         $prestazione = PrestazioneMedsport::create(['nome' => 'ECG a riposo' , 'codice' => 'ECG-EASY']);
         $listinoMedsport->prestazioni()->attach($prestazione->id);
         $listinoMedsport->save();
-
+        
         //CARDIO
         PrestazioneAmbulatoriale::create(['nome' => 'Visita cardiologica' , 'codice' => 'CARDIO' , 'prezzo' => 100.00 , 'durata' => 30]);           //1
         PrestazioneAmbulatoriale::create(['nome' => 'Elettrocardiogramma' , 'codice' => 'ECG' , 'prezzo' => 50.00 , 'durata' => 10]);               //2
@@ -73,10 +73,10 @@ class DatabaseSeeder extends Seeder
         PrestazioneAmbulatoriale::create(['nome' => 'Elettrostimolazione' , 'codice' => 'FISIO-STIM' , 'prezzo' => 15.00 , 'durata' => 10]);        //8
         PrestazioneAmbulatoriale::create(['nome' => 'Ultrasuono terapia' , 'codice' => 'FISIO-ULTRA' , 'prezzo' => 15.00 , 'durata' => 10]);        //9
 
-        $listinoAmbulatoriale = ListinoAmbulatoriale::create([ 'nome' => 'Visita cardiologica con ECG' , 'codice' => 'CARDIO-ECG' , 'prezzo' => 150.00 ]);            
+        $listinoAmbulatoriale = ListinoAmbulatoriale::create([ 'nome' => 'Visita cardiologica con ECG' , 'codice' => 'CARDIO-ECG' , 'prezzo' => 150.00 , 'referto_cardiologia' => true ]);            
         $listinoAmbulatoriale->prestazioni()->attach([1 , 2]);
         
-        $listinoAmbulatoriale = ListinoAmbulatoriale::create([ 'nome' => 'Visita cardiologica + ECG + ECO' , 'codice' => 'CARDIO-ECG-ECO' , 'prezzo' => 70.00 ]);
+        $listinoAmbulatoriale = ListinoAmbulatoriale::create([ 'nome' => 'Visita cardiologica + ECG + ECO' , 'codice' => 'CARDIO-ECG-ECO' , 'prezzo' => 70.00 , 'referto_cardiologia' => true ]);
         $listinoAmbulatoriale->prestazioni()->attach([1 , 2 , 3]);
 
         $listinoAmbulatoriale = ListinoAmbulatoriale::create([ 'nome' => 'Visita O.R.L.' , 'codice' => 'ORL-1' , 'prezzo' => 65.00 ]);
@@ -85,13 +85,13 @@ class DatabaseSeeder extends Seeder
         $listinoAmbulatoriale = ListinoAmbulatoriale::create([ 'nome' => 'Visita O.R.L. + Esame vestibolare' , 'codice' => 'ORL-1' , 'prezzo' => 65.00 ]);
         $listinoAmbulatoriale->prestazioni()->attach([4 , 5]);
 
-        $listinoAmbulatoriale = ListinoAmbulatoriale::create([ 'nome' => 'Visita fisiatrica' , 'codice' => 'FISIO-1' , 'prezzo' => 65.00 ]);
+        $listinoAmbulatoriale = ListinoAmbulatoriale::create([ 'nome' => 'Visita fisiatrica' , 'codice' => 'FISIO-1' , 'prezzo' => 65.00 , 'referto_fisioterapia' => true ]);
         $listinoAmbulatoriale->prestazioni()->attach(6);
 
-        $listinoAmbulatoriale = ListinoAmbulatoriale::create([ 'nome' => 'Visita fisiatrica + Onde urto' , 'codice' => 'FISIO-ONDE' , 'prezzo' => 75.00 ]);
+        $listinoAmbulatoriale = ListinoAmbulatoriale::create([ 'nome' => 'Visita fisiatrica + Onde urto' , 'codice' => 'FISIO-ONDE' , 'prezzo' => 75.00 , 'referto_fisioterapia' => true ]);
         $listinoAmbulatoriale->prestazioni()->attach([6 , 7]);
 
-        $listinoAmbulatoriale = ListinoAmbulatoriale::create([ 'nome' => 'Onde urto + Elettrostimolazione' , 'codice' => 'ONDE+STIMO' , 'prezzo' => 30.00 ]);
+        $listinoAmbulatoriale = ListinoAmbulatoriale::create([ 'nome' => 'Onde urto + Elettrostimolazione' , 'codice' => 'ONDE+STIMO' , 'prezzo' => 30.00 , 'referto_fisioterapia' => true ]);
         $listinoAmbulatoriale->prestazioni()->attach([7 , 8]);
 
         SocietaSportiva::create( [ 'ragione_sociale' => 'societa 1' , 'indirizzo' => 'Via delle società sportive' , 'civico' => 1 ] );

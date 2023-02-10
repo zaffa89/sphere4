@@ -59,7 +59,7 @@
             aria-hidden="true"
           />
           Impostazioni
-        </button>
+        </button>        
       </div>
     </div>
     <div
@@ -181,7 +181,6 @@
     <ModalPrenotazioneMedsport
       v-if="modalData?.sezione_visita == 'M'"
       :appointment-data="modalData"
-      :impostazioni="impostazioni"
       @close="chiudiAppuntamento"
       @store="addPrenotazione"
       @update="updatePrenotazione"
@@ -190,7 +189,6 @@
     <ModalPrenotazioneMedsportSocieta
       v-if="modalData?.sezione_visita == 'SM'"
       :appointment-data="modalData"
-      :impostazioni="impostazioni"
       @close="chiudiAppuntamento"
       @store="addPrenotazione"
       @update="updatePrenotazione"
@@ -199,7 +197,6 @@
     <ModalPrenotazioneAmbulatoriale
       v-if="modalData?.sezione_visita == 'A'"
       :appointment-data="modalData"
-      :impostazioni="impostazioni"
       @close="chiudiAppuntamento"
       @store="addPrenotazione"
       @update="updatePrenotazione"
@@ -296,15 +293,14 @@ export default {
             selectedCellData: [],
 
             orari_di_oggi: [],
+
             //impostazioni
-            impostazioni: [], // da spostare in global
             currentDate: dayjs().format('YYYY-MM-DD'),
             currentView: 'day',
 
             durataCella: 15,
             oraInizioCalendario: 8,
-            oraFineCalendario: 22,
-            prenotaFuoriOrario: false,                     
+            oraFineCalendario: 22,                             
 
             //flags
             openModalImpostazioni: false,
@@ -379,8 +375,7 @@ export default {
             await axios.get('api/sphere/calendario/carica').then(response => {
                 this.prenotazioni = response.data.prenotazioni;
                 this.strutture = response.data.strutture;
-
-                this.impostazioni = response.data.impostazioni;
+       
                 this.selezionaStruttura(1);
                 this.orari_di_oggi = this.strutturaSelezionata.orari_medici.filter(orario => dayjs(orario.data_inizio).isSame(dayjs() , 'day'));
             }).catch(err => { });
@@ -440,7 +435,7 @@ export default {
                 else {
                     e.newData.data_inizio = dayjs(e.newData.data_inizio).format('YYYY-MM-DD HH:mm:ss');
                     e.newData.data_fine = dayjs(e.newData.data_fine).format('YYYY-MM-DD HH:mm:ss');
-                    const medico_id = this.strutturaSelezionata.orari_medici.find(orario => { return dayjs(e.newData.data_inizio).isBetween(orario.data_inizio, orario.data_fine, null, '[]') && orario.ambulatorio_id == e.newData.ambulatorio_id; })?.medico_id ?? parseInt(this.impostazioni.medico_default_fuori_orario) ?? null;
+                    const medico_id = this.strutturaSelezionata.orari_medici.find(orario => { return dayjs(e.newData.data_inizio).isBetween(orario.data_inizio, orario.data_fine, null, '[]') && orario.ambulatorio_id == e.newData.ambulatorio_id; })?.medico_id ?? parseInt(this.$page.props.settings.medico_default_fuori_orario.value) ?? null;
 
                     e.cancel = axios.put(`api/sphere/calendario/sposta-prenotazione/${e.newData.id}`, { ...e.newData, medico_id }).then(() => { return false; }).catch(() => { return true; });
                 }
@@ -490,14 +485,14 @@ export default {
             const data_inizio = dayjs(this.isSelectedCell(cellData) ? this.selectedCellData[0].startDate : cellData.startDate).format('YYYY-MM-DD HH:mm:ss');
             const data_fine = dayjs(this.isSelectedCell(cellData) ? this.selectedCellData[this.selectedCellData.length - 1].endDate : cellData.endDate).format('YYYY-MM-DD HH:mm:ss');
             const ambulatorio_id = this.isSelectedCell(cellData) ? this.selectedCellData[0].groups.ambulatorio_id : cellData.groups.ambulatorio_id;
-            const medico_id = this.strutturaSelezionata.orari_medici.find(orario => { return dayjs(data_inizio).isBetween(orario.data_inizio, orario.data_fine, null, '[]') && orario.ambulatorio_id == ambulatorio_id; })?.medico_id ?? parseInt(this.impostazioni.medico_default_fuori_orario) ?? null;
+            const medico_id = this.strutturaSelezionata.orari_medici.find(orario => { return dayjs(data_inizio).isBetween(orario.data_inizio, orario.data_fine, null, '[]') && orario.ambulatorio_id == ambulatorio_id; })?.medico_id ?? parseInt(this.$page.props.settings.medico_default_fuori_orario.value) ?? null;
             const struttura_id = this.strutturaSelezionataId;
 
             this.contextMenuItems = [
                 { text: 'Nuova Prenotazione', beginGroup: true, disabled: true },
                 {
                     text: 'Medsport',
-                    visible: this.impostazioni.medsport,
+                    visible: this.$page.props.settings.medsport.value,
                     onItemClick: () => {
                         this.apriAppuntamento(
                             {
@@ -513,7 +508,7 @@ export default {
                 },
                 {
                     text: 'Medsport - Società Sportiva',
-                    visible: this.impostazioni.medsport,
+                    visible: this.$page.props.settings.medsport.value,
                     onItemClick: () => {
                         this.apriAppuntamento(
                             {
@@ -529,7 +524,7 @@ export default {
                 },
                 {
                     text: 'Ambulatoriale',
-                    visible: this.impostazioni.ambulatoriale,
+                    visible: this.$page.props.settings.ambulatoriale.value,
                     onItemClick: () => {
                         this.apriAppuntamento(
                             {

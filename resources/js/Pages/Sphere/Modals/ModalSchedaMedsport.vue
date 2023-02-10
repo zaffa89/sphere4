@@ -1988,7 +1988,7 @@ export default {
         locale('it-IT');
 
         this.fetching = true;
-        await axios.get(`api/sphere/visita-medsport/${this.visitaId}`)
+        await axios.get(`api/sphere/medsport/visita-medsport/${this.visitaId}`)
             .then(response => {
                 this.visita = response.data.visita;
                 this.elenco_sport = response.data.elenco_sport;
@@ -2047,6 +2047,7 @@ export default {
         {
             this.fetching = true;
             //await axios.put()
+            this.$emit('update')
             this.fetching = false;
         },
 

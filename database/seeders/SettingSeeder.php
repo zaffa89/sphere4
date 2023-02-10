@@ -15,7 +15,45 @@ class SettingSeeder extends Seeder
      */
     public function run()
     {
+        /* GENERALE */
+        Setting::create([
+            'attribute' => 'medsport',
+            'value' => 1,
+            'description' => 'Abilita / Disabilita le parti di Medicina sportiva',
+            'category' => 'generale'
+        ]);
+
+        Setting::create([
+            'attribute' => 'ambulatoriale',
+            'value' => 1,
+            'description' => 'Abilita / Disabilita le parti di Medicina Ambulatoriale',
+            'category' => 'generale'
+        ]);
+        
+                
+
         /* CALENDARIO */
+        Setting::create([
+            'attribute' => 'medico_default_fuori_orario',
+            'value' => null,
+            'description' => 'Medico di default quando si cerca di prenotare fuori orario',
+            'category' => 'calendario'
+        ]);
+
+        Setting::create([
+            'attribute' => 'avviso_presenza_orario_medico',
+            'value' => 1,
+            'description' => 'Avvisa quando data e ora scelti in fase di prenotazione non corrispondono ad alcun orario medico',
+            'category' => 'calendario'
+        ]);
+
+        Setting::create([
+            'attribute' => 'limita_medici_con_orario_medico',
+            'value' => 0,
+            'description' => 'In fase di prenotazione, permette di selezionare solamente i medici che che hanno un orario assegnato',
+            'category' => 'calendario'
+        ]);
+
         Setting::create([
             'attribute' => 'colore_prenotazione_medsport',
             'value' => '#FFFFFF',
@@ -28,21 +66,7 @@ class SettingSeeder extends Seeder
             'value' => '#FFFFFF',
             'description' => 'Colore di default per le prenotazioni ambulatoriali',
             'category' => 'calendario'
-        ]);
-
-        Setting::create([
-            'attribute' => 'colore_prenotazione_cardiologia',
-            'value' => '#FFFFFF',
-            'description' => 'Colore di default per le prenotazioni di cardiologia',
-            'category' => 'calendario'
-        ]);
-
-        Setting::create([
-            'attribute' => 'colore_prenotazione_fisioterapia',
-            'value' => '#FFFFFF',
-            'description' => 'Colore di default per le prenotazioni di fisioterapia',
-            'category' => 'calendario'
-        ]);
+        ]);        
         
         Setting::create([
             'attribute' => 'ora_minima_calendario',

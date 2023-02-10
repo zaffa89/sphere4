@@ -1,13 +1,13 @@
 <template>
     <AppLayout>
         <template #navigazione>
-            <nav class="-mb-px flex space-x-8" aria-label="Tabs" v-if="electronClient">
+            <nav class="-mb-px sm:flex hidden space-x-8" aria-label="Tabs" v-if="electronClient">
                 <button @click="activateForm(tab)" v-for="(tab, tabIdx) in activeTabs" :key="tab" :class="[tab.component == currentTab.component ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300', 'group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm']" :aria-current="tab.current ? 'page' : undefined">
                     <component :is="tab.icon" :class="[tab.component == currentTab.component ? 'text-indigo-500' : 'text-gray-400 group-hover:text-gray-500', '-ml-0.5 mr-2 h-5 w-5']" aria-hidden="true" />
                     <span>{{ tab.name }}</span>
                 </button>
             </nav>
-            <nav class="-mb-px flex space-x-8" aria-label="Tabs" v-else>
+            <nav class="-mb-px sm:flex space-x-8 hidden" aria-label="Tabs" v-else>
                 <button @click="activateForm(tab)" v-for="(tab, tabIdx) in browserTabs" :key="tab" :class="[tab.component == currentTab?.component ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300', 'group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm']" :aria-current="tab.current ? 'page' : undefined">
                     <component :is="tab.icon" :class="[tab.component == currentTab?.component ? 'text-indigo-500' : 'text-gray-400 group-hover:text-gray-500', '-ml-0.5 mr-2 h-5 w-5']" aria-hidden="true" />
                     <span>{{ tab.name }}</span>
@@ -121,6 +121,11 @@
                         component: FormPazienti,
                         icon: null
                     },
+                    {
+                        name: 'Gestione Prestazioni',
+                        component: FormGestionePrestazioni,
+                        icon: null
+                    }
                     
                     
                 ]

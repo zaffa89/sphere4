@@ -183,7 +183,7 @@ export default {
 /*imposta altezza fissa della griglia dinamicamente ( 216px altezza header + footer ) */
 
 #griglia.dx-widget {
-    height: 100% !important;
+    height: calc(100vh - 149px) !important;
 }
 
 </style>

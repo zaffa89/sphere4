@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
             $table->string('attribute');
-            $table->string('value');
+            $table->string('value')->nullable();
             $table->string('description')->nullable();
             $table->string('category')->default('generale');
             $table->timestamps();

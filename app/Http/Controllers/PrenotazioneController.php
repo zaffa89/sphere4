@@ -45,9 +45,10 @@ class PrenotazioneController extends Controller
             'data_inizio' => 'required',
             'data_fine' => 'required',
             'struttura_id' => 'required',
-            'ambulatorio_id' => 'required',
+            'ambulatorio_id' => 'required_without:prenotazione_diretta',
             'medico_id' => 'nullable',
             'sezione_visita' => 'required',
+            
         ]);
                 
         //$prenotazione = new Prenotazione($request->all());        

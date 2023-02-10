@@ -18,9 +18,11 @@ return new class extends Migration
 
             $table->string('nome');
             $table->string('codice');
-            $table->decimal('prezzo')->default(0);
-            $table->integer('durata')->default(10);
-            
+            $table->decimal('rimborso_asl')->default(0); //rimborso asl
+            $table->string('istat')->nullable();
+            $table->integer('branca')->nullable();  //sempre 15
+            $table->string('codice_siss')->nullable(); 
+
             $table->timestamps();
         });
     }

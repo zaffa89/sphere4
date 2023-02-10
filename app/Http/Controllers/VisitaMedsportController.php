@@ -105,7 +105,7 @@ class VisitaMedsportController extends Controller
             
          
             
-            VisitaMedsportModificata::dispatchIf($visitaMedsport->isDirty() , $visitaMedsport , auth()->user()->id);
+            //VisitaMedsportModificata::dispatchIf($visitaMedsport->isDirty() , $visitaMedsport , auth()->user()->id);
             $visitaMedsport->save();
         });
         

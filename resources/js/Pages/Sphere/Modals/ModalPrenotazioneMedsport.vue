@@ -127,7 +127,7 @@
                         :is-valid="!errorFor('medico_id')"
                       />
                       <p
-                        v-if="!orarioInOrarioMedico && impostazioni.avviso_presenza_orario_medico"
+                        v-if="!orarioInOrarioMedico && $page.props.settings.avviso_presenza_orario_medico.value"
                         class="text-red-500 text-sm"
                       >
                         Medico non disponibile nell'ambulatorio/orario selezionato
@@ -529,8 +529,7 @@ const societaDataSource = new DataSource({
 
 export default {
     props: [
-        'appointmentData',
-        'impostazioni',
+        'appointmentData'     
     ],
     emits: ['update', 'store', 'close'],
     data() {
@@ -567,7 +566,7 @@ export default {
         },
         mediciPrenotabili() {
             let array = [];
-            this.impostazioni.limita_medici_con_orario_medico
+            this.$page.props.settings.limita_medici_con_orario_medico.value
                 ? this.struttura.orari_medici.forEach(orario => {
                     if (dayjs(this.prenotazione.data_inizio, 'YYYY-MM-DD').isSame(orario.data_inizio, 'day') && orario.ambulatorio_id == this.prenotazione.ambulatorio_id) {
                         array.push(this.medici.find(medico => medico.id == orario.medico_id));

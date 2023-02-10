@@ -16,7 +16,14 @@ use App\Http\Controllers\PrenotazioneController;
 use App\Http\Controllers\VisitaMedsportController;
 use App\Http\Controllers\SocietaSportivaController;
 use App\Http\Controllers\AccettazioneMedsportController;
-
+use App\Http\Controllers\ListinoAmbulatorialeController;
+use App\Http\Controllers\ListinoMedsportController;
+use App\Http\Controllers\PrestazioneAmbulatorialeController;
+use App\Http\Controllers\PrestazioneMedsportController;
+use App\Models\ListinoAmbulatoriale;
+use App\Models\ListinoMedsport;
+use App\Models\PrestazioneAmbulatoriale;
+use App\Models\PrestazioneMedsport;
 
 /*
 |--------------------------------------------------------------------------
@@ -79,21 +86,39 @@ Route::prefix('sphere')->group(function() {
         Route::get('calendario/carica' , [CalendarController::class , 'caricaCalendario']);
         Route::put('calendario/sposta-prenotazione/{prenotazione}' , [PrenotazioneController::class , 'move']);
         Route::post('calendario/genera-orario-medico' , [CalendarController::class , 'generaOrarioMedico']);
-
-        //ACCETTAZIONE MEDSPORT
-        Route::post('carica-accettazione-medsport' , [AccettazioneMedsportController::class , 'accettazioni']);
-        Route::get('apri-visita-medsport/{visitaMedsport}' , [AccettazioneMedsportController::class , 'apriVisita']);
-        Route::get('calcola-posizione-ticket/{visitaMedsport}' , [AccettazioneMedsportController::class , 'calcolaPosizioneTicket']);
-
-        //VISITE MEDSPORT
-        Route::resource('visita-medsport' , VisitaMedsportController::class);
-
-        //ACCETTAZIONE AMBULATORIALE 
-
-        //VISITE AMBULATORIALI
+        
         //SPORT
         Route::resource('sport' , SportController::class);
         Route::get('sport-tramite-tipo-visita/{tipoVisita}' , [SportController::class , 'sportTramiteTipoVisita']);
+
+        /* MEDICINA DELLO SPORT */
+        Route::prefix('medsport')->group(function() {
+            //ACCETTAZIONE E VISITE
+            Route::post('accettazione' , [AccettazioneMedsportController::class , 'accettazione']);
+            Route::resource('visita-medsport' , VisitaMedsportController::class);
+            Route::get('calcola-posizione-ticket/{visitaMedsport}' , [AccettazioneMedsportController::class , 'calcolaPosizioneTicket']);
+
+            //LISTINI E PRESTAZIONI
+            Route::resource('listino' , ListinoMedsportController::class);
+            Route::resource('prestazione' , PrestazioneMedsportController::class);
+            Route::get('prestazioni-listino/{listinoMedsport}' , [ListinoMedsportController::class , 'prestazioniListino']);
+            Route::post('prestazioni-listino/add/{listinoMedsport}/{id}' , [ListinoMedsportController::class , 'attachPrestazione']);
+            Route::delete('prestazioni-listino/remove/{listinoMedsport}/{id}' , [ListinoMedsportController::class , 'detachPrestazione']);
+        });
+
+        /* AMBULATORIALE */
+        Route::prefix('ambulatoriale')->group(function() {
+            //ACCETTAZIONE E VISITE
+
+
+            //LISTINI E PRESTAZIONI
+            Route::resource('listino' , ListinoAmbulatorialeController::class);
+            Route::resource('prestazione' , PrestazioneAmbulatorialeController::class);
+            Route::get('prestazioni-listino/{listinoAmbulatoriale}' , [ListinoAmbulatorialeController::class , 'prestazioniListino']);
+            Route::post('prestazioni-listino/add/{listinoAmbulatoriale}/{prestazione_id}' , [ListinoAmbulatorialeController::class , 'attachPrestazione']);
+            Route::delete('prestazioni-listino/remove/{listinoAmbulatoriale}/{prestazione_id}' , [ListinoAmbulatorialeController::class , 'detachPrestazione']);
+        });
+        
     });
 
     //API PANNELLO AMMINISTRAZIONE WEB

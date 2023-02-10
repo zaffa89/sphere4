@@ -3,7 +3,7 @@
     <DxDataGrid
       id="griglia"
       ref="griglia"
-      :data-source="pazienti"
+      :data-source="visite"
       key-expr="id"
       :allow-column-reordering="true"
       :allow-column-resizing="true"
@@ -16,7 +16,7 @@
       @contextMenuPreparing="openContextMenu"
       @row-prepared="onRowPrepared"
       @row-dbl-click="onRowDblClick"
-      @row-removing="deletePaziente"
+      @row-removing="eliminaVisita"
     >
       <DxSelection mode="single" />
       <DxColumnChooser :enabled="true" />
@@ -38,8 +38,8 @@
       />
       <DxColumn
         data-field="societa_sportiva.ragione_sociale"
-        caption="Atleta"
-        :customize-text="defaultPazienteText"
+        caption="Società sportiva"
+        :customize-text="defaultSocietaText"
       />
       <DxColumn
         data-field="paziente.ragione_sociale"
@@ -86,15 +86,24 @@
     <ModalSchedaMedsport
       v-if="modal_visita_id"
       :visita-id="modal_visita_id"
-      @close="modal_visita_id = null"
-      @store="pazienteSalvato"
-      @update="pazienteModificato"
+      @close="modal_visita_id = null"      
+      @update="visitaModificata"
     />
+    
+    <ModalPrenotazioneMedsport
+      v-if="modal_nuova_visita?.sezione_visita == 'M'"
+      :appointment-data="modal_nuova_visita"
+      @close="modal_nuova_visita = {}"
+      @store="aggiungiVisita"      
+    />
+
   </div>
 </template>
   
 <script setup>
 import ModalSchedaMedsport from '../Modals/ModalSchedaMedsport.vue';
+import ModalPrenotazioneMedsport from '../Modals/ModalPrenotazioneMedsport.vue';
+import ModalPrenotazioneMedsportSocieta from '../Modals/ModalPrenotazioneMedsportSocieta.vue';
 import {
     DxDataGrid,
     DxColumn,
@@ -119,12 +128,13 @@ export default {
             //flags
             fetching: false,
             modal_visita_id: null,
+            modal_nuova_visita: null,
             ricerca: null,
             errors: null,
 
 
             //data
-            pazienti: [],
+            visite: [],
         };
     },
     computed: {
@@ -134,10 +144,10 @@ export default {
     },
     async created() {
         locale('it-IT');
-        await axios.post('api/sphere/carica-accettazione-medsport', {
+        await axios.post('api/sphere/medsport/accettazione', {
             data_inizio: dayjs().format('YYYY-MM-DD'),
             data_fine: '2023-02-01', //dayjs().format('YYYY-MM-DD'),                
-        }).then(response => { this.pazienti = response.data; });
+        }).then(response => { this.visite = response.data; });
     },
     methods: {
         timezoneFixer(data) {
@@ -155,15 +165,15 @@ export default {
         defaultPazienteText(data) {
             return data.value ?? 'PAZIENTE MANCANTE';
         },
-        pazienteSalvato(paziente) {
-            this.pazienti.push(paziente);
+        visitaCreata(data) {
+            this.visite.push(data);
             this.$refs.griglia.instance.refresh();
-            this.$emit('notify', 'success', 'Paziente salvato con successo');
+            this.$emit('notify', 'success', 'Visita creata con successo');
             this.modal_visita_id = null;
         },
-        async pazienteModificato(paziente) {
-            await axios.get('api/sphere/paziente').then(response => { this.pazienti = response.data; });
-            this.$emit('notify', 'success', 'Paziente modificato con successo');
+        async visitaModificata(data) {
+            //await axios.get('api/sphere/paziente').then(response => { this.pazienti = response.data; });
+            this.$emit('notify', 'success', 'Visita modificata con successo');
             this.modal_visita_id = null;
         },
         errorFor(field) {
@@ -183,18 +193,23 @@ export default {
                     visible: e.rowIndex > -1,
                     text: 'Apri',
                     icon: 'showpanel',
-                    onItemClick: () => { this.apriPaziente(e.row.data.id); },
+                    onItemClick: () => { this.apriVisita(e.row.data.id); },
                 },
                 {
                     visible: e.rowIndex > -1,
                     text: 'Elimina',
                     icon: 'trash',
-                    onItemClick: () => { this.confermaEliminaPaziente(e.rowIndex); },
+                    onItemClick: () => { this.confermaEliminazioneVisita(e.rowIndex); },
                 },
                 {
-                    text: 'Nuovo',
+                    text: 'Nuova accettazione',
                     icon: 'plus',
-                    onItemClick: () => { this.nuovoPaziente(); },
+                    onItemClick: () => { this.nuovaVisitaSingola(); },
+                },
+                {
+                    text: 'Nuova accettazione per Società sportiva',
+                    icon: 'plus',
+                    onItemClick: () => { this.nuovaVisitaSocieta(); },
                 },
             ];
         },
@@ -202,16 +217,16 @@ export default {
 
         },
         onRowDblClick(e) {
-            this.apriPaziente(e.data.id);
+            this.apriVisita(e.data.id);
         },
-        confermaEliminaPaziente(rowIndex) {
-            this.$refs.griglia.instance.option({ 'editing.texts.confirmDeleteMessage': 'Sei sicuro di voler eliminare il paziente selezionato?' });
+        confermaEliminazioneVisita(rowIndex) {
+            this.$refs.griglia.instance.option({ 'editing.texts.confirmDeleteMessage': 'Sei sicuro di voler eliminare questa visita?' });
             this.$refs.griglia.instance.deleteRow(rowIndex);
         },
-        deletePaziente(e) {
-            e.cancel = axios.delete(`api/sphere/paziente/${e.data.id}`)
+        eliminaVisita(e) {
+            e.cancel = axios.delete(`api/sphere/medsport/visita-medsport/${e.data.id}`)
                 .then(response => {
-                    this.$emit('notify', 'success', 'Paziente eliminato');
+                    this.$emit('notify', 'success', 'Visita eliminata');
                     return false;
                 })
                 .catch(err => {
@@ -219,16 +234,27 @@ export default {
                     return true;
                 });
         },
-        nuovoPaziente() {
-            this.modal_visita_id = 'new';
+        nuovaVisitaSingola() {
+            this.modal_nuova_visita = {
+                                sezione_visita : 'M',
+                                data_inizio : dayjs().format('YYYY-MM-DD HH:MM'),
+                                data_fine : dayjs().format('YYYY-MM-DD HH:MM'),
+                                ambulatorio_id : null,
+                                medico_id : null,
+                                struttura_id : 1,
+                                prenotazione_diretta: true
+                            };
         },
-        apriPaziente(id) {
+        aggiungiVisita(data) {
+            this.visite = [...this.visite , data]
+        },
+        apriVisita(id) {
             this.modal_visita_id = id;
         },
         async ricercaPaziente() {
             this.fetching = true;
             await axios.post('api/sphere/ricerca-paziente', { ricerca: this.ricerca }).then(response => {
-                this.pazienti = response.data;
+                this.visite = response.data;
             }).catch(err => {
 
             });

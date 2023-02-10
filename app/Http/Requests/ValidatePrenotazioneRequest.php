@@ -27,7 +27,7 @@ class ValidatePrenotazioneRequest extends FormRequest
             'sezione_visita' => 'nullable|required',
             'data_inizio' => 'required',           
             'struttura_id' => 'required',
-            'ambulatorio_id' => 'required',
+            'ambulatorio_id' => 'required_without:prenotazione_diretta',
             'medico_id' => 'nullable',
             'note' => 'nullable|max:255',
             'durata' => 'required|integer|min:1',
