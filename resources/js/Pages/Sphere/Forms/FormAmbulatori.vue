@@ -60,8 +60,7 @@
 </template>
 
 <script setup>
-import AppLayout from '../../../Layouts/AppLayout.vue';
-import ModalAmbulatorio from '../Modals/ModalAmbulatorio.vue';
+import ModalAmbulatorio from '@modals/Anagrafiche/ModalAmbulatorio.vue';
 import {
     DxDataGrid,
     DxColumn,
@@ -75,13 +74,12 @@ import { locale } from 'devextreme/localization';
 import { DxTextBox } from 'devextreme-vue/text-box';
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 
-import { dateFormat, dateAndTimeFormat } from '../../../utilities/dateUtilities';
+import { dateFormat, dateAndTimeFormat } from '@utilities/dateUtilities';
 </script>
 
 <script>
 export default {
     emits: ['notify'],
-    //layout: AppLayout,
     data() {
         return {
             //flags

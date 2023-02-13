@@ -16,8 +16,10 @@
 - rifare metodi salvataggio prenotazioni -> separare in base a sezione_visita + aggiungere creazione da accettazione
 - verifica ultima visita
 - verifica ultima prenotazione no-show
+- durate di default? 
 
 ## accettazioni
+- data corrente
 - accettazioni senza prenotazione*
 - verifica dati anagrafici
 - idoneità

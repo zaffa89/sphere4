@@ -8,19 +8,19 @@ use Illuminate\Http\Request;
 class ListinoAmbulatorialeController extends Controller
 {
 
-    public function prestazioniListino(ListinoAmbulatoriale $listinoAmbulatoriale)
+    public function prestazioniListino(ListinoAmbulatoriale $listino)
     {
-        return $listinoAmbulatoriale->prestazioni;
+        return $listino->prestazioni;
     }
 
-    public function attachPrestazione(ListinoAmbulatoriale $listinoAmbulatoriale , $id)
+    public function attachPrestazione(ListinoAmbulatoriale $listino , $id)
     {
-        $listinoAmbulatoriale->prestazioni()->syncWithoutDetaching($id);
+        $listino->prestazioni()->syncWithoutDetaching($id);
     }
 
-    public function detachPrestazione(ListinoAmbulatoriale $listinoAmbulatoriale , $id)
+    public function detachPrestazione(ListinoAmbulatoriale $listino , $id)
     {
-        $listinoAmbulatoriale->prestazioni()->detach($id);
+        $listino->prestazioni()->detach($id);
     }
 
     /**
@@ -57,21 +57,21 @@ class ListinoAmbulatorialeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ListinoAmbulatoriale  $listinoAmbulatoriale
+     * @param  \App\Models\ListinoAmbulatoriale  $listino
      * @return \Illuminate\Http\Response
      */
-    public function show(ListinoAmbulatoriale $listinoAmbulatoriale)
+    public function show(ListinoAmbulatoriale $listino)
     {
-        return $listinoAmbulatoriale->load('prestazioni');
+        return $listino->load('prestazioni');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ListinoAmbulatoriale  $listinoAmbulatoriale
+     * @param  \App\Models\ListinoAmbulatoriale  $listino
      * @return \Illuminate\Http\Response
      */
-    public function edit(ListinoAmbulatoriale $listinoAmbulatoriale)
+    public function edit(ListinoAmbulatoriale $listino)
     {
         //
     }
@@ -80,10 +80,10 @@ class ListinoAmbulatorialeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ListinoAmbulatoriale  $listinoAmbulatoriale
+     * @param  \App\Models\ListinoAmbulatoriale  $listino
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ListinoAmbulatoriale $listinoAmbulatoriale)
+    public function update(Request $request, ListinoAmbulatoriale $listino)
     {
         //
     }
@@ -91,10 +91,10 @@ class ListinoAmbulatorialeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ListinoAmbulatoriale  $listinoAmbulatoriale
+     * @param  \App\Models\ListinoAmbulatoriale  $listino
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ListinoAmbulatoriale $listinoAmbulatoriale)
+    public function destroy(ListinoAmbulatoriale $listino)
     {
         //
     }

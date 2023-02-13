@@ -76,7 +76,6 @@
     })
 
     const prestazione_selezionata = ref(null)
-    const grid = ref(null)
 
     const prestazioniMedsportDataSource = new CustomStore({
         key: 'id',

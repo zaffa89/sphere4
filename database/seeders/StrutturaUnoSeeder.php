@@ -102,6 +102,7 @@ class StrutturaUnoSeeder extends Seeder
             switch($sezione_visita) {
                 case 'M':                    
                     $visita = $prenotazione->visiteMedsport()->create([
+                        'data_visita' => $data_inizio,
                         'listino_id' => $listino_med_random, 
                         'sport_id' => $rand_sport, 
                         'societa_id' => $prenotazione->societa_id,
@@ -112,6 +113,7 @@ class StrutturaUnoSeeder extends Seeder
                 break;
                 case 'SM':                    
                     $visita = $prenotazione->visiteMedsport()->create([
+                        'data_visita' => $data_inizio,
                         'listino_id' => $listino_med_random, 
                         'sport_id' => $rand_sport, 
                         'societa_id' => $prenotazione->societa_id,
@@ -121,6 +123,7 @@ class StrutturaUnoSeeder extends Seeder
                     
                     
                     $visita = $prenotazione->visiteMedsport()->create([
+                        'data_visita' => $data_inizio,
                         'listino_id' => $listino_med_random, 
                         'sport_id' => $rand_sport, 
                         'societa_id' => $prenotazione->societa_id,
@@ -130,6 +133,7 @@ class StrutturaUnoSeeder extends Seeder
                     
 
                     $visita = $prenotazione->visiteMedsport()->create([
+                        'data_visita' => $data_inizio,
                         'listino_id' => $listino_med_random, 
                         'sport_id' => $rand_sport, 
                         'societa_id' => $prenotazione->societa_id,
@@ -140,6 +144,7 @@ class StrutturaUnoSeeder extends Seeder
                 break;
                 case 'A':
                     $prenotazione->visiteAmbulatoriali()->create([
+                        'data_visita' => $data_inizio,
                         'listino_id' => $listino_amb_random , 
                         'paziente_id' => $faker->numberBetween(1 , 2000) , 
                         'struttura_id' => 1

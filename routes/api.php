@@ -73,8 +73,8 @@ Route::prefix('sphere')->group(function() {
         Route::get('ricerca-societa/{queryRicerca}' , [SocietaSportivaController::class , 'ricercaSocieta']);
 
         //PRENOTAZIONI
-        Route::resource('prenotazione' , PrenotazioneController::class)->except('create'); //metodo CREATE separato in quanto creare una prenotazione richiede l'invio di dati dal calendario
-        Route::post('prenotazione/create' , [PrenotazioneController::class , 'create']);
+        Route::resource('prenotazione' , PrenotazioneController::class)->except('create'); //metodo CREATE separato. vedi medsport/create
+        
         
         //LOCALITA
         Route::resource('localita' , LocalitaController::class);
@@ -93,6 +93,9 @@ Route::prefix('sphere')->group(function() {
 
         /* MEDICINA DELLO SPORT */
         Route::prefix('medsport')->group(function() {
+            //PRENOTAZIONI
+            Route::post('prenotazione/create' , [PrenotazioneController::class , 'createMedsport']);
+
             //ACCETTAZIONE E VISITE
             Route::post('accettazione' , [AccettazioneMedsportController::class , 'accettazione']);
             Route::resource('visita-medsport' , VisitaMedsportController::class);
@@ -108,6 +111,8 @@ Route::prefix('sphere')->group(function() {
 
         /* AMBULATORIALE */
         Route::prefix('ambulatoriale')->group(function() {
+            //PRENOTAZIONI
+            Route::post('prenotazione/create' , [PrenotazioneController::class , 'createAmbulatoriale']);
             //ACCETTAZIONE E VISITE
 
 

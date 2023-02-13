@@ -79,7 +79,7 @@
 </template>
   
   <script setup>
-  import { dateFormat } from '../../../utilities/dateUtilities';
+  import { dateFormat } from '@utilities/dateUtilities';
   import { computed, ref , reactive } from 'vue';
   import { MagnifyingGlassIcon } from '@heroicons/vue/20/solid';
   import {

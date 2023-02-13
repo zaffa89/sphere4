@@ -101,6 +101,7 @@ class StrutturaDueSeeder extends Seeder
             switch($sezione_visita) {
                 case 'M':                    
                     $visita = $prenotazione->visiteMedsport()->create([
+                        'data_visita' => $data_inizio,
                         'listino_id' => $listino_med_random, 
                         'sport_id' => $rand_sport, 
                         'societa_id' => $prenotazione->societa_id,
@@ -111,6 +112,7 @@ class StrutturaDueSeeder extends Seeder
                 break;
                 case 'SM':
                     $visita = $prenotazione->visiteMedsport()->create([
+                        'data_visita' => $data_inizio,
                         'listino_id' => $listino_med_random, 
                         'sport_id' => $rand_sport, 
                         'societa_id' => $prenotazione->societa_id,
@@ -120,6 +122,7 @@ class StrutturaDueSeeder extends Seeder
                     
                     
                     $visita = $prenotazione->visiteMedsport()->create([
+                        'data_visita' => $data_inizio,
                         'listino_id' => $listino_med_random, 
                         'sport_id' => $rand_sport, 
                         'societa_id' => $prenotazione->societa_id,
@@ -130,6 +133,7 @@ class StrutturaDueSeeder extends Seeder
                 break;
                 case 'A':
                     $prenotazione->visiteAmbulatoriali()->create([
+                        'data_visita' => $data_inizio,
                         'listino_id' => $listino_amb_random , 
                         'paziente_id' => $faker->numberBetween(2001 , 4000) , 
                         'struttura_id' => 2

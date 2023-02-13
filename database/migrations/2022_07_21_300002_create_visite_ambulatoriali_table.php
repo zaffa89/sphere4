@@ -16,6 +16,11 @@ return new class extends Migration
         Schema::create('visite_ambulatoriali', function (Blueprint $table) {
             $table->id();
 
+            $table->boolean('accettata')->default(false);
+            $table->timestamp('accettata_at')->nullable();
+            
+            $table->timestamp('data_visita');
+
             $table->unsignedBigInteger('paziente_id')->nullable();
             $table->foreign('paziente_id')->references('id')->on('pazienti');
 

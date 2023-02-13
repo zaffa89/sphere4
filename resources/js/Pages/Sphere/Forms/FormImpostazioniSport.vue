@@ -86,7 +86,7 @@
 </template>
   
 <script setup>
-import ModalSport from '../Modals/ModalSport.vue';
+import ModalSport from '@modals/ModalSport.vue';
 import {
     DxDataGrid,
     DxColumn,
@@ -100,7 +100,7 @@ import {
 
 import { locale } from 'devextreme/localization';
 
-import { dateFormat, dateAndTimeFormat } from '../../../utilities/dateUtilities';
+import { dateFormat, dateAndTimeFormat } from '@utilities/dateUtilities';
 import dayjs from 'dayjs';
 </script>
   

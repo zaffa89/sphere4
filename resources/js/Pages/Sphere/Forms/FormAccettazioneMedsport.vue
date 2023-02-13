@@ -97,13 +97,19 @@
       @store="aggiungiVisita"      
     />
 
+    <ModalPrenotazioneMedsportSocieta
+      v-if="modal_nuova_visita?.sezione_visita == 'SM'"
+      :appointment-data="modal_nuova_visita"
+      @close="modal_nuova_visita = {}"
+      @store="aggiungiVisita"      
+    />
   </div>
 </template>
   
 <script setup>
-import ModalSchedaMedsport from '../Modals/ModalSchedaMedsport.vue';
-import ModalPrenotazioneMedsport from '../Modals/ModalPrenotazioneMedsport.vue';
-import ModalPrenotazioneMedsportSocieta from '../Modals/ModalPrenotazioneMedsportSocieta.vue';
+import ModalSchedaMedsport from '@modals/Accettazioni/ModalSchedaMedsport.vue';
+import ModalPrenotazioneMedsport from '@modals/Calendario/ModalPrenotazioneMedsport.vue';
+import ModalPrenotazioneMedsportSocieta from '@modals/Calendario/ModalPrenotazioneMedsportSocieta.vue';
 import {
     DxDataGrid,
     DxColumn,
@@ -116,7 +122,7 @@ import { locale } from 'devextreme/localization';
 
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 
-import { dateFormat, dateAndTimeFormat } from '../../../utilities/dateUtilities';
+import { dateFormat, dateAndTimeFormat } from '@utilities/dateUtilities';
 import dayjs from 'dayjs';
 </script>
   
@@ -135,6 +141,9 @@ export default {
 
             //data
             visite: [],
+
+            data_inizio_ricerca: dayjs().format('YYYY-MM-DD'),
+            data_fine_ricerca: dayjs().format('YYYY-MM-DD')
         };
     },
     computed: {
@@ -144,12 +153,15 @@ export default {
     },
     async created() {
         locale('it-IT');
-        await axios.post('api/sphere/medsport/accettazione', {
-            data_inizio: dayjs().format('YYYY-MM-DD'),
-            data_fine: '2023-02-01', //dayjs().format('YYYY-MM-DD'),                
-        }).then(response => { this.visite = response.data; });
+        this.caricaAccettazioni();
     },
     methods: {
+        async caricaAccettazioni() {
+            await axios.post('api/sphere/medsport/accettazione', {
+                data_inizio: this.data_inizio_ricerca,
+                data_fine: this.data_fine_ricerca,               
+            }).then(response => { this.visite = response.data; });
+        },
         timezoneFixer(data) {
             return dateAndTimeFormat(data.value);
         },
@@ -237,16 +249,28 @@ export default {
         nuovaVisitaSingola() {
             this.modal_nuova_visita = {
                                 sezione_visita : 'M',
-                                data_inizio : dayjs().format('YYYY-MM-DD HH:MM'),
-                                data_fine : dayjs().format('YYYY-MM-DD HH:MM'),
+                                data_inizio : dayjs().format('YYYY-MM-DD HH:mm'),
+                                data_fine : dayjs().format('YYYY-MM-DD HH:mm'),
                                 ambulatorio_id : null,
                                 medico_id : null,
                                 struttura_id : 1,
-                                prenotazione_diretta: true
+                                nascosta: true
                             };
         },
+        nuovaVisitaSocieta() {
+            this.modal_nuova_visita = {
+                sezione_visita : 'SM',
+                data_inizio : dayjs().format('YYYY-MM-DD HH:mm'),
+                data_fine : dayjs().format('YYYY-MM-DD HH:mm'),
+                ambulatorio_id : null,
+                medico_id : null,
+                struttura_id : 1,
+                nascosta: true
+            }
+        },
         aggiungiVisita(data) {
-            this.visite = [...this.visite , data]
+            this.caricaAccettazioni()
+            this.modal_nuova_visita = {}
         },
         apriVisita(id) {
             this.modal_visita_id = id;

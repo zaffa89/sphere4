@@ -65,7 +65,7 @@
 </template>
 
 <script setup>
-import ModalMedico from '../Modals/ModalMedico.vue';
+import ModalMedico from '@modals/Anagrafiche/ModalMedico.vue';
 import {
     DxDataGrid,
     DxColumn,
@@ -78,7 +78,7 @@ import { locale } from 'devextreme/localization';
 
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 
-import { dateFormat, dateAndTimeFormat } from '../../../utilities/dateUtilities';
+import { dateFormat, dateAndTimeFormat } from '@utilities/dateUtilities';
 </script>
 
 <script>

@@ -158,7 +158,7 @@ import DxDateBox from 'devextreme-vue/date-box';
 import DxNumberBox from 'devextreme-vue/number-box';
 import { DxTextArea } from 'devextreme-vue/text-area';
 import { DxSelectBox } from 'devextreme-vue/select-box';
-import { is422 } from '../../../utilities/response';
+import { is422 } from '../../../../utilities/response';
 
 
 </script>

@@ -65,16 +65,16 @@
     import { BuildingOfficeIcon, CreditCardIcon, UserIcon, UsersIcon , XMarkIcon } from '@heroicons/vue/20/solid'
     import GeneralNotification from './Components/GeneralNotification.vue';
     
-    import FormPazienti from './Forms/FormPazienti.vue';
-    import FormAmbulatori from './Forms/FormAmbulatori.vue';
-    import FormCalendario from './Forms/FormCalendario.vue';
-    import FormMedici from './Forms/FormMedici.vue';
-    import FormSocieta from './Forms/FormSocieta.vue';
-    import FormAccettazioneMedsport from './Forms/FormAccettazioneMedsport.vue'
-    import FormImpostazioniSport from './Forms/FormImpostazioniSport.vue'
-    import FormGestionePrestazioni from './Forms/FormGestionePrestazioni.vue';
+    import FormPazienti from '@forms/FormPazienti.vue';
+    import FormAmbulatori from '@forms/FormAmbulatori.vue';
+    import FormCalendario from '@forms/FormCalendario.vue';
+    import FormMedici from '@forms/FormMedici.vue';
+    import FormSocieta from '@forms/FormSocieta.vue';
+    import FormAccettazioneMedsport from '@forms/FormAccettazioneMedsport.vue'
+    import FormImpostazioniSport from '@forms/FormImpostazioniSport.vue'
+    import FormGestionePrestazioni from '@forms/FormGestionePrestazioni.vue';
 
-    import FormHome from './Forms/FormHome.vue';
+    import FormHome from '@forms/FormHome.vue';
 </script>
 
 <script>

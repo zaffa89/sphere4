@@ -7,9 +7,11 @@ use App\Models\Medico;
 use App\Models\Prenotazione;
 use Illuminate\Http\Request;
 use App\Models\VisitaMedsport;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Events\VisitaMedsportModificata;
 use App\Events\VisitaMedsportVisualizzata;
+use App\Http\Requests\ValidatePrenotazioneRequest;
 
 class VisitaMedsportController extends Controller
 {
@@ -39,9 +41,9 @@ class VisitaMedsportController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //90000630195 cod fiscale interfulmina
+    public function store(ValidatePrenotazioneRequest $request)
+    {        
+        //
     }
 
     /**
@@ -74,7 +76,7 @@ class VisitaMedsportController extends Controller
 
         return [
             'visita' => $visitaMedsport->load('prenotazione' , 'datiClinici' , 'preAnamnesi' , 'medico' , 'listino' , 'sport' , 'paziente.localitaNascita' , 'paziente.localitaResidenza'),
-            'elenco_sport' => Sport::where('tipo_visita' , $visitaMedsport->sport->tipo_visita)->get(),
+            'elenco_sport' => $visitaMedsport->listino->agonistica ? Sport::where('tipo_visita' , $visitaMedsport->listino->tipo_visita)->get() : Sport::all(),
             'elenco_medici' => Medico::where('attivo' , true)->orWhere('id' , $visitaMedsport->medico_id)->orderBy('ragione_sociale')->get()
         ];
     }

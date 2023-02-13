@@ -1866,7 +1866,7 @@
 <script setup>
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
 
-import { is422 } from '../../../utilities/response';
+import { is422 } from '../../../../utilities/response';
 
 import { locale } from 'devextreme/localization';
 
@@ -1875,15 +1875,15 @@ import DxButton from 'devextreme-vue/button';
 import DxNumberBox from 'devextreme-vue/number-box';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import DxDateBox from 'devextreme-vue/date-box';
-import { getAgeFromDate, dateFormat, dateAndTimeFormat } from '../../../utilities/dateUtilities';
+import { getAgeFromDate, dateFormat, dateAndTimeFormat } from '../../../../utilities/dateUtilities';
 
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from '@headlessui/vue';
 import { CheckCircleIcon } from '@heroicons/vue/20/solid';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
 
-import ModalPaziente from './ModalPaziente.vue';
-import ModalRicercaPaziente from './ModalRicercaPaziente.vue';
+import ModalPaziente from '../Anagrafiche/ModalPaziente.vue';
+import ModalRicercaPaziente from '../Altro/ModalRicercaPaziente.vue';
 
 const tabs = [
     { id: 1, label: 'Generale' },

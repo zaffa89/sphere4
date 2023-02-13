@@ -64,7 +64,7 @@
                   as="h3"
                   class="text-lg font-medium leading-6 text-gray-900 text-center"
                 >
-                  {{ prenotazione.id ? 'Modifica prenotazione medsport (Società sportiva)' : 'Nuova prenotazione medsport (Società sportiva)' }}
+                  {{ prenotazione.id ? 'Modifica prenotazione ambulatoriale' : 'Nuova prenotazione ambulatoriale' }}
                 </DialogTitle>
                 <div class="flex flex-col gap-3">
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -130,9 +130,10 @@
                         v-if="!orarioInOrarioMedico && $page.props.settings.avviso_presenza_orario_medico.value"
                         class="text-red-500 text-sm"
                       >
-                        Medico non disponibile nell'ambulatorio/orario selezionato
+                        Data e ora scelti non sono all'interno di un orario medico
                       </p>
-                      <!-- atleti e sport -->
+
+                      <!-- paziente -->                     
                       <div class="relative">
                         <div
                           class="absolute inset-0 flex items-center"
@@ -146,28 +147,84 @@
                         </div>
                       </div>
                       <div class="flex items-center gap-3">
-                        <DxButton
-                          id="saveButton"
-                          width="100%"
-                          text="Nuova società"
-                          icon="plus"
-                          type="normal"
-                          styling-mode="contained"
-                          :disabled="false"
-                          @click="apriModalNuovaSocieta"
-                        />
+                        <div class="flex flex-col gap-1">
+                          <DxButton
+                            width="100%"
+                            text="Leggi Tessera Sanitaria"
+                            type="normal"
+                            icon="find"
+                            styling-mode="contained"
+                            :disabled="false"
+                            @click="letturaTessera"
+                          />
+                          <DxButton
+                            id="saveButton"
+                            width="100%"
+                            text="Nuovo paziente"
+                            icon="plus"
+                            type="normal"
+                            styling-mode="contained"
+                            :disabled="false"
+                            @click="apriModalNuovoPaziente()"
+                          />
+                        </div>
+
                         <DxButton
                           id="saveButton"
                           width="100%"
                           height="100%"
-                          text="Apri società"
+                          text="Apri paziente"
                           icon="activefolder"
                           type="normal"
                           styling-mode="contained"
-                          :disabled="!prenotazione.societa_id"
-                          @click="apriModalModificaSocieta"
+                          :disabled="!prenotazione.visita.paziente_id"
+                          @click="apriModalModificaPaziente"
                         />
                       </div>
+                      <DxSelectBox
+                        ref="selectboxPaziente"
+                        v-model:value="prenotazione.visita.paziente_id"
+                        :data-source="pazientiDataSource"
+                        value-expr="id"
+                        display-expr="ragione_sociale"
+                        :search-enabled="true"
+                        :search-timeout="500"
+                        label="Paziente"
+                        label-mode="static"
+                        placeholder="Cognome e Nome"
+                        no-data-text="Nessuna anagrafica trovata"
+                        :disabled="disabledElement"
+                        :drop-down-options="{ maxHeight: '200px' }"
+                        :item-template="pazienteItemTemplate"
+                        :on-selection-changed="selezionaPaziente"
+                        :is-valid="!errorFor('paziente_id')"
+                        :open-on-field-click="false"
+                        :min-search-length="2"
+                      />
+                      <!-- listino , sport e società -->
+                      <div class="relative">
+                        <div
+                          class="absolute inset-0 flex items-center"
+                          aria-hidden="true"
+                        >
+                          <div class="w-full border-t border-gray-300" />
+                        </div>
+                        <div class="relative flex justify-center">
+                          <span class="bg-white px-2 text-sm text-gray-500">Listino</span>
+                        </div>
+                      </div>
+                      <!-- listino -->
+                      <DxSelectBox
+                        v-model:value="prenotazione.visita.listino_id"
+                        label="Listino"
+                        :data-source="listini"
+                        value-expr="id"
+                        display-expr="nome"
+                        :item-template="listinoItemTemplate"
+                        :is-valid="!errorFor('visita.listino_id')"
+                        :disabled="disabledElement"
+                        no-data-text="Nessun listino trovato"
+                      />
 
                       <DxSelectBox
                         v-model:value="prenotazione.societa_id"
@@ -186,56 +243,9 @@
                         :open-on-field-click="false"
                         :min-search-length="2"
                       />
-
-                      <DxNumberBox
-                        v-model:value="prenotazione.numero_paz"
-                        placeholder="1"
-                        :show-spin-buttons="true"
-                        :is-valid="!errorFor('numero_paz')"
-                        label="Numero di atleti"
-                        :disabled="disabledElement"
-                      />
-
-                      <!-- listino , sport e società -->
-                      <div class="relative">
-                        <div
-                          class="absolute inset-0 flex items-center"
-                          aria-hidden="true"
-                        >
-                          <div class="w-full border-t border-gray-300" />
-                        </div>
-                        <div class="relative flex justify-center">
-                          <span class="bg-white px-2 text-sm text-gray-500">Listino e
-                            sport</span>
-                        </div>
-                      </div>
-                      <!-- listino e sport per medicina sportiva -->
-                      <DxSelectBox
-                        v-model:value="prenotazione.visita.sport_id"
-                        label="Sport praticato"
-                        :data-source="elenco_sport"
-                        value-expr="id"
-                        display-expr="nome"
-                        :search-enabled="true"
-                        :item-template="sportItemTemplate"
-                        :is-valid="!errorFor('visita.sport_id')"
-                        :disabled="disabledElement"
-                        no-data-text="Nessuno sport trovato"
-                      />
-
-                      <DxSelectBox
-                        v-model:value="prenotazione.visita.listino_id"
-                        label="Listino"
-                        :data-source="listiniFiltratiPerSport"
-                        value-expr="id"
-                        display-expr="nome"
-                        :item-template="listinoItemTemplate"
-                        :is-valid="!errorFor('visita.listino_id')"
-                        :disabled="disabledElement"
-                        no-data-text="Nessun listino trovato"
-                      />
                     </div>
 
+                    <!-- dettagli paziente -->
                     <div class="flex flex-col gap-1">
                       <div class="relative">
                         <div
@@ -245,10 +255,101 @@
                           <div class="w-full border-t border-gray-300" />
                         </div>
                         <div class="relative flex justify-center">
-                          <span class="bg-white px-2 text-sm text-gray-500">Qualcosa</span>
+                          <span class="bg-white px-2 text-sm text-gray-500">Dettagli
+                            paziente</span>
                         </div>
                       </div>
-                      <!-- dettagli societa -->
+                      <div
+                        v-if="!prenotazione.visita.paziente"
+                        class="flex justify-center items-center h-full"
+                      >
+                        Nessun paziente selezionato
+                      </div>
+                      <div v-else>
+                        <div class="flex justify-between  pt-1">
+                          <span class="text-sm text-gray-500">Nome: </span>
+                          <span
+                            class="text-sm font-medium text-gray-900 capitalize"
+                          >{{ prenotazione.visita.paziente.nome }}</span>
+                        </div>
+                        <div class="flex justify-between  pt-1">
+                          <span class="text-sm text-gray-500">Cognome: </span>
+                          <span
+                            class="text-sm font-medium text-gray-900 capitalize"
+                          >{{ prenotazione.visita.paziente.cognome }}</span>
+                        </div>
+                        <div class="flex justify-between  pt-1">
+                          <span class="text-sm text-gray-500">ragsoc: </span>
+                          <span
+                            class="text-sm font-medium text-gray-900 capitalize"
+                          >{{ prenotazione.visita.paziente.ragione_sociale }}</span>
+                        </div>
+                        <div class="flex justify-between  pt-1">
+                          <span class="text-sm text-gray-500">Sesso: </span>
+                          <span
+                            class="text-sm font-medium text-gray-900 capitalize"
+                          >{{ prenotazione.visita.paziente.sesso }}</span>
+                        </div>
+                        <div class="flex justify-between  pt-1">
+                          <span class="text-sm text-gray-500">Data di nascita: </span>
+                          <span
+                            class="text-sm font-medium text-gray-900 capitalize"
+                          >{{ dateFormat(prenotazione.visita.paziente.data_nascita) }}
+                            ( {{ calcolaAnni(prenotazione.visita.paziente.data_nascita) }}
+                            anni )
+                          </span>
+                        </div>
+                        <div class="flex justify-between  pt-1">
+                          <span class="text-sm text-gray-500">Nato a: </span>
+                          <span
+                            class="text-sm font-medium text-gray-900 uppercase"
+                          >{{ prenotazione.visita.paziente.localita_nascita?.nome }}
+                            (
+                            {{ prenotazione.visita.paziente.localita_nascita?.sigla_provincia }}
+                            )</span>
+                        </div>
+                        <div class="flex justify-between  pt-1">
+                          <span class="text-sm text-gray-500">Codice fiscale: </span>
+                          <span
+                            class="text-sm font-medium text-gray-900 uppercase"
+                          >{{ prenotazione.visita.paziente?.codice_fiscale }}</span>
+                        </div>
+                        <div class="flex justify-between  pt-1">
+                          <span class="text-sm text-gray-500">Residenza: </span>
+                          <span
+                            class="text-sm font-medium text-gray-900 uppercase"
+                          >{{ prenotazione.visita.paziente.localita_residenza?.nome }}
+                            (
+                            {{ prenotazione.visita.paziente.localita_residenza?.sigla_provincia }}
+                            )</span>
+                        </div>
+                        <div class="flex justify-between  pt-1">
+                          <span class="text-sm text-gray-500">Indirizzo: </span>
+                          <span
+                            class="text-sm text-gray-900 uppercase text-right"
+                          >{{ prenotazione.visita.paziente?.indirizzo }}</span>
+                        </div>
+                        <div class="flex justify-between  pt-1">
+                          <span class="text-sm text-gray-500">Cellulare: </span>
+                          <span
+                            class="text-sm font-medium text-gray-900 capitalize"
+                          >{{ prenotazione.visita.paziente?.telefono }}</span>
+                        </div>
+                        <div class="flex justify-between  pt-1">
+                          <span class="text-sm text-gray-500">Fisso: </span>
+                          <span
+                            class="text-sm font-medium text-gray-900 capitalize"
+                          >{{ prenotazione.visita.paziente?.telefono_fisso }}</span>
+                        </div>
+                        <div class="flex justify-between  pt-1">
+                          <span class="text-sm text-gray-500">Indirizzo Email: </span>
+                          <span
+                            class="text-sm font-medium text-gray-900 capitalize"
+                          >{{ prenotazione.visita.paziente?.email }}</span>
+                        </div>
+                      </div>
+
+                      <!-- dettagli ambulatoriale -->
                       <div class="relative">
                         <div
                           class="absolute inset-0 flex items-center"
@@ -257,25 +358,12 @@
                           <div class="w-full border-t border-gray-300" />
                         </div>
                         <div class="relative flex justify-center">
-                          <span class="bg-white px-2 text-sm text-gray-500">Dettagli Società
-                            sportiva</span>
-                        </div>
-                      </div>
-                      <div
-                        v-if="!prenotazione.societa_sportiva"
-                        class="flex justify-center items-center h-full"
-                      >
-                        Nessuna società selezionata
-                      </div>
-                      <div v-else>
-                        <div class="flex justify-between  pt-1">
-                          <span class="text-sm text-gray-500">Ragione sociale: </span>
-                          <span class="text-sm font-medium text-gray-900 capitalize">{{ prenotazione.societa_sportiva.ragione_sociale }}</span>
+                          <span class="bg-white px-2 text-sm text-gray-500">Dettagli
+                            ambulatoriale</span>
                         </div>
                       </div>
                     </div>
                   </div>
-
 
                   <div class="relative">
                     <div
@@ -330,35 +418,52 @@
         v-if="errors"
         :errors="errors"
       />
-      <ModalSocietaSportiva
-        v-if="modal_societa_id"
-        :societa-id="modal_societa_id"
-        @close="modal_societa_id = null"
-        @store="societaSalvata"
-        @update="societaModificata"
+      <ModalPaziente
+        v-if="modalPazienteId"
+        :paziente-id="modalPazienteId"
+        :dati-tessera="datiTesseraSanitaria"
+        @close="modalPazienteId = null"
+        @store="cambiaPaziente"
+        @update="cambiaPaziente"
       />
     </Dialog>
   </TransitionRoot>
 </template>
-
+  
 <script setup>
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
-import { dateFormat, dateAndTimeFormat } from '../../../utilities/dateUtilities';
-
-import ModalSocietaSportiva from './ModalSocietaSportiva.vue';
+import ModalPaziente from '../Anagrafiche/ModalPaziente.vue';
+import { dateFormat, dateAndTimeFormat } from '@utilities/dateUtilities';
 
 import DxButton from 'devextreme-vue/button';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import DxDateBox from 'devextreme-vue/date-box';
 import DxNumberBox from 'devextreme-vue/number-box';
+import { DxTextBox } from 'devextreme-vue/text-box';
 import DxRadioGroup from 'devextreme-vue/radio-group';
 import { DxTextArea } from 'devextreme-vue/text-area';
 
 import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
-import { is422 } from '../../../utilities/response';
+import { is422 , is404 } from '@utilities/response';
 
-
+const pazientiDataSource = new DataSource({
+    store: new CustomStore({
+        key: 'id',
+        useDefaultSearch: false,
+        load(loadOptions) {
+            if (loadOptions.searchValue) {
+                return axios.get(`api/sphere/ricerca-paziente/${loadOptions.searchValue}`).then(response => response.data).catch(err => { throw new Error('Errore caricamento'); });
+            }
+        },
+        byKey: (key) => {
+            return axios.get(`api/sphere/paziente/${key}`).then(response => response.data).catch(err => { throw new Error('Errore caricamento località'); });
+        },
+        errorHandler: (error) => {
+            console.log(error.message);
+        },
+    }),
+});
 
 const societaDataSource = new DataSource({
     store: new CustomStore({
@@ -379,7 +484,7 @@ const societaDataSource = new DataSource({
 });
 
 </script>
-
+  
 <script>
 
 export default {
@@ -400,8 +505,8 @@ export default {
             societa: null,
             listini: [],
             colori: [],
-            elenco_sport: [],
-            modal_societa_id: null,
+            modalPazienteId: null,
+            datiTesseraSanitaria: null,
         };
     },
     computed:
@@ -431,14 +536,6 @@ export default {
             let unique = [...new Set(array.map(item => item))];
             return unique;
         },
-        listiniFiltratiPerSport() {
-            let array = this.prenotazione.visita.sport_id && this.prenotazione.visita.sport_id != 0
-                ? this.listini.filter(listino => { return listino.tipo_visita == this.elenco_sport.find(sport => { return sport.id === this.prenotazione.visita.sport_id; }).tipo_visita; })
-                : this.listini;
-
-            this.prenotazione.visita.listino_id = this.prenotazione.visita.sport_id ? array[0]?.id : null;
-            return array;
-        },
         orarioInOrarioMedico() {
             return this.struttura.orari_medici.find(orario => { return dayjs(this.prenotazione.data_inizio).isBetween(orario.data_inizio, orario.data_fine, null, '[]') && orario.ambulatorio_id == this.prenotazione.ambulatorio_id && orario.medico_id == this.prenotazione.medico_id; });
         },
@@ -446,7 +543,7 @@ export default {
     },
     watch: {
         'prenotazione.ambulatorio_id': {
-            handler(newValue, oldValue) {
+            handler(newValue, oldValue) {           
                 if (oldValue && oldValue !== newValue) this.prenotazione.medico_id = null;
             },
         },
@@ -458,9 +555,7 @@ export default {
             await axios.get(`api/sphere/prenotazione/${this.appointmentData.id}/edit`)
                 .then(response => {
                     this.prenotazione = response.data.prenotazione;
-                    this.prenotazione.durata = dayjs(response.data.prenotazione.data_fine).diff(response.data.prenotazione.data_inizio, 'minute');
-                    this.colori = response.data.colori;
-                    this.elenco_sport = response.data.elenco_sport;
+                    this.prenotazione.durata = dayjs(response.data.prenotazione.data_fine).diff(response.data.prenotazione.data_inizio, 'minute');              
                     this.struttura = response.data.struttura;
                     this.listini = response.data.listini;
                     this.medici = response.data.medici;
@@ -474,15 +569,12 @@ export default {
         }
         else {
             this.fetching = true;
-            await axios.post('api/sphere/prenotazione/create', this.appointmentData)
+            await axios.post('api/sphere/ambulatoriale/prenotazione/create', this.appointmentData)
                 .then(response => {
                     this.prenotazione = response.data.prenotazione;
                     this.prenotazione.durata = dayjs(response.data.prenotazione.data_fine).diff(response.data.prenotazione.data_inizio, 'minute');
-                    this.prenotazione.numero_paz = 1;
                     this.struttura = response.data.struttura;
-                    this.listini = response.data.listini;
-                    this.colori = response.data.colori;
-                    this.elenco_sport = response.data.elenco_sport;
+                    this.listini = response.data.listini;                    
                     this.medici = response.data.medici;
                 })
                 .catch(
@@ -493,25 +585,20 @@ export default {
             this.fetching = false;
         }
     },
-    methods: {        
-        apriModalModificaSocieta() {
-            this.modal_societa_id = this.prenotazione.societa_id;
+    methods: {
+        apriModalNuovoPaziente(datiTessera = null) {
+            this.modalPazienteId = 'new';
+            this.datiTesseraSanitaria = datiTessera;
         },
-        apriModalNuovaSocieta() {
-            this.modal_societa_id = 'new';
+        apriModalModificaPaziente() {
+            this.modalPazienteId = this.prenotazione.visita.paziente_id;
         },
-        societaSalvata(societa) {
-            this.prenotazione.societa_id = societa.id;
-            this.prenotazione.societa_sportiva = societa;
-            this.modal_societa_id = null;
-        },
-        societaModificata(societa) {
-            this.prenotazione.societa_id = societa.id;
-            this.prenotazione.societa_sportiva = societa;
-            this.modal_societa_id = null;
-        },
-        selezionaSocieta(e) {
-            this.prenotazione.societa_sportiva = e.selectedItem;
+        cambiaPaziente(paziente) {
+            this.prenotazione.visita.paziente_id = paziente.id;
+            this.prenotazione.visita.paziente = paziente;
+            this.modalPazienteId = null;
+
+            this.$refs.selectboxPaziente.instance.repaint();
         },
         formatDataNascita(date) {
             return dayjs(date).format('DD/MM/YYYY');
@@ -520,6 +607,10 @@ export default {
             return null !== this.errors && this.errors[field]
                 ? true
                 : false;
+        },
+        pazienteItemTemplate(data) {
+            let data_nascita = data.data_nascita ? dayjs(data.data_nascita).format('DD/MM/YYYY') : 'N/A';
+            return '<div class="flex justify-between"><span class="truncate capitalize">' + data.ragione_sociale + '</span><span>' + data_nascita + '</span></div>';
         },
         societaItemTemplate(data) {
             return '<div class="flex justify-between"><span class="truncate">' + data.ragione_sociale + '</span></div>';
@@ -539,8 +630,12 @@ export default {
         coloriTemplate(data) {
             return '<div class="flex capitalize font-bold text-[' + data.codice + ']">' + data.nome + '</div>';
         },
-
-        
+        selezionaPaziente(e) {
+            this.prenotazione.visita.paziente = e.selectedItem;
+        },
+        selezionaSocieta(e) {
+            this.societa = e.selectedItem;
+        },
         salvaPrenotazione() {
             if (this.prenotazione.id) {
                 this.update();
@@ -577,8 +672,27 @@ export default {
 
             return dayjs().diff(dn, 'year');
         },
+        letturaTessera() {
+            window.electron ?? window.electron.leggiTessera().then(response => {
+                if(response == 'no tessera') { 
+                    console.log('nessuna tessera inserita');
+                }
+                else {
+                    axios.get(`api/sphere/cerca-tramite-codice-fiscale/${response.codice_fiscale}`).then(res => {
+                        this.cambiaPaziente(res.data);
+                    }).catch(err => {
+                        if (is404(err)) { 
+                            console.log('nessun paziente trovato con codice fiscale '+ response.codice_fiscale);
+                            this.apriModalNuovoPaziente(response);
+                        }
+                        else { console.log('errore controllo codice fiscale'); }
+                    });
+                }                
+            });            
+        },
     },
 };
 
 </script>
-
+  
+  

@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
+import path from 'path'
 
 export default defineConfig({
     plugins: [
@@ -23,5 +24,12 @@ export default defineConfig({
         rollupOptions: {
             treeshake: false
         }
-    }
+    },
+    resolve: {
+        alias: {
+          '@utilities': path.resolve(__dirname, './resources/js/utilities'),
+          '@modals' : path.resolve(__dirname, './resources/js/Pages/Sphere/Modals'),
+          '@forms' : path.resolve(__dirname, './resources/js/Pages/Sphere/Forms'),
+        },
+      }
 });

@@ -407,7 +407,7 @@
 <script setup>
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
 
-import { is422, is404 } from '../../../utilities/response';
+import { is422, is404 } from '@utilities/response';
 
 import { locale } from 'devextreme/localization';
 

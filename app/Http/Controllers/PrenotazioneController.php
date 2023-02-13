@@ -34,23 +34,23 @@ class PrenotazioneController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource. deamici leonardo 14/10
+     * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
-    {
-        
+
+    //inizializza una nuova prenotazione medsport 
+    public function createMedsport(Request $request)  
+    {        
         $request->validate([
             'data_inizio' => 'required',
             'data_fine' => 'required',
             'struttura_id' => 'required',
-            'ambulatorio_id' => 'required_without:prenotazione_diretta',
+            'ambulatorio_id' => 'nullable',
             'medico_id' => 'nullable',
-            'sezione_visita' => 'required',
-            
+            'sezione_visita' => 'required'            
         ]);
-                
+
         //$prenotazione = new Prenotazione($request->all());        
         $prenotazione = new Prenotazione([
             'data_inizio' => $request->data_inizio,
@@ -58,27 +58,16 @@ class PrenotazioneController extends Controller
             'struttura_id' => $request->struttura_id,
             'ambulatorio_id' => $request->ambulatorio_id,
             'medico_id' => $request->medico_id,
-            'sezione_visita' => $request->sezione_visita        
+            'sezione_visita' => $request->sezione_visita,
+            'nascosta' => $request->nascosta
         ]);
-
-        $listini = null;
-        $elenco_sport = null;
-        switch(true)
-        {
-            case $prenotazione->sezione_visita == 'M' || $prenotazione->sezione_visita == 'SM':
-                $prenotazione->visita = new VisitaMedsport(['struttura_id' => $request->struttura_id , 'medico_id' => $request->medico_id]);
-                $listini = ListinoMedsport::with('prestazioni')->get();
-                $elenco_sport = Sport::orderBy('nome')->get();
-            break;
-            
-            case $prenotazione->sezione_visita == 'A':
-                $prenotazione->visita = new VisitaAmbulatoriale(['struttura_id' => $request->struttura_id , 'medico_id' => $request->medico_id]);
-                $listini = ListinoAmbulatoriale::all();
-            break;                        
-        }
-        
+                 
+        $prenotazione->visita = new VisitaMedsport(['struttura_id' => $request->struttura_id , 'medico_id' => $request->medico_id ]);
+        $listini = ListinoMedsport::with('prestazioni')->get();
+        $elenco_sport = Sport::orderBy('nome')->get();
+                                                        
         return [
-            'prenotazione' => $prenotazione,          
+            'prenotazione' => $prenotazione,
             'listini' => $listini,
             'elenco_sport' => $elenco_sport,
             'struttura' => Struttura::with('ambulatori' , 'orariMedici')->where('id' , $request->struttura_id)->first(),
@@ -86,12 +75,47 @@ class PrenotazioneController extends Controller
         ];
     }
 
+    //inizializza una nuova prenotazione ambulatoriale 
+    public function createAmbulatoriale(Request $request)  
+    {        
+        $request->validate([
+            'data_inizio' => 'required',
+            'data_fine' => 'required',
+            'struttura_id' => 'required',
+            'ambulatorio_id' => 'nullable',
+            'medico_id' => 'nullable',
+            'sezione_visita' => 'required'            
+        ]);
+
+        //$prenotazione = new Prenotazione($request->all());        
+        $prenotazione = new Prenotazione([
+            'data_inizio' => $request->data_inizio,
+            'data_fine' => $request->data_fine,
+            'struttura_id' => $request->struttura_id,
+            'ambulatorio_id' => $request->ambulatorio_id,
+            'medico_id' => $request->medico_id,
+            'sezione_visita' => $request->sezione_visita,
+            'nascosta' => $request->nascosta       
+        ]);
+                
+        $prenotazione->visita = new VisitaAmbulatoriale(['struttura_id' => $request->struttura_id , 'medico_id' => $request->medico_id]);
+        $listini = ListinoAmbulatoriale::all();
+                   
+        return [
+            'prenotazione' => $prenotazione,          
+            'listini' => $listini,
+            'struttura' => Struttura::with('ambulatori' , 'orariMedici')->where('id' , $request->struttura_id)->first(),
+            'medici' => Medico::all()
+        ];
+    }
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    
     public function store(ValidatePrenotazioneRequest $request)
     {                
         return DB::transaction(function () use ($request) {
@@ -106,6 +130,7 @@ class PrenotazioneController extends Controller
                 'data_fine' => Carbon::parse($request->data_inizio)->addMinutes($request->durata)->format('Y-m-d H:i:s'),
                 'note' => $request->note,
           
+                'nascosta' => $request->nascosta,
                 'accettata' => false,
                 'sezione_visita' => $request->sezione_visita
             ]);
@@ -113,12 +138,14 @@ class PrenotazioneController extends Controller
             switch($prenotazione->sezione_visita) {
                 case 'M':
                     $prenotazione->visitaMedsport()->create([
+                        'data_visita' => Carbon::parse($request->data_inizio)->format('Y-m-d H:i:s'),
                         'listino_id' => $request->visita['listino_id'] , 
                         'sport_id' => $request->visita['sport_id'],
                         'paziente_id' => $request->visita['paziente_id'],
                         'medico_id' => $request->medico_id, //medico esecutore
                         'societa_id' => $request->societa_id,
-                        'struttura_id' => $request->struttura_id
+                        'struttura_id' => $request->struttura_id,
+                        
                     ]);
 
                     $prenotazione->load('visitaMedsport.paziente');
@@ -126,6 +153,7 @@ class PrenotazioneController extends Controller
                 case 'SM':
                     for($i = 1; $i <= $request->numero_paz; $i++) {
                         $prenotazione->visiteMedsport()->create([
+                            'data_visita' => Carbon::parse($request->data_inizio)->format('Y-m-d H:i:s'),
                             'listino_id' => $request->visita['listino_id'] , 
                             'sport_id' => $request->visita['sport_id'],                            
                             'medico_id' => $request->medico_id, //medico esecutore
@@ -137,6 +165,7 @@ class PrenotazioneController extends Controller
                 break;
                 case 'A':
                     $prenotazione->visitaAmbulatoriale()->create([
+                        'data_visita' => Carbon::parse($request->data_inizio)->format('Y-m-d H:i:s'),
                         'listino_id' => $request->visita['listino_id'],
                         'paziente_id' => $request->paziente_id,
                         'medico_id' => $request->medico_id, //medico esecutore
@@ -148,6 +177,7 @@ class PrenotazioneController extends Controller
                 case 'SA':
                     for($i = 1; $i <= $request->numero_paz; $i++) {
                         $prenotazione->visiteAmbulatoriali()->create([
+                            'data_visita' => Carbon::parse($request->data_inizio)->format('Y-m-d H:i:s'),
                             'listino_id' => $request->visita['listino_id'] , 
                             'sport_id' => $request->visita['sport_id'],                            
                             'medico_id' => $request->medico_id, //medico esecutore
@@ -156,7 +186,7 @@ class PrenotazioneController extends Controller
                     }  
                 break;
             }
-            
+                        
             broadcast(new NotificaPrenotazioneCreata($prenotazione , auth()->user()->username))->toOthers();
 
             return new PrenotazioneCalendarioResource($prenotazione);

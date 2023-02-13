@@ -30,7 +30,7 @@ return new class extends Migration
             $table->unsignedBigInteger('medico_id')->nullable();
             $table->foreign('medico_id')->references('id')->on('medici');
             
-            $table->unsignedBigInteger('ambulatorio_id');
+            $table->unsignedBigInteger('ambulatorio_id')->nullable();
             $table->foreign('ambulatorio_id')->references('id')->on('ambulatori');
 
             $table->unsignedBigInteger('struttura_id');
@@ -40,8 +40,10 @@ return new class extends Migration
             $table->text('note')->nullable();
             $table->boolean('accettata')->default(false);
             
-            $table->string('colore')->nullable();
+            $table->boolean('nascosta')->nullable()->default(false);
 
+            $table->string('colore')->nullable();
+            
             $table->softDeletes();
             $table->timestamps();
         });

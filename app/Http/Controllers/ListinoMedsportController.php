@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ListinoMedsport;
+use Exception;
 use Illuminate\Http\Request;
 
 class ListinoMedsportController extends Controller
@@ -10,19 +11,19 @@ class ListinoMedsportController extends Controller
 
     /* METODI PER LE PRESTAZIONI ASSOCIATE */
 
-    public function prestazioniListino(ListinoMedsport $listinoMedsport)
+    public function prestazioniListino(ListinoMedsport $listino)
     {
-        return $listinoMedsport->prestazioni;
+        return $listino->prestazioni;
     }
 
-    public function attachPrestazione(ListinoMedsport $listinoMedsport , $id)
+    public function attachPrestazione(ListinoMedsport $listino , $id)
     {
-        $listinoMedsport->prestazioni()->syncWithoutDetaching($id);
+        $listino->prestazioni()->syncWithoutDetaching($id);
     }
 
-    public function detachPrestazione(ListinoMedsport $listinoMedsport , $id)
+    public function detachPrestazione(ListinoMedsport $listino , $id)
     {
-        $listinoMedsport->prestazioni()->detach($id);
+        $listino->prestazioni()->detach($id);
     }
 
     /**
@@ -59,21 +60,21 @@ class ListinoMedsportController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ListinoMedsport  $listinoMedsport
+     * @param  \App\Models\ListinoMedsport  $listino
      * @return \Illuminate\Http\Response
      */
-    public function show(ListinoMedsport $listinoMedsport)
+    public function show(ListinoMedsport $listino)
     {
-        return $listinoMedsport;
+        return $listino;
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ListinoMedsport  $listinoMedsport
+     * @param  \App\Models\ListinoMedsport  $listino
      * @return \Illuminate\Http\Response
      */
-    public function edit(ListinoMedsport $listinoMedsport)
+    public function edit(ListinoMedsport $listino)
     {
         //
     }
@@ -82,26 +83,22 @@ class ListinoMedsportController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ListinoMedsport  $listinoMedsport
+     * @param  \App\Models\ListinoMedsport  $listino
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ListinoMedsport $listinoMedsport)
+    public function update(Request $request, ListinoMedsport $listino)
     {
-        $request->validate([
-
-        ]);
-
-        $listinoMedsport->update($request->all());
+        $listino->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ListinoMedsport  $listinoMedsport
+     * @param  \App\Models\ListinoMedsport  $listino
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ListinoMedsport $listinoMedsport)
+    public function destroy(ListinoMedsport $listino)
     {       
-        $listinoMedsport->delete();
+        return $listino->delete();
     }
 }

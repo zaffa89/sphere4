@@ -44,7 +44,7 @@
                     <DxColumn data-field="rtp" />
                     <DxColumn data-field="tipo_scheda" />
 
-                    <DxScrolling mode="infinite" />
+                 
                     <DxEditing
                         mode="form"                       
                         :allow-updating="true"
@@ -86,7 +86,7 @@
                     <DxColumn data-field="branca" :allow-editing="false"  />
                     <DxColumn data-field="codice_siss" :allow-editing="false"  />
 
-                    <DxScrolling mode="infinite" />
+                  
                     <DxEditing
                         mode="form"
                         :allow-updating="true"
@@ -120,7 +120,7 @@
                     <DxColumn data-field="referto_cardiologia" />
                     <DxColumn data-field="referto_fisioterapia" />
                    
-                    <DxScrolling mode="infinite" />
+                
                     <DxEditing
                         mode="form"                       
                         :allow-updating="true"
@@ -160,7 +160,7 @@
                     <DxColumn data-field="durata" :allow-editing="false"  />                             
                     <DxColumn data-field="prezzo" />                    
 
-                    <DxScrolling mode="infinite" />
+               
                     <DxEditing
                         mode="form"
                         :allow-updating="true"
