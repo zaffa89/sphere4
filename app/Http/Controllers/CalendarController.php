@@ -14,11 +14,20 @@ class CalendarController extends Controller
 {
     public function caricaCalendario()
     {
+        
         return [                        
             'prenotazioni' => PrenotazioneCalendarioResource::collection(Prenotazione::with('societaSportiva' , 'visitaMedsport.paziente' , 'visitaMedsport.listino' , 'visitaAmbulatoriale.paziente' , 'visitaAmbulatoriale.listino')->withCount('visiteMedsport' , 'visiteAmbulatoriali')->whereBetween('data_inizio' , [Carbon::now()->subMonth() , Carbon::now()->addMonths(1)])->get()),            
             'strutture' => Struttura::with('ambulatori' , 'orariMedici')->get()             
         ];
-    }    
+    }
+
+    public function caricaCalendarioGiornalmente($data)
+    {
+        return [                        
+            'prenotazioni' => PrenotazioneCalendarioResource::collection(Prenotazione::with('societaSportiva' , 'visitaMedsport.paziente' , 'visitaMedsport.listino' , 'visitaAmbulatoriale.paziente' , 'visitaAmbulatoriale.listino')->withCount('visiteMedsport' , 'visiteAmbulatoriali')->whereDate('data_inizio' , Carbon::parse($data))->get()),            
+            'strutture' => Struttura::with('ambulatori' , 'orariMedici')->get()             
+        ];
+    }
 
     public static function generaOrariDefault($medico_id , $ambulatorio_id , $data_inizio , $data_fine , $ora_inizio , $ora_fine)
     {

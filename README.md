@@ -98,6 +98,7 @@ DEFAULT paziente_id <- codice <- numero_cartella
 - creare model e migrations per gli storici ( prenotazione* , visita , ...? )
 - usare model events in booted
 
+## vedere permessi medico sulle visite
 
 ## sistema notifiche, controllo jobs e servizio attivo. stistiche invio mail
 

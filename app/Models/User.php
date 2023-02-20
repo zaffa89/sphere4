@@ -29,7 +29,7 @@ class User extends Authenticatable
 
     public function permessi()
     {
-        return $this->belongsToMany(UserPermission::class);
+        return $this->hasOne(UserPermission::class);
     }
 
     public function struttura()

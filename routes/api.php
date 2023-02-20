@@ -85,6 +85,7 @@ Route::prefix('sphere')->group(function() {
 
         //CALENDARIO
         Route::get('calendario/carica' , [CalendarController::class , 'caricaCalendario']);
+        Route::get('calendario/carica/{data}' , [CalendarController::class , 'caricaCalendarioGiornalmente']);
         Route::put('calendario/sposta-prenotazione/{prenotazione}' , [PrenotazioneController::class , 'move']);
         Route::post('calendario/genera-orario-medico' , [CalendarController::class , 'generaOrarioMedico']);
         
