@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Events\PazienteVisualizzato;
+use App\Http\Requests\ValidatePazienteRequest;
 use Illuminate\Support\Facades\Auth;
 
 class PazienteController extends Controller
@@ -61,7 +62,7 @@ class PazienteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ValidatePazienteRequest $request)
     {
         $request->validate([
             'nome' => 'required',
@@ -145,7 +146,7 @@ class PazienteController extends Controller
      * @param  \App\Models\Paziente  $paziente
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Paziente $paziente)
+    public function update(ValidatePazienteRequest $request, Paziente $paziente)
     {
         //aggiungere validazione
         $request->validate([

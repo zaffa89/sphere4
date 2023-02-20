@@ -70,4 +70,8 @@ class Prenotazione extends Model
     {
         return $this->hasMany(VisitaAmbulatoriale::class);
     }
+
+    public function storico() {
+        return $this->hasMany(StoricoPrenotazione::class);
+    }
 }

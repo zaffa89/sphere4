@@ -39,7 +39,7 @@
                     <DxColumn data-field="tipo_visita" />
                     <DxColumn data-field="prezzo" />
                     <DxColumn data-field="durata" />
-                    <DxColumn data-field="agonistica" />
+                    <DxColumn data-field="agonistico" />
                     <DxColumn data-field="tracciato" />
                     <DxColumn data-field="rtp" />
                     <DxColumn data-field="tipo_scheda" />

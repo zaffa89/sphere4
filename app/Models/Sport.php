@@ -14,6 +14,7 @@ class Sport extends Model
 
     protected $guarded = [];
 
+    //attributi di default nuovo sport
     protected $attributes = [       
         'nome' => null,
         'tipo_visita' => null,

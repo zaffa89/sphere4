@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
         <!-- Scripts -->
         
-        @vite('resources/js/app.js')
+        @vite('resources/css/app.css')
       
     </head>
     <body class="bg-gray-300">
@@ -59,9 +59,20 @@
                 </div>
                 <div class="absolute mt-[23cm] w-[19cm] h-[3cm] text-center">
                     [TIMBRO_FIRMA_MEDICO]
+                    <img id="firmaMedico" src="" class="border h-full w-full" />
                 </div>
             </div>
         </page>
+        <script>
+            (function () {
+                if(window.electron) { 
+                    window.electron.leggiFirma().then(response => {
+                        document.getElementById("firmaMedico").src = "data:image/jpg;base64," + response;
+                    }).catch(err => console.log(err))
+                 }
+            })();
+           
+        </script>
     </body>
 </html>
 
@@ -93,6 +104,8 @@
 
 
 </style>
+
+
 <!-- 
     <body class="font-sans bg-gray-50 print:bg-white">        
         <div style="page-break-after: always" class="p-5">

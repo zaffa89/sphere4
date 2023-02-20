@@ -9,9 +9,8 @@ use Illuminate\Http\Request;
 use App\Models\VisitaMedsport;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use App\Events\VisitaMedsportModificata;
-use App\Events\VisitaMedsportVisualizzata;
 use App\Http\Requests\ValidatePrenotazioneRequest;
+use App\Http\Requests\ValidateVisitaMedsportRequest;
 
 class VisitaMedsportController extends Controller
 {
@@ -60,12 +59,9 @@ class VisitaMedsportController extends Controller
             //prendi dati clinici da visita precedente
             $visitaPrecedente = VisitaMedsport::with('datiClinici' , 'preAnamnesi')->where('accettata' , true)->where('paziente_id' , $visitaMedsport->paziente_id)->orderBy('accettata_at' , 'desc')->first();
             
-            if( $visitaPrecedente ) {                
-                $replicaDatiClinici = $visitaPrecedente->datiClinici->replicate();
-                $replicaPreAnamnesi = $visitaPrecedente->preAnamnesi->replicate();
-                    
-                $visitaMedsport->datiClinici()->save($replicaDatiClinici);
-                $visitaMedsport->preAnamnesi()->save($replicaPreAnamnesi);
+            if( $visitaPrecedente ) {                    
+                $visitaMedsport->datiClinici()->save($visitaPrecedente->datiClinici->replicate());
+                $visitaMedsport->preAnamnesi()->save($visitaPrecedente->preAnamnesi->replicate());
             }
             else {
                 //crea dati clinici di default
@@ -76,7 +72,7 @@ class VisitaMedsportController extends Controller
 
         return [
             'visita' => $visitaMedsport->load('prenotazione' , 'datiClinici' , 'preAnamnesi' , 'medico' , 'listino' , 'sport' , 'paziente.localitaNascita' , 'paziente.localitaResidenza'),
-            'elenco_sport' => $visitaMedsport->listino->agonistica ? Sport::where('tipo_visita' , $visitaMedsport->listino->tipo_visita)->get() : Sport::all(),
+            'elenco_sport' => $visitaMedsport->listino->agonistico ? Sport::where('tipo_visita' , $visitaMedsport->listino->tipo_visita)->get() : Sport::all(),
             'elenco_medici' => Medico::where('attivo' , true)->orWhere('id' , $visitaMedsport->medico_id)->orderBy('ragione_sociale')->get()
         ];
     }
@@ -99,20 +95,44 @@ class VisitaMedsportController extends Controller
      * @param  \App\Models\VisitaMedsport  $visitaMedsport
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, VisitaMedsport $visitaMedsport)
+    public function update(ValidateVisitaMedsportRequest $request, VisitaMedsport $visitaMedsport)
     {
-        //aggiungere validazione
+       
+        return DB::transaction(function () use ($request , $visitaMedsport) {
+            
+            // update visita
+            $visitaMedsport->update([
+                'data_visita' => $request->data_visita,
+                'medico_id' => $request->medico_id,
+                'paziente_id' => $request->paziente_id,
+                'societa_id' => $request->societa_id,
+                'listino_id' => $request->listino_id,
+                'sport_id' => $request->sport_id,
+            ]);
 
-        DB::transaction(function () use ($request , $visitaMedsport) {
+            //update note prenotazione
+            Prenotazione::find($visitaMedsport->prenotazione_id)->update(['note' => $request->prenotazione['note']]);
+
+
             
-         
-            
-            //VisitaMedsportModificata::dispatchIf($visitaMedsport->isDirty() , $visitaMedsport , auth()->user()->id);
-            $visitaMedsport->save();
+            return $visitaMedsport->load('prenotazione' , 'datiClinici' , 'preAnamnesi' , 'medico' , 'listino' , 'sport' , 'paziente.localitaNascita' , 'paziente.localitaResidenza');
         });
-        
+    }
 
-        return $visitaMedsport;
+    public function eseguiAccettazione(VisitaMedsport $visitaMedsport) {
+        
+        return DB::transaction(function () use ($visitaMedsport) {
+
+            //genera numero certificato
+            
+            $visitaMedsport->update([
+                'accettata' => true,
+                'accettata_at' => now()
+            ]);
+
+            return $visitaMedsport->load('prenotazione' , 'datiClinici' , 'preAnamnesi' , 'medico' , 'listino' , 'sport' , 'paziente.localitaNascita' , 'paziente.localitaResidenza');
+
+        });
     }
 
     /**

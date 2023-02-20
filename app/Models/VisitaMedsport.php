@@ -57,4 +57,15 @@ class VisitaMedsport extends Model
     {
         return $this->belongsTo(Sport::class , 'sport_id');
     }
+
+    protected static function booted() : void 
+    {
+        static::updating(function( VisitaMedsport $visitaMedsport ) {
+                   
+        });
+
+        static::updated(function ( VisitaMedsport $visitaMedsport ) {
+
+        });
+    }
 }

@@ -16,6 +16,7 @@ class SettingSeeder extends Seeder
     public function run()
     {
         /* GENERALE */
+        // inutili ? 
         Setting::create([
             'attribute' => 'medsport',
             'value' => 1,
@@ -28,10 +29,9 @@ class SettingSeeder extends Seeder
             'value' => 1,
             'description' => 'Abilita / Disabilita le parti di Medicina Ambulatoriale',
             'category' => 'generale'
-        ]);
+        ]);        
+        //---
         
-                
-
         /* CALENDARIO */
         Setting::create([
             'attribute' => 'medico_default_fuori_orario',

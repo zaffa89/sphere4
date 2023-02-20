@@ -47,7 +47,7 @@
 			-->
       <DxScrolling mode="infinite" />
     </DxDataGrid>
-    <!-- 
+    
     <ModalAmbulatorio
       v-if="modal_ambulatorio_id"
       :ambulatorio-id="modal_ambulatorio_id"
@@ -55,7 +55,6 @@
       @store="ambulatorioSalvato"
       @update="ambulatorioModificato"
     />
-    -->
   </div>
 </template>
 

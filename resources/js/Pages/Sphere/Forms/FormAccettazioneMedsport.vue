@@ -94,14 +94,7 @@
       v-if="modal_nuova_visita?.sezione_visita == 'M'"
       :appointment-data="modal_nuova_visita"
       @close="modal_nuova_visita = {}"
-      @store="aggiungiVisita"      
-    />
-
-    <ModalPrenotazioneMedsportSocieta
-      v-if="modal_nuova_visita?.sezione_visita == 'SM'"
-      :appointment-data="modal_nuova_visita"
-      @close="modal_nuova_visita = {}"
-      @store="aggiungiVisita"      
+      @store="ricaricaGriglia"      
     />
   </div>
 </template>
@@ -109,7 +102,7 @@
 <script setup>
 import ModalSchedaMedsport from '@modals/Accettazioni/ModalSchedaMedsport.vue';
 import ModalPrenotazioneMedsport from '@modals/Calendario/ModalPrenotazioneMedsport.vue';
-import ModalPrenotazioneMedsportSocieta from '@modals/Calendario/ModalPrenotazioneMedsportSocieta.vue';
+
 import {
     DxDataGrid,
     DxColumn,
@@ -217,12 +210,7 @@ export default {
                     text: 'Nuova accettazione',
                     icon: 'plus',
                     onItemClick: () => { this.nuovaVisitaSingola(); },
-                },
-                {
-                    text: 'Nuova accettazione per Società sportiva',
-                    icon: 'plus',
-                    onItemClick: () => { this.nuovaVisitaSocieta(); },
-                },
+                }
             ];
         },
         aggiornaRiga(id) {
@@ -257,18 +245,7 @@ export default {
                                 nascosta: true
                             };
         },
-        nuovaVisitaSocieta() {
-            this.modal_nuova_visita = {
-                sezione_visita : 'SM',
-                data_inizio : dayjs().format('YYYY-MM-DD HH:mm'),
-                data_fine : dayjs().format('YYYY-MM-DD HH:mm'),
-                ambulatorio_id : null,
-                medico_id : null,
-                struttura_id : 1,
-                nascosta: true
-            }
-        },
-        aggiungiVisita(data) {
+        ricaricaGriglia() {
             this.caricaAccettazioni()
             this.modal_nuova_visita = {}
         },

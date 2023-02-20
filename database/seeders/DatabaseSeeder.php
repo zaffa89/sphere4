@@ -43,17 +43,17 @@ class DatabaseSeeder extends Seeder
         $this->call(LocalitaSeeder::class);
         $this->call(SportSeeder::class);
         
-        $listinoMedsport = ListinoMedsport::create(['nome' => 'Visita B1 ago' , 'tipo_visita' => 'B1' , 'codice' => 'B1' , 'prezzo' => 50.00 , 'durata' => 20]);
+        $listinoMedsport = ListinoMedsport::create(['nome' => 'Visita B1 ago' , 'tipo_visita' => 'B1' , 'codice' => 'B1' , 'prezzo' => 50.00 , 'durata' => 20 , 'agonistico' => true , 'tracciato' => true]);
         $prestazione = PrestazioneMedsport::create(['nome' => 'Spirometria semplice' , 'codice' => 'SPIRO']);
         $listinoMedsport->prestazioni()->attach($prestazione->id);
         $listinoMedsport->save();
 
-        $listinoMedsport = ListinoMedsport::create(['nome' => 'Visita A1 ago' , 'tipo_visita' => 'A1' , 'codice' => 'A1' , 'prezzo' => 40.00 , 'durata' => 15]);
+        $listinoMedsport = ListinoMedsport::create(['nome' => 'Visita A1 ago' , 'tipo_visita' => 'A1' , 'codice' => 'A1' , 'prezzo' => 40.00 , 'durata' => 15 , 'agonistico' => true , 'tracciato' => true]);
         $prestazione = PrestazioneMedsport::create(['nome' => 'Spirometria polpetta' , 'codice' => 'SPIRO-POLP']);
         $listinoMedsport->prestazioni()->attach($prestazione->id);
         $listinoMedsport->save();
 
-        $listinoMedsport = ListinoMedsport::create(['nome' => 'Visita non ago' , 'tipo_visita' => 'BS' , 'codice' => 'BS' , 'prezzo' => 30.00 , 'durata' => 10]);
+        $listinoMedsport = ListinoMedsport::create(['nome' => 'Visita non ago' , 'tipo_visita' => 'BS' , 'codice' => 'BS' , 'prezzo' => 30.00 , 'durata' => 10 , 'agonistico' => false , 'tracciato' => false]);
         $prestazione = PrestazioneMedsport::create(['nome' => 'ECG a riposo' , 'codice' => 'ECG-EASY']);
         $listinoMedsport->prestazioni()->attach($prestazione->id);
         $listinoMedsport->save();
@@ -122,10 +122,6 @@ class DatabaseSeeder extends Seeder
         $medico->user()->associate($user);
         
         $medico->save();
-
-       
-
-        
     }
 }
 

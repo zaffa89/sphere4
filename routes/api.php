@@ -18,6 +18,7 @@ use App\Http\Controllers\SocietaSportivaController;
 use App\Http\Controllers\AccettazioneMedsportController;
 use App\Http\Controllers\ListinoAmbulatorialeController;
 use App\Http\Controllers\ListinoMedsportController;
+use App\Http\Controllers\NumeratoreController;
 use App\Http\Controllers\PrestazioneAmbulatorialeController;
 use App\Http\Controllers\PrestazioneMedsportController;
 use App\Models\ListinoAmbulatoriale;
@@ -41,7 +42,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('asd' , [Controller::class , 'asd']);
+Route::get('asd' , [Controller::class , 'numeratoriGolosi']);
 
 Route::prefix('test')->group(function() {
     
@@ -91,37 +92,48 @@ Route::prefix('sphere')->group(function() {
         Route::resource('sport' , SportController::class);
         Route::get('sport-tramite-tipo-visita/{tipoVisita}' , [SportController::class , 'sportTramiteTipoVisita']);
 
+        //NUMERATORI
+        Route::resource('numeratore' , NumeratoreController::class);
+        Route::get('numeratore-det/{numeratore}' , [NumeratoreController::class , 'caricaDet']);
+        Route::post('numeratore-det/{numeratore}' , [NumeratoreController::class , 'aggiungiDet']);
+        Route::put('numeratore-det/{numeratoreDet}' , [NumeratoreController::class , 'modificaDet']);
+        Route::delete('numeratore-det/{numeratoreDet}' , [NumeratoreController::class , 'eliminaDet']);
+
         /* MEDICINA DELLO SPORT */
         Route::prefix('medsport')->group(function() {
             //PRENOTAZIONI
             Route::post('prenotazione/create' , [PrenotazioneController::class , 'createMedsport']);
-
+            Route::post('prenotazione/store' , [PrenotazioneController::class , 'storeMedsport']);
+            Route::get('prenotazione/edit/{prenotazione}' , [PrenotazioneController::class , 'editMedsport']);
             //ACCETTAZIONE E VISITE
             Route::post('accettazione' , [AccettazioneMedsportController::class , 'accettazione']);
-            Route::resource('visita-medsport' , VisitaMedsportController::class);
+            Route::get('accetta-visita/{visitaMedsport}' , [VisitaMedsportController::class , 'eseguiAccettazione']);
+            Route::resource('visita-medsport' , VisitaMedsportController::class);            
             Route::get('calcola-posizione-ticket/{visitaMedsport}' , [AccettazioneMedsportController::class , 'calcolaPosizioneTicket']);
 
             //LISTINI E PRESTAZIONI
             Route::resource('listino' , ListinoMedsportController::class);
             Route::resource('prestazione' , PrestazioneMedsportController::class);
-            Route::get('prestazioni-listino/{listinoMedsport}' , [ListinoMedsportController::class , 'prestazioniListino']);
-            Route::post('prestazioni-listino/add/{listinoMedsport}/{id}' , [ListinoMedsportController::class , 'attachPrestazione']);
-            Route::delete('prestazioni-listino/remove/{listinoMedsport}/{id}' , [ListinoMedsportController::class , 'detachPrestazione']);
+            Route::get('prestazioni-listino/{listino}' , [ListinoMedsportController::class , 'prestazioniListino']);
+            Route::post('prestazioni-listino/add/{listino}/{id}' , [ListinoMedsportController::class , 'attachPrestazione']);
+            Route::delete('prestazioni-listino/remove/{listino}/{id}' , [ListinoMedsportController::class , 'detachPrestazione']);
         });
 
         /* AMBULATORIALE */
         Route::prefix('ambulatoriale')->group(function() {
             //PRENOTAZIONI
             Route::post('prenotazione/create' , [PrenotazioneController::class , 'createAmbulatoriale']);
+            Route::post('prenotazione/store' , [PrenotazioneController::class , 'storeAmbulatoriale']);
+            Route::get('prenotazione/edit/{prenotazione}' , [PrenotazioneController::class , 'editAmbulatoriale']);
             //ACCETTAZIONE E VISITE
 
 
             //LISTINI E PRESTAZIONI
             Route::resource('listino' , ListinoAmbulatorialeController::class);
             Route::resource('prestazione' , PrestazioneAmbulatorialeController::class);
-            Route::get('prestazioni-listino/{listinoAmbulatoriale}' , [ListinoAmbulatorialeController::class , 'prestazioniListino']);
-            Route::post('prestazioni-listino/add/{listinoAmbulatoriale}/{prestazione_id}' , [ListinoAmbulatorialeController::class , 'attachPrestazione']);
-            Route::delete('prestazioni-listino/remove/{listinoAmbulatoriale}/{prestazione_id}' , [ListinoAmbulatorialeController::class , 'detachPrestazione']);
+            Route::get('prestazioni-listino/{listino}' , [ListinoAmbulatorialeController::class , 'prestazioniListino']);
+            Route::post('prestazioni-listino/add/{listino}/{id}' , [ListinoAmbulatorialeController::class , 'attachPrestazione']);
+            Route::delete('prestazioni-listino/remove/{listino}/{id}' , [ListinoAmbulatorialeController::class , 'detachPrestazione']);
         });
         
     });

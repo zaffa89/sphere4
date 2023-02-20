@@ -73,6 +73,7 @@
     import FormAccettazioneMedsport from '@forms/FormAccettazioneMedsport.vue'
     import FormImpostazioniSport from '@forms/FormImpostazioniSport.vue'
     import FormGestionePrestazioni from '@forms/FormGestionePrestazioni.vue';
+    import FormGestioneNumeratori from '@forms/FormGestioneNumeratori.vue';
 
     import FormHome from '@forms/FormHome.vue';
 </script>
@@ -89,6 +90,7 @@
             FormAccettazioneMedsport,
             FormImpostazioniSport,
             FormGestionePrestazioni,
+            FormGestioneNumeratori,
             FormHome,
             UserIcon
         },
@@ -124,6 +126,11 @@
                     {
                         name: 'Gestione Prestazioni',
                         component: FormGestionePrestazioni,
+                        icon: null
+                    },
+                    {
+                        name: 'Numeratori',
+                        component: FormGestioneNumeratori,
                         icon: null
                     }
                     

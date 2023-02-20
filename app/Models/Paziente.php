@@ -106,11 +106,6 @@ class Paziente extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function visualizzazioni()
-    {
-        return $this->morphToMany(User::class , 'viewable' , 'gdpr_log_views')->withTimestamps();
-    }
-
     public function localitaNascita()
     {
         return $this->belongsTo(Localita::class , 'localita_nascita_id');

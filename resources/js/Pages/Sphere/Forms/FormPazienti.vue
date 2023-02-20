@@ -21,7 +21,7 @@
                     <DxColumn data-field="localita_nascita.nome" caption="Località di nascita" />
                     <DxColumn data-field="localita_nascita.sigla_provincia" caption="Provincia di nascita" />
 
-                    <DxColumn data-field="created_at" />
+                    <DxColumn data-field="created_at" :customize-text="timezoneFixer"  />
                     <DxColumn data-field="updated_at" :customize-text="timezoneFixer" />
                     <!-- 
                         <DxPaging

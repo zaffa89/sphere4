@@ -33,7 +33,7 @@ class ListinoMedsportController extends Controller
      */
     public function index()
     {
-        return ListinoMedsport::with('prestazioni')->orderBy('codice')->get();
+        return ListinoMedsport::orderBy('codice')->get();
     }
 
     /**

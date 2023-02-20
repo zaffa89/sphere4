@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('nome');
             $table->string('codice');
             $table->string('tipo_visita');
-            $table->boolean('agonistica')->default(false); //ago o bs
+            $table->boolean('agonistico')->default(false); //ago o bs
             $table->boolean('tracciato')->default(false);
             $table->boolean('rtp')->default(false);
             $table->string('tipo_scheda')->nullable(); //tipo scheda atleta : azzurra tipo b con ecg a1: bianca con ecg a riposo BS: tipo a1

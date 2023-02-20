@@ -45,11 +45,11 @@
                                             <DxDateBox v-model:value="prenotazione.data_inizio" :min="now"
                                                 type="datetime" :is-valid="!errorFor('data_inizio')"
                                                 label="Data e ora della visita" :disabled="disabledElement" />
-                                            <DxNumberBox v-model:value="prenotazione.durata"
+                                            <DxNumberBox v-model:value="prenotazione.durata" v-if="!appointmentData.nascosta"
                                                 placeholder="Durata visita in minuti" :show-spin-buttons="true"
                                                 :is-valid="!errorFor('durata')" label="Durata della visita"
                                                 :disabled="disabledElement" />
-                                            <DxSelectBox v-model:value="prenotazione.ambulatorio_id"
+                                            <DxSelectBox v-model:value="prenotazione.ambulatorio_id" v-if="!appointmentData.nascosta"
                                                 :data-source="ambulatoriPrenotabili" value-expr="id" display-expr="nome"
                                                 label="Ambulatorio" label-mode="static" placeholder="---"
                                                 no-data-text="Nessun ambulatorio selezionabile"
@@ -59,6 +59,7 @@
                                                 :is-valid="!errorFor('ambulatorio_id')" />
                                             <DxSelectBox v-model:value="prenotazione.medico_id"
                                                 :data-source="mediciPrenotabili" value-expr="id"
+                                                :search-enabled="true"
                                                 display-expr="ragione_sociale" label="Medico" label-mode="static"
                                                 placeholder="---" no-data-text="Nessun medico selezionabile"
                                                 :disabled="mediciPrenotabili.length === 0 || disabledElement"
@@ -129,13 +130,15 @@
                                                 no-data-text="Nessuno sport trovato" />
 
                                             <DxSelectBox v-model:value="prenotazione.visita.listino_id"
-                                                label="Listino Agonistico" :data-source="listiniFiltratiPerSport"
+                                                :search-enabled="true"
+                                                label="Listino Agonistico" :data-source="listiniAgonisticiFiltratiPerSport"
                                                 value-expr="id" display-expr="nome" :item-template="listinoItemTemplate"
                                                 :is-valid="!errorFor('visita.listino_id')" :disabled="disabledElement"
                                                 no-data-text="Nessun listino trovato" />
 
                                             <DxSelectBox v-model:value="prenotazione.visita.listino_id"
-                                                label="Listino non Agonistico" :data-source="listiniNonAgonistici"
+                                                :search-enabled="true"
+                                                label="Listino non Agonistico" :data-source="listini_non_agonistici"
                                                 value-expr="id" display-expr="nome" :item-template="listinoItemTemplate"
                                                 :is-valid="!errorFor('visita.listino_id')" :disabled="disabledElement"
                                                 no-data-text="Nessun listino trovato" />
@@ -366,7 +369,8 @@ export default {
             struttura: [],
             prenotazione: [],
 
-            listini: [],
+            listini_agonistici: [],
+            listini_non_agonistici: [],
             colori: [],
             elenco_sport: [],
             modalPazienteId: null,
@@ -390,7 +394,7 @@ export default {
         },
         mediciPrenotabili() {
             let array = [];
-            this.$page.props.settings.limita_medici_con_orario_medico.value
+            this.$page.props.settings.limita_medici_con_orario_medico.value && !this.appointmentData.nascosta
                 ? this.struttura.orari_medici.forEach(orario => {
                     if (dayjs(this.prenotazione.data_inizio, 'YYYY-MM-DD').isSame(orario.data_inizio, 'day') && orario.ambulatorio_id == this.prenotazione.ambulatorio_id) {
                         array.push(this.medici.find(medico => medico.id == orario.medico_id));
@@ -401,16 +405,20 @@ export default {
             let unique = [...new Set(array.map(item => item))];
             return unique;
         },
-        listiniFiltratiPerSport() {
+        listiniAgonisticiFiltratiPerSport() {
+            
             let array = this.prenotazione.visita.sport_id && this.prenotazione.visita.sport_id != 0
-                ? this.listini.filter(listino => { return listino.tipo_visita == this.elenco_sport.find(sport => { return sport.id === this.prenotazione.visita.sport_id; }).tipo_visita; })
-                : this.listini.filter(listino => listino.tipo_visita != 'BS');
+                ? this.listini_agonistici.filter(listino => { return listino.tipo_visita == this.elenco_sport.find(sport => { return sport.id === this.prenotazione.visita.sport_id; }).tipo_visita; })
+                : this.listini_agonistici.filter(listino => listino.agonistico);
 
-            this.prenotazione.visita.listino_id = this.prenotazione.visita.sport_id ? array[0]?.id : null;
+            if( this.listini_agonistici.find(listino => listino.id === this.prenotazione.visita.listino_id) ) {
+                this.prenotazione.visita.listino_id = array[0]?.id
+            }           
+            
             return array;
         },
         listiniNonAgonistici() {
-            return this.listini.filter(listino => listino.tipo_visita == 'BS');
+            return this.listini_non_agonistici;
         },
         orarioInOrarioMedico() {
             return this.struttura.orari_medici.find(orario => { return dayjs(this.prenotazione.data_inizio).isBetween(orario.data_inizio, orario.data_fine, null, '[]') && orario.ambulatorio_id == this.prenotazione.ambulatorio_id && orario.medico_id == this.prenotazione.medico_id; });
@@ -428,13 +436,14 @@ export default {
     async created() {
         if (this.appointmentData.id) {
             this.fetching = true;
-            await axios.get(`api/sphere/prenotazione/${this.appointmentData.id}/edit`)
+            await axios.get(`api/sphere/medsport/prenotazione/edit/${this.appointmentData.id}`)
                 .then(response => {
                     this.prenotazione = response.data.prenotazione;
                     this.prenotazione.durata = dayjs(response.data.prenotazione.data_fine).diff(response.data.prenotazione.data_inizio, 'minute');                 
                     this.elenco_sport = response.data.elenco_sport;
                     this.struttura = response.data.struttura;
-                    this.listini = response.data.listini;
+                    this.listini_agonistici = response.data.listini_agonistici;
+                    this.listini_non_agonistici = response.data.listini_non_agonistici;
                     this.medici = response.data.medici;
                 })
                 .catch(
@@ -451,7 +460,8 @@ export default {
                     this.prenotazione = response.data.prenotazione;
                     this.prenotazione.durata = dayjs(response.data.prenotazione.data_fine).diff(response.data.prenotazione.data_inizio, 'minute');
                     this.struttura = response.data.struttura;
-                    this.listini = response.data.listini;                   
+                    this.listini_agonistici = response.data.listini_agonistici;
+                    this.listini_non_agonistici = response.data.listini_non_agonistici;                  
                     this.elenco_sport = response.data.elenco_sport;
                     this.medici = response.data.medici;
                 })
@@ -537,7 +547,7 @@ export default {
         async store() {
             this.errors = null;
             this.saving = true;
-            await axios.post('api/sphere/prenotazione', this.prenotazione).then(response => {
+            await axios.post('api/sphere/medsport/prenotazione/store', this.prenotazione).then(response => {
                 this.$emit('store', response.data);
             }).catch(err => {
                 if (is422(err)) this.errors = err.response.data.errors;

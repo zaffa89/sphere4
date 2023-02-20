@@ -216,6 +216,7 @@
                       <!-- listino -->
                       <DxSelectBox
                         v-model:value="prenotazione.visita.listino_id"
+                        :search-enabled="true"
                         label="Listino"
                         :data-source="listini"
                         value-expr="id"
@@ -552,7 +553,7 @@ export default {
     async created() {
         if (this.appointmentData.id) {
             this.fetching = true;
-            await axios.get(`api/sphere/prenotazione/${this.appointmentData.id}/edit`)
+            await axios.get(`api/sphere/ambulatoriale/prenotazione/edit/${this.appointmentData.id}`)
                 .then(response => {
                     this.prenotazione = response.data.prenotazione;
                     this.prenotazione.durata = dayjs(response.data.prenotazione.data_fine).diff(response.data.prenotazione.data_inizio, 'minute');              
@@ -659,7 +660,7 @@ export default {
         async store() {
             this.errors = null;
             this.saving = true;
-            await axios.post('api/sphere/prenotazione', this.prenotazione).then(response => {
+            await axios.post('api/sphere/ambulatoriale/prenotazione/store', this.prenotazione).then(response => {
                 this.$emit('store', response.data);
             }).catch(err => {
                 if (is422(err)) this.errors = err.response.data.errors;

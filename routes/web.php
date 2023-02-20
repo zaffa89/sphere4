@@ -1,14 +1,15 @@
 <?php
 
+use Inertia\Inertia;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\StampeController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\FormSphereController;
 use App\Http\Controllers\Online\Prenotazione\IndexController;
-use App\Http\Controllers\StampeController;
-use App\Http\Controllers\UserController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +38,7 @@ return Inertia::render('PrenotazioneOnline/SelezioneAnagrafica');
 */
 
 Route::get('/' , [FormSphereController::class , 'mainForm'])->middleware('auth')->name('sphere.main');
-
+Route::get('asd' , [Controller::class , 'numeratoriGolosi']);
 Route::get('/anagrafiche/pazienti' , [FormSphereController::class , 'formPazienti'])->middleware('auth')->name('sphere.anagrafiche.pazienti');
 Route::get('/anagrafiche/ambulatori' , [FormSphereController::class , 'formAmbulatori'])->middleware('auth')->name('sphere.anagrafiche.ambulatori');
 Route::get('/calendario' , [CalendarController::class , 'caricaCalendario'])->middleware('auth')->name('sphere.calendario');

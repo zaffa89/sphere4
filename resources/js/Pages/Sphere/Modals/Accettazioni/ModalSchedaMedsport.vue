@@ -77,7 +77,7 @@
                       text="Salva"
                       type="success"
                       styling-mode="outlined"
-                      @click="salvaScheda"
+                      @click="salvaScheda(false)"
                     />
                   </div>
                 </div>
@@ -335,6 +335,13 @@
                               />
                             </div>
                           </div>
+                          <div>
+                            <DxTextArea
+                                v-model:value="visita.prenotazione.note"
+                                placeholder="Note prenotazione"
+                                :spellcheck="false"
+                            />
+                          </div>
                         </div>
 
                         <!-- colonna dx -->
@@ -360,18 +367,36 @@
                             :disabled="true"
                           />
                           <DxDateBox
-                            v-model:value="visita.prenotazione.data_inizio"
+                            v-model:value="visita.data_visita"
                             type="datetime"
                             :is-valid="!errorFor('data_inizio')"
                             label="Data e ora della visita"
                             :disabled="false"
                           />
 
+                          <DxDateBox
+                            v-if="visita.accettata"
+                            v-model:value="visita.accettata_at"
+                            type="datetime"
+                            :is-valid="!errorFor('data_inizio')" 
+                            label="Data e ora della visita"
+                            :disabled="false"
+                          />
+
+                          <div class="relative flex items-end">
+                                <div class="mr-3 text-sm">
+                                    <label for="visita-privata" class="font-medium text-gray-700">Visita privata</label>                                    
+                                </div>
+                                <div class="flex h-5 items-center">
+                                    <input v-model="visita.visita_privata" id="visita-privata" name="visita-privata" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                                </div>
+                                
+                            </div>
                           <RadioGroup v-model="visita.pagamento_a_carico">
                             <RadioGroupLabel class="text-base font-medium text-gray-900">
                               Pagamento a carico:
                             </RadioGroupLabel>
-
+                            
                             <div
                               class="mt-4 grid grid-cols-1 gap-y-1 sm:grid-cols-2 sm:gap-x-3"
                             >
@@ -411,24 +436,13 @@
                           <DxButton
                             width="100%"
                             height="80px"
-                            text="Accettato"
+                            text="Accetta Paziente"
                             type="normal"
                             icon="activefolder"
                             styling-mode="contained"
                             :disabled="!accettabile"
+                            @click="salvaScheda(true)"
                           />
-
-                          <DxButton
-                            width="100%"
-                            height="80px"
-                            text="Anteprima"
-                            type="normal"
-                            icon="activefolder"
-                            styling-mode="contained"
-                            :disabled="false"
-                            @click="anteprimaCertificato(visita.id)"
-                          />
-
                         </div>
                       </div>
                     </div>
@@ -1866,7 +1880,7 @@
 <script setup>
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
 
-import { is422 } from '../../../../utilities/response';
+import { is422 } from '@utilities/response';
 
 import { locale } from 'devextreme/localization';
 
@@ -1875,15 +1889,17 @@ import DxButton from 'devextreme-vue/button';
 import DxNumberBox from 'devextreme-vue/number-box';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import DxDateBox from 'devextreme-vue/date-box';
-import { getAgeFromDate, dateFormat, dateAndTimeFormat } from '../../../../utilities/dateUtilities';
+import { DxTextArea } from 'devextreme-vue/text-area';
+
+import { getAgeFromDate, dateFormat, dateAndTimeFormat } from '@utilities/dateUtilities';
 
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from '@headlessui/vue';
 import { CheckCircleIcon } from '@heroicons/vue/20/solid';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
 
-import ModalPaziente from '../Anagrafiche/ModalPaziente.vue';
-import ModalRicercaPaziente from '../Altro/ModalRicercaPaziente.vue';
+import ModalPaziente from '@modals/Anagrafiche/ModalPaziente.vue';
+import ModalRicercaPaziente from '@modals/Altro/ModalRicercaPaziente.vue';
 
 const tabs = [
     { id: 1, label: 'Generale' },
@@ -2043,16 +2059,32 @@ export default {
             return '<div class="flex justify-between"><span class="truncate">' + data.nome + '</span><span>' + data.tipo_visita + '</span></div>';
         },
 
-        async salvaScheda()
+        async salvaScheda(eseguiAccettazione)
         {
-            this.fetching = true;
-            //await axios.put()
-            this.$emit('update')
-            this.fetching = false;
+            this.saving = true;
+            this.errors = null;
+            await axios.put(`api/sphere/medsport/visita-medsport/${this.visita.id}` , this.visita).then(res => {
+                if(eseguiAccettazione) {
+                    this.eseguiAccettazione();
+                }
+                else {
+                    this.visita = res.data
+                }
+            }).catch(err => {
+                if (is422(err)) this.errors = err.response.data.errors;
+                this.saving = false;
+            });
+            //this.$emit('update')
+            this.saving = false;
         },
+        async eseguiAccettazione() {            
+            await axios.get(`api/sphere/medsport/accetta-visita/${this.visita.id}`).then(res => {
+                    this.visita = res.data
+                }).catch(err => {
 
-        anteprimaCertificato() {           
-           window.electron.anteprimaCertificatoAgonisticoGiallo(this.visita.id)
+                })
+           
+            
         }
     },
 };

@@ -416,12 +416,14 @@ export default {
         },
 
         updatePrenotazione(e) {
+            console.log(e)
             this.isBroadcastUpdate = true;
             this.$refs.schedulerRef.instance.updateAppointment(this.prenotazioni[this.prenotazioni.findIndex(element => element.id === e.id)], e);
             this.modalData = null;
         
         },
         spostaPrenotazione(e) {
+            console.log(e)
             if (e.newData.accettata === 'S') { e.cancel = true; }
             else {
                 if (this.isBroadcastUpdate) { this.isBroadcastUpdate = false; }

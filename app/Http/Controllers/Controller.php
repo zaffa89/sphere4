@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Sport;
+use App\Models\Struttura;
+use App\Models\Numeratore;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
@@ -37,6 +41,21 @@ class Controller extends BaseController
                 ->orWhere('tab_localita.id_asl' , null);
             })    
             ->get();
+    }
 
+    public function numeratoriGolosi() {
+        $struttura = Struttura::find(1);
+        //$struttura->incrementaNumeratoreFattura(2023);
+    
+        return [
+            'mesi' => Sport::where('id' , 1366)->value('mesi_scadenza'),
+            'ultimo_certificato' => $struttura->numeratore('certificato'),
+            'prossimo_certificato' => $struttura->prossimoNumeratore('certificato'),
+            'fatture_2023' => $struttura->numeratoreFattura(2023),
+            'prossima_fattura_2023' => $struttura->prossimoNumeratoreFattura(),
+            'numeratore_certificato' => $struttura->numeratoreCertificato()            
+            //'certificati_ago' => Struttura::numeratoreCertificati(),            
+        ];
+        
     }
 }
