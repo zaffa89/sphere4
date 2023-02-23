@@ -75,6 +75,8 @@
     import FormGestionePrestazioni from '@forms/FormGestionePrestazioni.vue';
     import FormGestioneNumeratori from '@forms/FormGestioneNumeratori.vue';
 
+    import FormBrytumCalendar from './Forms/FormBrytumCalendar.vue';
+
     import FormHome from '@forms/FormHome.vue';
 </script>
 
@@ -92,13 +94,22 @@
             FormGestionePrestazioni,
             FormGestioneNumeratori,
             FormHome,
+            FormBrytumCalendar,
             UserIcon
         },
         data() {
             return {
                 dati_tessera : null,
-                activeTabs: [],
-                currentTab: null,
+                activeTabs: [{
+                        name: 'Brytum',
+                        component: FormBrytumCalendar,
+                        icon: null
+                    }],
+                currentTab: {
+                        name: 'Brytum',
+                        component: FormBrytumCalendar,
+                        icon: null
+                    },
                 notifications: [],
                 electronClient: false,
 
@@ -111,6 +122,11 @@
                     {
                         name: 'Calendario',
                         component: FormCalendario,
+                        icon: null
+                    },
+                    {
+                        name: 'Brytum',
+                        component: FormBrytumCalendar,
                         icon: null
                     },
                     {
@@ -173,13 +189,14 @@
             dismissNotification(id) {
                 this.notifications.splice(this.notifications.findIndex(n => n.id === id), 1);
             },
-            convertiPermessi(arrayPermessi)
+            convertiPermessi(permessi)
             {
-                let obj = {};
-                arrayPermessi.forEach(p => {
-                    obj[p.field] = true
-                })
-                return obj
+                
+                let obj = {}
+                for(const [key , value] of Object.entries(permessi)) {
+                    obj[key] = value
+                }
+                return obj;
             },            
         },
     };

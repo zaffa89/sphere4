@@ -41,11 +41,7 @@ class UserController extends Controller
             {
                // $user->tokens()->delete();
                 //$token = $user->createToken($request->username , ['sphere-client']);
-
-                $permessi = [];
-                foreach($user->permessi as $permesso) {
-                    $permessi[$permesso['field']] = true;
-                }                
+              
                 return redirect()->intended('/');
             }            
         }

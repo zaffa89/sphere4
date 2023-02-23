@@ -25,6 +25,9 @@ export default defineConfig({
             treeshake: false
         }
     },
+    optimizeDeps: {
+        include: ['@bryntum/calendar' , '@bryntum/calendar-vue-3']
+    },
     resolve: {
         alias: {
           '@utilities': path.resolve(__dirname, './resources/js/utilities'),
