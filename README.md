@@ -105,3 +105,7 @@ DEFAULT paziente_id <- codice <- numero_cartella
 ## sistema richiesta modifiche / assistenza
 
 ## dashboard per noi. Per assistenza, statistiche e altro, connessa a tutte le installazioni
+
+## area società sportive
+
+## referti online

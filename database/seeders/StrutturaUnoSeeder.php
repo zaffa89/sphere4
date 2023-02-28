@@ -129,7 +129,7 @@ class StrutturaUnoSeeder extends Seeder
             $listino_amb_random = rand(1 , 6);
 
             $prenotazione = $struttura->prenotazioni()->create([
-                'user_id' => 1,                
+                'user_id' => 1,
                 
                 'data_prenotazione' => now(),
                 'data_inizio' => $data_inizio,

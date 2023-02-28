@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use DatePeriod;
+use DateInterval;
 use App\Models\Sport;
 use App\Models\Struttura;
 use App\Models\Numeratore;
@@ -47,6 +49,7 @@ class Controller extends BaseController
         $struttura = Struttura::find(1);
         //$struttura->incrementaNumeratoreFattura(2023);
     
+        /*
         return [
             'mesi' => Sport::where('id' , 1366)->value('mesi_scadenza'),
             'ultimo_certificato' => $struttura->numeratore('certificato'),
@@ -55,7 +58,24 @@ class Controller extends BaseController
             'prossima_fattura_2023' => $struttura->prossimoNumeratoreFattura(),
             'numeratore_certificato' => $struttura->numeratoreCertificato()            
             //'certificati_ago' => Struttura::numeratoreCertificati(),            
-        ];
-        
+        ];*/
+        $begin = Carbon::today()->subDays(15);
+        $end = Carbon::today()->addMonths(4);
+
+        $interval = DateInterval::createFromDateString('1 day');
+        $period = new DatePeriod($begin, $interval, $end);
+
+        $yo = '';
+        foreach ($period as $dt) { //ciclo giornaliero
+            $open_time = strtotime("07:00");
+            $close_time = strtotime("12:59");
+
+            //ciclo per minuti
+            for( $i=$open_time; $i<$close_time; $i+=600) { //600 = 10 minuti
+                $yo .= Carbon::parse($dt->format('Y-m-d').' '.date('H:i:s' , $i)).'<br>';
+            }            
+        }
+
+        return $yo;
     }
 }

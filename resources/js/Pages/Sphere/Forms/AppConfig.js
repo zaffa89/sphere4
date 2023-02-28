@@ -1,19 +1,14 @@
 export const useCalendarConfig = () => {
-
     return {
         // Start life looking at this date
-        date: new Date(2020, 9, 12),
+        date: new Date(),
 
-        
-        listeners : {
-            dataChange: (event) => {
-                console.log(event)
-            },
-            eventclick: (event) =>  {
-                
-            }
+        datePicker: {
+            showEvents: true
         },
+        dateFormat: 'DD MMMM YYYY', //giorno in alto
         
+        //readOnly: true, questo funziona
         sidebar : {
             footer: 'footer sidebar',
             items : {
@@ -55,6 +50,14 @@ export const useCalendarConfig = () => {
                     }
                 }
             },
+            eventTooltip : {
+                align: 'l-r',
+                listeners : {
+                    beforeShow({ source }) {
+                        source.tools.delete = false;
+                    }
+                }
+            },
             eventMenu : {
                 items : {
                     // Knocks out the predefined deleteEvent item
@@ -69,51 +72,62 @@ export const useCalendarConfig = () => {
                          handler : 'up.duplicateEvent'
                     }
                 }
-            }
+            },                                                
         },
-        // CrudManager arranges loading and syncing of data in JSON form from/to a web service
-        crudManager: {
-            transport: {
-                load: {
-                    url: 'data/data.json'
+        // CrudManager arranges loading and syncing of data in JSON form from/to a web service 36563
+        
+        /*
+        crudManager: {            
+            transport : {
+                load : {
+                    url : '/api/sphere/calendario/bryntum/autoload'
+                },
+                sync: {
+                    url: 'asd'
                 }
-            },
-            autoLoad: true
+            },            
+            //loadUrl: '/api/sphere/calendario/bryntum/autoload',
+            autoLoad: true,
+            autoSync: true
         },
-
+        */
+        
+        
         // Features named by the properties are included.
         // An object is used to configure the feature.
-        eventTooltipFeature: {
-            // Configuration options are passed on to the tooltip instance
-            // We want the tooltip's left edge aligned to the right edge of the event if possible.
-            align: 'l-r'
-        },
+        
         header: null,
         
         weekStartDay: 1,
-        mode: 'dayResourceview',
+        mode: 'day',
         modes: {
-            day: {
-                dayStartTime : 7,
-                dayEndTime: 21,                
-            },
+            
             week   : {
-                
+                /*
+                hourHeight: 260,
+                    hourHeightBreakpoints: {
+                        thirty : 70,
+                        fifteen: 140,
+                        ten: 260,
+                        five: 500 
+                    },
+                */
             },
             month: {
                 showWeekColumn : false
             },
-            agenda: {
-
-            },
+            agenda: null,
             year: null,
 
-            dayResourceview : {
+            day : {
+                title: 'Day',
                 // Type has the final say over which view type is created
                 type : 'resource',
                 showAvatars: true,
                 meta : resource => resource.name,
+                timeFormat: 'HH:mm',
                 
+                    
                 // This is a config object for the subviews; one for each resource
                 view : {
                     // We show a month view for each resource in the project
@@ -121,8 +135,11 @@ export const useCalendarConfig = () => {
                     showAllDayHeader: true,
                     allDayEvents: {
                         fullWeek: false                        
-                    },
-                  
+                    },                    
+                    dayStartTime : 7,
+                    dayEndTime: 21,
+                    hourHeight: 300,
+                    increment: '1 minute',                    
                     /*
                     dayHeaderRenderer : function(headerDomConfig, cellData) {
                         if (true) {
@@ -137,6 +154,23 @@ export const useCalendarConfig = () => {
                     }
                     */                    
                 },                                
+            },
+            weekResourcesView: {
+                title: 'Settimana',
+                type: 'resource',
+                meta : resource => resource.name,
+                timeFormat: 'HH:mm',
+                view: {
+                    type: 'week',
+                    showAllDayHeader: true,
+                    allDayEvents: {
+                        fullWeek: false                        
+                    },                    
+                    dayStartTime : 7,
+                    dayEndTime: 21,
+                    hourHeight: 300,
+                    increment: '1 minute', 
+                }
             }
         }
     };
