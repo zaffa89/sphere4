@@ -86,7 +86,9 @@ Route::prefix('sphere')->group(function() {
         //CALENDARIO
         Route::get('calendario/carica' , [CalendarController::class , 'caricaCalendario']);
         Route::get('calendario/carica/{data}' , [CalendarController::class , 'caricaCalendarioGiornalmente']);
-        Route::put('calendario/sposta-prenotazione/{prenotazione}' , [PrenotazioneController::class , 'move']);
+        Route::put('calendario/sposta-prenotazione/{prenotazione}' , [PrenotazioneController::class , 'dragMove']);
+        Route::put('calendario/resize-prenotazione/{prenotazione}' , [PrenotazioneController::class , 'dragResize']);
+
         Route::post('calendario/genera-orario-medico' , [CalendarController::class , 'generaOrarioMedico']);
         
         Route::get('calendario/bryntum/carica-eventi' , [CalendarController::class , 'caricaCalendarioBryntum']);

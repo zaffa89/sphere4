@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BryntumCalendarEventResource extends JsonResource
@@ -16,6 +17,7 @@ class BryntumCalendarEventResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'prenotazione_id' => $this->id,
             'name' => match($this->sezione_visita) {
                 'M' => $this->whenLoaded('visitaMedsport')->paziente->ragione_sociale.' | '.$this->whenLoaded('visitaMedsport')->listino->codice,
                 'A' => $this->whenLoaded('visitaAmbulatoriale')->paziente->ragione_sociale.' | '.$this->whenLoaded('visitaAmbulatoriale')->listino->codice,
@@ -24,6 +26,7 @@ class BryntumCalendarEventResource extends JsonResource
                 'X' => 'ASSENZA',
                 default => ''
             },
+            'sezione_visita' => $this->sezione_visita,
             'startDate' => $this->data_inizio,
             'endDate' => $this->data_fine,
             'resourceId' => $this->ambulatorio_id //ambulatorio

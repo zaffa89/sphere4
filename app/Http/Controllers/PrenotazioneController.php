@@ -19,6 +19,7 @@ use App\Events\NotificaPrenotazioneModificata;
 use App\Models\ListinoAmbulatoriale;
 
 use App\Http\Requests\ValidatePrenotazioneRequest;
+use App\Http\Resources\BryntumCalendarEventResource;
 use App\Http\Resources\PrenotazioneCalendarioResource;
 
 class PrenotazioneController extends Controller
@@ -43,20 +44,22 @@ class PrenotazioneController extends Controller
     public function createMedsport(Request $request)  
     {        
         $request->validate([
-            'data_inizio' => 'required',
-            'data_fine' => 'required',
+            'startDate' => 'required',            
             'struttura_id' => 'required',
-            'ambulatorio_id' => 'nullable',
+            'resourceId' => 'required',
             'medico_id' => 'nullable',
             'sezione_visita' => 'required'            
         ]);
 
-        //$prenotazione = new Prenotazione($request->all());        
+        //$prenotazione = new Prenotazione($request->all());    
+        //prendi durata di default
+        $durata = 15;
+
         $prenotazione = new Prenotazione([
-            'data_inizio' => $request->data_inizio,
-            'data_fine' => $request->data_fine,
+            'data_inizio' => Carbon::parse($request->startDate)->format('Y-m-d H:i:s'),
+            'data_fine' => Carbon::parse($request->startDate)->addMinutes($durata)->format('Y-m-d H:i:s'),
             'struttura_id' => $request->struttura_id,
-            'ambulatorio_id' => $request->ambulatorio_id,
+            'ambulatorio_id' => $request->resourceId,
             'medico_id' => $request->medico_id,
             'sezione_visita' => $request->sezione_visita,
             'nascosta' => $request->nascosta
@@ -174,7 +177,8 @@ class PrenotazioneController extends Controller
             }
 
             broadcast(new NotificaPrenotazioneCreata($prenotazione , auth()->user()->username))->toOthers();
-            return new PrenotazioneCalendarioResource($prenotazione);
+            //return new PrenotazioneCalendarioResource($prenotazione);
+            return new BryntumCalendarEventResource($prenotazione);
         });
     }
 
@@ -422,7 +426,7 @@ class PrenotazioneController extends Controller
      * @param  \App\Models\Prenotazione  $prenotazione
      * @return \Illuminate\Http\Response
      */
-    public function update(ValidatePrenotazioneRequest $request, Prenotazione $prenotazione)
+    public function update(ValidatePrenotazioneRequest $request, Prenotazione $prenotazione)  //farle separate ??
     {
        
         return DB::transaction(function () use ($request , $prenotazione) {
@@ -467,7 +471,45 @@ class PrenotazioneController extends Controller
             }
 
             broadcast(new NotificaPrenotazioneModificata($prenotazione , auth()->user()->username))->toOthers();
-            return new PrenotazioneCalendarioResource($prenotazione);
+            return new BryntumCalendarEventResource($prenotazione);
+        });
+    }
+
+    public function dragMove(Request $request , Prenotazione $prenotazione)
+    {
+        $request->validate([            
+            'startDate' => 'required',
+            'endDate' => 'required',
+            'resourceId' => 'required',
+            'medico_id' => 'nullable'
+        ]);
+
+        return DB::transaction(function () use ($request , $prenotazione) {
+            $prenotazione->update([
+                'data_inizio' => Carbon::parse($request->startDate)->format('Y-m-d H:i:s'),
+                'data_fine' => Carbon::parse($request->endDate)->format('Y-m-d H:i:s'),
+                'ambulatorio_id' => $request->resourceId,
+                'medico_id' => $request->medico_id
+            ]);
+
+            return $prenotazione;
+        });
+    }
+
+    public function dragResize(Request $request , Prenotazione $prenotazione)
+    {
+        $request->validate([            
+            'startDate' => 'required',
+            'endDate' => 'required',            
+        ]);
+
+        return DB::transaction(function () use ($request , $prenotazione) {
+            $prenotazione->update([
+                'data_inizio' => Carbon::parse($request->startDate)->format('Y-m-d H:i:s'),
+                'data_fine' => Carbon::parse($request->endDate)->format('Y-m-d H:i:s'),                
+            ]);
+
+            return $prenotazione;
         });
     }
 

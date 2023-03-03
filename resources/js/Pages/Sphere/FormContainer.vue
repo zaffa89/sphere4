@@ -75,8 +75,8 @@
     import FormGestionePrestazioni from '@forms/FormGestionePrestazioni.vue';
     import FormGestioneNumeratori from '@forms/FormGestioneNumeratori.vue';
 
-    import FormBrytumCalendar from './Forms/FormBrytumCalendar.vue';
-
+    import FormBryntumCalendar from './Forms/FormBryntumCalendar.vue';
+    
     import FormHome from '@forms/FormHome.vue';
 </script>
 
@@ -94,7 +94,7 @@
             FormGestionePrestazioni,
             FormGestioneNumeratori,
             FormHome,
-            FormBrytumCalendar,
+            FormBryntumCalendar,            
             UserIcon
         },
         data() {
@@ -102,12 +102,12 @@
                 dati_tessera : null,
                 activeTabs: [{
                         name: 'Brytum',
-                        component: FormBrytumCalendar,
+                        component: FormBryntumCalendar,
                         icon: null
                     }],
                 currentTab: {
                         name: 'Brytum',
-                        component: FormBrytumCalendar,
+                        component: FormBryntumCalendar,
                         icon: null
                     },
                 notifications: [],
@@ -126,7 +126,7 @@
                     },
                     {
                         name: 'Brytum',
-                        component: FormBrytumCalendar,
+                        component: FormBryntumCalendar,
                         icon: null
                     },
                     {

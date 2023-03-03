@@ -38,10 +38,10 @@ class AppServiceProvider extends ServiceProvider
             'ambulatoriale' => 'App\Models\VisitaAmbulatoriale',
         ]);
 
-        if (Schema::hasTable('settings')) {
-            foreach (Setting::all() as $setting) {
-                Config::set('settings.'.$setting->attribute, $setting);
-            }
-        }        
+        
+        foreach (Setting::all() as $setting) {
+            Config::set('settings.'.$setting->attribute, $setting);
+        }
+                
     }
 }

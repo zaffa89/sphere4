@@ -44,24 +44,31 @@ class CalendarController extends Controller
         ];
     }
 
-    public function onDemand($mode = 'day' , $date = null) {
+    public function onDemand($mode = 'dayResourceView' , $date = null) {
         
         if(!isset($date)) $date = today();
         return [
             'success' => true,
             'resources' => BryntumCalendarAmbulatorioResource::collection(Ambulatorio::all()),
+            
             'events' => BryntumCalendarEventResource::collection(Prenotazione::with('societaSportiva' , 'visitaMedsport.paziente' , 'visitaMedsport.listino' , 'visitaAmbulatoriale.paziente' , 'visitaAmbulatoriale.listino')
                             ->withCount('visiteMedsport' , 'visiteAmbulatoriali')
-                            ->when($mode == 'day' , function($query) use ($date) {
+                            ->when($mode == 'dayResourceView' , function($query) use ($date) {
                                 $query->whereDate('data_inizio' , Carbon::parse($date));
                             })
                             ->when($mode == 'weekResourcesView' , function($query) use ($date) {
                                 $query->whereBetween('data_inizio' , [Carbon::parse($date)->startOfWeek()->format('Y-m-d') , Carbon::parse($date)->endOfWeek()->format('Y-m-d')]);
-                            })
-                            
-                            
+                            })                                                        
                             ->get())
-            
+            /*
+            'events' => Prenotazione::when($mode == 'day' , function($query) use ($date) {
+                $query->whereDate('data_inizio' , Carbon::parse($date));
+            })
+            ->when($mode == 'weekResourcesView' , function($query) use ($date) {
+                $query->whereBetween('data_inizio' , [Carbon::parse($date)->startOfWeek()->format('Y-m-d') , Carbon::parse($date)->endOfWeek()->format('Y-m-d')]);
+            })            
+            ->get()
+            */
         ];
     }
 

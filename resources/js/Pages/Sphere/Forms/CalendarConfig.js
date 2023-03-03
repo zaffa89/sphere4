@@ -2,7 +2,7 @@ export const useCalendarConfig = () => {
     return {
         // Start life looking at this date
         date: new Date(),
-
+        
         datePicker: {
             showEvents: true
         },
@@ -29,27 +29,12 @@ export const useCalendarConfig = () => {
                             // Let's change that round.
                             ascending : false
                         }]
-                    }
+                    }                    
                 },
                 
             }
         },
-        features : {
-            scheduleMenu : {
-                items : {
-                    // Knocks out the predefined addEvent item
-                    //addEvent : null,
-        
-                    // Add our own custom item
-                    disableDate : {
-                         icon    : 'b-fa b-fa-calendar-times',
-                         text    : 'Nuova voce',
-        
-                         // Will look up ownership chain and find the Calendar
-                         handler : null
-                    }
-                }
-            },
+        features : {            
             eventTooltip : {
                 align: 'l-r',
                 listeners : {
@@ -60,19 +45,26 @@ export const useCalendarConfig = () => {
             },
             eventMenu : {
                 items : {
-                    // Knocks out the predefined deleteEvent item
-                    //deleteEvent : null,
-        
+                    editEvent: {
+                        'text' : 'Apri prenotazione'
+                    },
+                    deleteEvent : {
+                        text: 'Elimina'
+                    },
+                    duplicate: null,
                     // Add our own custom item
                     myMenuItem : {
                          icon    : 'b-fa b-fa-clone',
                          text    : 'Nuova voce',
         
                          // Will look up ownership chain and find the Calendar
-                         handler : 'up.duplicateEvent'
+                         handler : null
                     }
                 }
-            },                                                
+            },
+            drag: {
+                creatable: false,
+            },                                                   
         },
         // CrudManager arranges loading and syncing of data in JSON form from/to a web service 36563
         
@@ -99,9 +91,9 @@ export const useCalendarConfig = () => {
         header: null,
         
         weekStartDay: 1,
-        mode: 'day',
+        mode: 'dayResourceView',
         modes: {
-            
+            day: null,
             week   : {
                 /*
                 hourHeight: 260,
@@ -119,8 +111,8 @@ export const useCalendarConfig = () => {
             agenda: null,
             year: null,
 
-            day : {
-                title: 'Day',
+            dayResourceView : {
+                title: 'Ambulatori',
                 // Type has the final say over which view type is created
                 type : 'resource',
                 showAvatars: true,
@@ -130,16 +122,17 @@ export const useCalendarConfig = () => {
                     
                 // This is a config object for the subviews; one for each resource
                 view : {
-                    // We show a month view for each resource in the project
-                    type : 'day',   
+                    // We show a day view for each resource in the project
+                    type : 'dayView',
                     showAllDayHeader: true,
                     allDayEvents: {
                         fullWeek: false                        
                     },                    
-                    dayStartTime : 7,
+                    dayStartTime : 6,
                     dayEndTime: 21,
-                    hourHeight: 300,
-                    increment: '1 minute',                    
+                    hourHeight: 240,
+                    increment: '1 minute',  
+                    //autoCreate: false                  
                     /*
                     dayHeaderRenderer : function(headerDomConfig, cellData) {
                         if (true) {
