@@ -1,1 +1,0 @@
-import{o,c as t}from"./app.e0b64a2d.js";import{A as a}from"./AppLayout.4431199f.js";import{_ as r}from"./AdminLayout.879301ae.js";import"./plugin-vue_export-helper.21dcd24c.js";const _={layout:a},f=Object.assign(_,{__name:"Integrazioni",setup(e){return(s,c)=>(o(),t(r))}});export{f as default};
