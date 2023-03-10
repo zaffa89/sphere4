@@ -1,72 +1,31 @@
+import { Toast } from '@bryntum/calendar'
 export const useCalendarConfig = () => {
     return {
         // Start life looking at this date
         date: new Date(),
         
-        datePicker: {
-            showEvents: true
-        },
-        dateFormat: 'DD MMMM YYYY', //giorno in alto
         
+        dateFormat: 'DD MMMM YYYY', //giorno in alto
+        onDateRangeLoad(e) {
+            //Toast.show(`Loaded ${this.eventStore.count} events`);
+        },
         //readOnly: true, questo funziona
         sidebar : {
             footer: 'footer sidebar',
-            items : {
-                datePicker : {
-                    // Never go to dates in the past
-                    minDate : new Date(2020, 9, 12)
-                },
-                
-                eventFilter : {
-                    // Let's have this at the top
-                    weight : 50
-                },
-                resourceFilter : {
-                    store : {
-                        sorters : [{
-                            field     : 'name',
-                            // By default this is in ascending name order
-                            // Let's change that round.
-                            ascending : false
-                        }]
-                    }                    
-                },
-                
-            }
+            
         },
-        features : {            
-            eventTooltip : {
-                align: 'l-r',
-                listeners : {
-                    beforeShow({ source }) {
-                        source.tools.delete = false;
-                    }
-                }
-            },
-            eventMenu : {
-                items : {
-                    editEvent: {
-                        'text' : 'Apri prenotazione'
-                    },
-                    deleteEvent : {
-                        text: 'Elimina'
-                    },
-                    duplicate: null,
-                    // Add our own custom item
-                    myMenuItem : {
-                         icon    : 'b-fa b-fa-clone',
-                         text    : 'Nuova voce',
-        
-                         // Will look up ownership chain and find the Calendar
-                         handler : null
-                    }
-                }
-            },
+        features : {
+            timeRanges  : true,
+            
+            
             drag: {
                 creatable: false,
-            },                                                   
+            },
+                                                                   
         },
         // CrudManager arranges loading and syncing of data in JSON form from/to a web service 36563
+        
+        
         
         /*
         crudManager: {            
@@ -92,8 +51,10 @@ export const useCalendarConfig = () => {
         
         weekStartDay: 1,
         mode: 'dayResourceView',
+        autoCreate: false ,
+
         modes: {
-            day: null,
+            day: {},
             week   : {
                 /*
                 hourHeight: 260,
@@ -118,8 +79,8 @@ export const useCalendarConfig = () => {
                 showAvatars: true,
                 meta : resource => resource.name,
                 timeFormat: 'HH:mm',
-                
-                    
+                //includeTimeRanges: true,
+                //syncViewDate: false,
                 // This is a config object for the subviews; one for each resource
                 view : {
                     // We show a day view for each resource in the project
@@ -130,9 +91,14 @@ export const useCalendarConfig = () => {
                     },                    
                     dayStartTime : 6,
                     dayEndTime: 21,
-                    hourHeight: 240,
-                    increment: '1 minute',  
-                    //autoCreate: false                  
+                    autoCreate: false ,
+            
+                    hourHeight : 140,
+    
+                    
+                    increment: '1 minute',   
+                                     
+                                     
                     /*
                     dayHeaderRenderer : function(headerDomConfig, cellData) {
                         if (true) {
@@ -157,12 +123,14 @@ export const useCalendarConfig = () => {
                     type: 'week',
                     showAllDayHeader: true,
                     allDayEvents: {
-                        fullWeek: false                        
+                        fullWeek: true                        
                     },                    
                     dayStartTime : 7,
                     dayEndTime: 21,
                     hourHeight: 300,
                     increment: '1 minute', 
+        autoCreate: false ,
+                    
                 }
             }
         }

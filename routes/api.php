@@ -90,12 +90,10 @@ Route::prefix('sphere')->group(function() {
         Route::put('calendario/resize-prenotazione/{prenotazione}' , [PrenotazioneController::class , 'dragResize']);
 
         Route::post('calendario/genera-orario-medico' , [CalendarController::class , 'generaOrarioMedico']);
+                        
+        Route::get('calendario/bryntum/count-prenotazioni-datepicker' , [CalendarController::class , 'countPrenotazioniPerDatepicker']);
+        Route::get('calendario/bryntum/on-demand' , [CalendarController::class , 'onDemand']);
         
-        Route::get('calendario/bryntum/carica-eventi' , [CalendarController::class , 'caricaCalendarioBryntum']);
-        Route::get('calendario/bryntum/carica-eventi-giorno' , [CalendarController::class , 'caricaCalendarioBryntumGiornaliero']);
-        Route::get('calendario/bryntum/autoload' , [CalendarController::class , 'autoLoad']);
-        Route::get('calendario/bryntum/load/{mode}/{date?}' , [CalendarController::class , 'onDemand']);
-
         //SPORT
         Route::resource('sport' , SportController::class);
         Route::get('sport-tramite-tipo-visita/{tipoVisita}' , [SportController::class , 'sportTramiteTipoVisita']);

@@ -21,14 +21,13 @@
         "vue": "^3.2.31"
     },
     "dependencies": {
-        "@bryntum/calendar": "npm:@bryntum/calendar-trial@^5.2.10",
-        "@bryntum/calendar-vue-3": "^5.2.10",
+        "@bryntum/calendar": "npm:@bryntum/calendar-trial@^5.3.0",
+        "@bryntum/calendar-vue-3": "^5.3.0",
         "@headlessui/vue": "^1.7.7",
         "@heroicons/vue": "^2.0.13",
         "@inertiajs/vue3": "^1.0.0",
         "dayjs": "^1.11.7",
         "devextreme": "22.2.3",
-        "devextreme-vue": "22.2.3",
-        "pinia": "^2.0.14"
+        "devextreme-vue": "22.2.3"
     }
 }

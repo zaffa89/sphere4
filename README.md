@@ -9,7 +9,8 @@
 ## calendario
 - fix prenotazioni.lenght > 0 nella FormCalendario
 - impostazioni notifiche, avviso notifiche disabilitate, altro
-- 
+- iconcina nota se presente. aggiungere nota in tooltip
+- check cambio medico on drag
 
 
 ## prenotazione e accettazione medsport

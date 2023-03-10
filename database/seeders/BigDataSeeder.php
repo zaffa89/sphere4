@@ -43,8 +43,8 @@ class BigDataSeeder extends Seeder
         Medico::create( [ 'ragione_sociale' => 'Medico-3', 'codice_fiscale' => $faker->taxId() ] );
         
         for($id_med_ambu = 1; $id_med_ambu <= 3; $id_med_ambu++) {
-            $begin = Carbon::today()->subMonths(1);
-            $end = Carbon::today()->addMonths(1);
+            $begin = Carbon::today()->subWeeks(1);
+            $end = Carbon::today()->addWeeks(1);
 
             $interval = DateInterval::createFromDateString('1 day');
             $period = new DatePeriod($begin, $interval, $end);

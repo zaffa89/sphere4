@@ -15,7 +15,7 @@ class BryntumCalendarEventResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        return [            
             'id' => $this->id,
             'prenotazione_id' => $this->id,
             'name' => match($this->sezione_visita) {
@@ -29,7 +29,8 @@ class BryntumCalendarEventResource extends JsonResource
             'sezione_visita' => $this->sezione_visita,
             'startDate' => $this->data_inizio,
             'endDate' => $this->data_fine,
-            'resourceId' => $this->ambulatorio_id //ambulatorio
+            'resourceId' => $this->ambulatorio_id, //ambulatorio
+            'note' => $this->note
         ];
     }
 }

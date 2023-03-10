@@ -1,1 +1,0 @@
-import{o as t,c as a}from"./app.ff11f486.js";import{A as o}from"./AppLayout.2a8a7d01.js";import{_}from"./AdminLayout.26d689ae.js";import"./plugin-vue_export-helper.21dcd24c.js";const r={layout:o},f=Object.assign(r,{__name:"Pagamenti",setup(e){return(s,c)=>(t(),a(_))}});export{f as default};

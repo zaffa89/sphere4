@@ -50,8 +50,7 @@ class PrenotazioneController extends Controller
             'medico_id' => 'nullable',
             'sezione_visita' => 'required'            
         ]);
-
-        //$prenotazione = new Prenotazione($request->all());    
+   
         //prendi durata di default
         $durata = 15;
 
@@ -81,31 +80,31 @@ class PrenotazioneController extends Controller
     public function createAmbulatoriale(Request $request)  
     {        
         $request->validate([
-            'data_inizio' => 'required',
-            'data_fine' => 'required',
+            'startDate' => 'required',
             'struttura_id' => 'required',
-            'ambulatorio_id' => 'nullable',
+            'resourceId' => 'nullable',
             'medico_id' => 'nullable',
             'sezione_visita' => 'required'            
         ]);
 
-        //$prenotazione = new Prenotazione($request->all());        
+        //prendi durata di default
+        $durata = 15;
+               
         $prenotazione = new Prenotazione([
-            'data_inizio' => $request->data_inizio,
-            'data_fine' => $request->data_fine,
+            'data_inizio' => Carbon::parse($request->startDate)->format('Y-m-d H:i:s'),
+            'data_fine' => Carbon::parse($request->startDate)->addMinutes($durata)->format('Y-m-d H:i:s'),
             'struttura_id' => $request->struttura_id,
-            'ambulatorio_id' => $request->ambulatorio_id,
+            'ambulatorio_id' => $request->resourceId,
             'medico_id' => $request->medico_id,
             'sezione_visita' => $request->sezione_visita,
             'nascosta' => $request->nascosta       
         ]);
                 
-        $prenotazione->visita = new VisitaAmbulatoriale(['struttura_id' => $request->struttura_id , 'medico_id' => $request->medico_id]);
-        $listini = ListinoAmbulatoriale::all();
+        $prenotazione->visita = new VisitaAmbulatoriale(['struttura_id' => $request->struttura_id , 'medico_id' => $request->medico_id]);        
                    
         return [
             'prenotazione' => $prenotazione,          
-            'listini' => $listini,
+            'listini' => ListinoAmbulatoriale::all(),
             'struttura' => Struttura::with('ambulatori' , 'orariMedici')->where('id' , $request->struttura_id)->first(),
             'medici' => Medico::all()
         ];

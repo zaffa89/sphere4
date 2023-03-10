@@ -1,0 +1,1 @@
+import{o as a,c as t,w as e,a as o}from"./app.d1109b7e.js";import{A as r}from"./AppLayout.13956c29.js";import{_ as s}from"./AdminLayout.77a22cd2.js";import"./plugin-vue_export-helper.21dcd24c.js";const _={layout:r},i=Object.assign(_,{__name:"Generale",setup(c){return(n,p)=>(a(),t(s,null,{default:e(()=>[o(" asd ")]),_:1}))}});export{i as default};
