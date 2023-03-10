@@ -1,11 +1,6 @@
-<template>
-    <!-- 
-        :resourceStore="resourceStore"
-            :resourceTimeRangeStore="resourceTimeRangeStore"
-            
-        -->
-    <div class="h-full" v-if="isLoaded">            
-        <bryntum-calendar
+<template>    
+    <div class="h-full">            
+        <bryntum-calendar v-if="isLoaded"
             ref="calendar"
             :config="calendarConfig"            
             :crudManager="crudManager"
@@ -73,9 +68,6 @@
             @delete="eliminaAppuntamento"
         />
     </div>
-    <div class="whitespace-pre-line">
-
-    </div>
 </template>
 
 <script>
@@ -99,8 +91,6 @@
     
 
     export default {
-        name: 'Calendario-Bryntum',
-        
         components : {
             BryntumCalendar,
             ModalPrenotazioneMedsport,

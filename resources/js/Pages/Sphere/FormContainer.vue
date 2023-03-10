@@ -25,7 +25,7 @@
         <component
             :is="tab.component"
             v-for="tab in activeTabs"
-            v-show="tab.component == currentTab.component"
+            v-show="tab.component === currentTab.component"
             :key="'active-component-' + tab.component"
             @notify="addNotification"
         >            
@@ -100,16 +100,8 @@
         data() {
             return {
                 dati_tessera : null,
-                activeTabs: [{
-                        name: 'Brytum',
-                        component: FormBryntumCalendar,
-                        icon: null
-                    }],
-                currentTab: {
-                        name: 'Brytum',
-                        component: FormBryntumCalendar,
-                        icon: null
-                    },
+                activeTabs: [],
+                currentTab: null,
                 notifications: [],
                 electronClient: false,
 
@@ -125,7 +117,7 @@
                         icon: null
                     },
                     {
-                        name: 'Brytum',
+                        name: 'Bryntum',
                         component: FormBryntumCalendar,
                         icon: null
                     },
@@ -171,7 +163,7 @@
         },
         methods: {
             activateForm(data) {
-                if (!this.activeTabs.find(t => t.component == data.component)) this.activeTabs.push(data);
+                if (!this.activeTabs.find(t => t.component === data.component)) this.activeTabs.push(data);
                 this.currentTab = data;
             },
             destroyForm(component) {
