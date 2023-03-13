@@ -1,0 +1,1 @@
+import{o as _,c as a}from"./app.1031c8d8.js";import{_ as t}from"./AppLayout.f8657fb1.js";import{_ as o}from"./AdminLayout.03c0a746.js";import"./index.714177a1.js";const r={layout:t},f=Object.assign(r,{__name:"Pagamenti",setup(s){return(c,e)=>(_(),a(o))}});export{f as default};

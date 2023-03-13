@@ -1,0 +1,1 @@
+import{o as a,c as t,w as e,a as _}from"./app.1031c8d8.js";import{_ as o}from"./AppLayout.f8657fb1.js";import{_ as s}from"./AdminLayout.03c0a746.js";import"./index.714177a1.js";const r={layout:o},u=Object.assign(r,{__name:"Generale",setup(c){return(n,m)=>(a(),t(s,null,{default:e(()=>[_(" asd ")]),_:1}))}});export{u as default};

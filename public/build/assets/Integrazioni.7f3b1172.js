@@ -1,0 +1,1 @@
+import{o as _,c as o}from"./app.1031c8d8.js";import{_ as t}from"./AppLayout.f8657fb1.js";import{_ as a}from"./AdminLayout.03c0a746.js";import"./index.714177a1.js";const r={layout:t},f=Object.assign(r,{__name:"Integrazioni",setup(s){return(c,e)=>(_(),o(a))}});export{f as default};
