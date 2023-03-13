@@ -20,7 +20,8 @@ class BryntumCalendarOrarioMedicoEventResource extends JsonResource
             'startDate' => $this->data_inizio,
             'endDate' => $this->data_fine,
             'allDay' => true,
-            'name' => $this->medico['ragione_sociale'],
+            'medico_id' => $this->medico_id,
+            'name' => $this->whenLoaded('medico')->ragione_sociale ?? null,
             'resourceId' => $this->ambulatorio_id,
             'sezione_visita' => 'ORARIO'  //fasullo, usato solo per aprire il modal corretto
         ];

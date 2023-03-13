@@ -25,7 +25,7 @@
             v-show="tab.name == currentTab.name"
             :key="'active-component-' + tab.name"
             @notify="addNotification" />
-        <FormHome v-if="activeTabs.length === 0" />
+        <FormBryntumCalendar v-if="activeTabs.length === 0" />
         <!-- notifiche -->
         <div aria-live="assertive" class="z-50 pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-end sm:p-6">
             <div class="flex w-full flex-col items-center space-y-4 sm:items-end">

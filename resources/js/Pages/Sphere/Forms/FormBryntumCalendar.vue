@@ -2,7 +2,7 @@
     <div class="h-full">            
         <bryntum-calendar v-if="isLoaded"
             ref="calendar"
-            v-bind="calendarConfig"            
+            :config="calendarConfig"            
             :crudManager="crudManager"
            
 
@@ -62,6 +62,14 @@
             @update="updatePrenotazione"
         />
 
+        <ModalOrarioMedico
+            v-if="modalData?.sezione_visita == 'ORARIO'"
+            :event-data="modalData"
+            @close="chiudiAppuntamento"
+            @store="addOrarioMedico"
+            @update="updateOrarioMedico"
+        />
+
         <ModalConfermaEliminazione
             v-if="deleteDialog"
             @close="deleteDialog = null"
@@ -86,6 +94,7 @@
     import ModalPrenotazioneMedsportSocieta from '@modals/Calendario/ModalPrenotazioneMedsportSocieta.vue';
     import ModalNotaCalendario from '@modals/Calendario/ModalNotaCalendario.vue';
     import ModalAssenzaCalendario from '@modals/Calendario/ModalAssenzaCalendario.vue';
+    import ModalOrarioMedico from '@modals/Calendario/ModalOrarioMedico.vue';
 
     import ModalConfermaEliminazione from '@modals/ModalConfermaEliminazione.vue';
     
@@ -98,6 +107,7 @@
             ModalPrenotazioneMedsportSocieta,
             ModalNotaCalendario,
             ModalAssenzaCalendario,
+            ModalOrarioMedico,
             ModalConfermaEliminazione
         },
         methods: {
@@ -138,6 +148,16 @@
                 //console.log('update' + e.id)
                 this.crudManager.eventStore.getById(e.id).set(e)
                 this.modalData = null;
+            },
+            addOrarioMedico(e) {
+                this.crudManager.eventStore.add(e.event)
+                this.crudManager.resourceTimeRangeStore.add(e.resourceTimeRange)
+                this.modalData = null
+            },
+            updateOrarioMedico(e) {
+                this.crudManager.eventStore.getById(e.event.id).set(e.event)
+                this.crudManager.resourceTimeRangeStore.getById(e.resourceTimeRange.id).set(e.resourceTimeRange)
+                this.modalData = null
             },
             onActiveItemChange(e) { //cambio view . caricare roba ?
                 console.log(e)
@@ -194,6 +214,7 @@
                 //autoSync: true                                
             });
 
+            
             function nuovaPrenotazione(e , sezione_visita) {
                 //console.log(e)
                 console.log(sezione_visita)
@@ -209,6 +230,14 @@
                 }
             }
             
+            function nuovoOrarioMedico(startDate , resourceId) {
+                modalData.value = {
+                    startDate,
+                    resourceId,
+                    sezione_visita : 'ORARIO',
+                    struttura_id: 1
+                }
+            }
             const features = {
                 eventTooltip : {                 
                     align: 'l-r',
@@ -275,6 +304,14 @@
                         
                         if(eventRecord.data.sezione_visita === 'ORARIO')
                         {
+                            items.nuovoOrario = {
+                                icon    : 'b-icon b-icon-add',
+                                text: 'Nuovo Orario Medico',
+                                onItem: (e) => {
+                                    
+                                    nuovoOrarioMedico(e.eventRecord.data.startDate , e.eventRecord.data.resourceId)
+                                }
+                            }
                             items.editEvent.text = 'Modifica orario medico'
                             items.deleteEvent.text = 'Elimina orario medico'
                             items.duplicate = null
@@ -328,6 +365,20 @@
                 scheduleMenu : {
                     processItems(data) {
                         console.log(data)
+                        if(data.targetElement.className == 'b-cal-event-bar-container') {
+                            data.items.nuovoOrario = {
+                                icon    : 'b-icon b-icon-add',
+                                text: 'Nuovo Orario Medico',
+                                onItem: (e) => {
+                                    console.log(e)
+                                    //console.log('data: ' + e.date + ' | ambu: ' +e.resourceRecord.data.id)
+                                    nuovoOrarioMedico(e.date , e.resourceRecord.data.id)
+                                }
+                            }
+                            data.items.nuovaMedsport = null
+                            data.items.nuovaMedsportSocieta = null
+                            data.items.nuovaAmbulatoriale = null
+                        }
                     },
                     items: {
                         addEvent: null,
