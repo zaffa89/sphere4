@@ -121,7 +121,7 @@
 </template>
 
 <script setup>
-import AppLayout from '../../Layouts/ElectronLayout.vue';
+import AppLayout from '../../Layouts/AppLayout.vue';
 import AdminLayout from '../../Layouts/AdminLayout.vue';
 
 </script>

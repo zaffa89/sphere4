@@ -2,7 +2,7 @@
     <div class="h-full">            
         <bryntum-calendar v-if="isLoaded"
             ref="calendar"
-            :config="calendarConfig"            
+            v-bind="calendarConfig"            
             :crudManager="crudManager"
            
 
@@ -24,7 +24,7 @@
         />
         <ModalPrenotazioneMedsport
             v-if="modalData?.sezione_visita == 'M'"
-            :appointment-data="modalData"
+            :event-data="modalData"
             @close="chiudiAppuntamento"
             @store="addPrenotazione"
             @update="updatePrenotazione"
@@ -32,7 +32,7 @@
 
         <ModalPrenotazioneMedsportSocieta
             v-if="modalData?.sezione_visita == 'SM'"
-            :appointment-data="modalData"
+            :event-data="modalData"
             @close="chiudiAppuntamento"
             @store="addPrenotazione"
             @update="updatePrenotazione"
@@ -40,7 +40,7 @@
 
         <ModalPrenotazioneAmbulatoriale
             v-if="modalData?.sezione_visita == 'A'"
-            :appointment-data="modalData"
+            :event-data="modalData"
             @close="chiudiAppuntamento"
             @store="addPrenotazione"
             @update="updatePrenotazione"
@@ -48,7 +48,7 @@
 
         <ModalNotaCalendario
             v-if="modalData?.sezione_visita == 'N'"
-            :appointment-data="modalData"
+            :event-data="modalData"
             @close="chiudiAppuntamento"
             @store="addPrenotazione"
             @update="updatePrenotazione"
@@ -56,7 +56,7 @@
 
         <ModalAssenzaCalendario
             v-if="modalData?.sezione_visita == 'X'"
-            :appointment-data="modalData"
+            :event-data="modalData"
             @close="chiudiAppuntamento"
             @store="addPrenotazione"
             @update="updatePrenotazione"

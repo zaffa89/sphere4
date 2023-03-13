@@ -45,11 +45,11 @@
                                             <DxDateBox v-model:value="prenotazione.data_inizio" :min="now"
                                                 type="datetime" :is-valid="!errorFor('data_inizio')"
                                                 label="Data e ora della visita" :disabled="disabledElement" />
-                                            <DxNumberBox v-model:value="prenotazione.durata" v-if="!appointmentData?.nascosta"
+                                            <DxNumberBox v-model:value="prenotazione.durata" v-if="!eventData?.nascosta"
                                                 placeholder="Durata visita in minuti" :show-spin-buttons="true"
                                                 :is-valid="!errorFor('durata')" label="Durata della visita"
                                                 :disabled="disabledElement" />
-                                            <DxSelectBox v-model:value="prenotazione.ambulatorio_id" v-if="!appointmentData?.nascosta"
+                                            <DxSelectBox v-model:value="prenotazione.ambulatorio_id" v-if="!eventData?.nascosta"
                                                 :data-source="ambulatoriPrenotabili" value-expr="id" display-expr="nome"
                                                 label="Ambulatorio" label-mode="static" placeholder="---"
                                                 no-data-text="Nessun ambulatorio selezionabile"
@@ -357,7 +357,7 @@ const societaDataSource = new DataSource({
 <script>
 
 export default {
-    props: ['appointmentData'],
+    props: ['eventData'],
     emits: ['update', 'store', 'close'],
     data() {
         return {
@@ -384,7 +384,7 @@ export default {
             return this.prenotazione.accettata || this.saving;
         },
         open() {
-            return this.appointmentData !== null;
+            return this.eventData !== null;
         },
         sezioneVisita() {
             return this.prenotazione.sezione_visita;
@@ -394,7 +394,7 @@ export default {
         },
         mediciPrenotabili() {
             let array = [];
-            this.$page.props.settings.limita_medici_con_orario_medico.value && !this.appointmentData?.nascosta
+            this.$page.props.settings.limita_medici_con_orario_medico.value && !this.eventData?.nascosta
                 ? this.struttura.orari_medici.forEach(orario => {
                     if (dayjs(this.prenotazione.data_inizio, 'YYYY-MM-DD').isSame(orario.data_inizio, 'day') && orario.ambulatorio_id == this.prenotazione.ambulatorio_id) {
                         array.push(this.medici.find(medico => medico.id == orario.medico_id));
@@ -434,9 +434,9 @@ export default {
     },
 
     async created() {
-        if (this.appointmentData.id) {
+        if (this.eventData.id) {
             this.fetching = true;
-            await axios.get(`api/sphere/medsport/prenotazione/edit/${this.appointmentData.id}`)
+            await axios.get(`api/sphere/medsport/prenotazione/edit/${this.eventData.id}`)
                 .then(response => {
                     this.prenotazione = response.data.prenotazione;
                     this.prenotazione.durata = dayjs(response.data.prenotazione.data_fine).diff(response.data.prenotazione.data_inizio, 'minute');                 
@@ -455,7 +455,7 @@ export default {
         }
         else {
             this.fetching = true;
-            await axios.post('api/sphere/medsport/prenotazione/create', this.appointmentData)
+            await axios.post('api/sphere/medsport/prenotazione/create', this.eventData)
                 .then(response => {
                     this.prenotazione = response.data.prenotazione;
                     this.prenotazione.durata = dayjs(response.data.prenotazione.data_fine).diff(response.data.prenotazione.data_inizio, 'minute');

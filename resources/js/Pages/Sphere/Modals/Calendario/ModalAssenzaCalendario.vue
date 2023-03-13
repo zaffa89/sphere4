@@ -166,7 +166,7 @@ import { is422 } from '../../../../utilities/response';
 <script>
 
 export default {
-    props: ['appointmentData'],
+    props: ['eventData'],
     emits: ['update', 'store', 'close'],
     data() {
         return {
@@ -184,13 +184,13 @@ export default {
             return this.saving;
         },
         open() {
-            return this.appointmentData !== null;
+            return this.eventData !== null;
         },        
     },
     async created() {
-        if (this.appointmentData.id) {
+        if (this.eventData.id) {
             this.fetching = true;
-            await axios.get(`api/sphere/prenotazione/${this.appointmentData.id}/edit`)
+            await axios.get(`api/sphere/prenotazione/${this.eventData.id}/edit`)
                 .then(response => {
                     this.prenotazione = response.data.prenotazione;
                     this.prenotazione.durata = dayjs(response.data.prenotazione.data_fine).diff(response.data.prenotazione.data_inizio, 'minute');
@@ -204,7 +204,7 @@ export default {
         }
         else {
             this.fetching = true;
-            await axios.post('api/sphere/prenotazione/create', this.appointmentData)
+            await axios.post('api/sphere/prenotazione/create', this.eventData)
                 .then(response => {
                     this.prenotazione = response.data.prenotazione;
                     this.prenotazione.durata = dayjs(response.data.prenotazione.data_fine).diff(response.data.prenotazione.data_inizio, 'minute');

@@ -19,6 +19,7 @@ use App\Http\Controllers\AccettazioneMedsportController;
 use App\Http\Controllers\ListinoAmbulatorialeController;
 use App\Http\Controllers\ListinoMedsportController;
 use App\Http\Controllers\NumeratoreController;
+use App\Http\Controllers\OrarioMedicoController;
 use App\Http\Controllers\PrestazioneAmbulatorialeController;
 use App\Http\Controllers\PrestazioneMedsportController;
 use App\Models\ListinoAmbulatoriale;
@@ -61,7 +62,10 @@ Route::prefix('sphere')->group(function() {
         //MEDICI
         Route::resource('medico' , MedicoController::class);
         Route::post('ricerca-medico' , [MedicoController::class , 'ricercaMedico']);
-    
+        Route::post('orario-medico/genera' , [OrarioMedicoController::class , 'generaOrarioMedico']);
+        Route::resource('orario-medico' , OrarioMedicoController::class)->except('create');
+        Route::post('orario-medico/create' , [OrarioMedicoController::class , 'create']);        
+
         //PAZIENTI
         Route::resource('paziente' , PazienteController::class);     
         //Route::post('ricerca-paziente' , [PazienteController::class , 'ricercaPaziente']);
@@ -74,7 +78,7 @@ Route::prefix('sphere')->group(function() {
         Route::get('ricerca-societa/{queryRicerca}' , [SocietaSportivaController::class , 'ricercaSocieta']);
 
         //PRENOTAZIONI
-        Route::resource('prenotazione' , PrenotazioneController::class)->except('create'); //metodo CREATE separato. vedi medsport/create
+        Route::resource('prenotazione' , PrenotazioneController::class); //create , store e edit sono divisi per sezione visita
         
         
         //LOCALITA
@@ -89,7 +93,7 @@ Route::prefix('sphere')->group(function() {
         Route::put('calendario/sposta-prenotazione/{prenotazione}' , [PrenotazioneController::class , 'dragMove']);
         Route::put('calendario/resize-prenotazione/{prenotazione}' , [PrenotazioneController::class , 'dragResize']);
 
-        Route::post('calendario/genera-orario-medico' , [CalendarController::class , 'generaOrarioMedico']);
+        
                         
         Route::get('calendario/bryntum/count-prenotazioni-datepicker' , [CalendarController::class , 'countPrenotazioniPerDatepicker']);
         Route::get('calendario/bryntum/on-demand' , [CalendarController::class , 'onDemand']);

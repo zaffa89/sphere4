@@ -13,6 +13,7 @@ use App\Models\ListinoMedsport;
 use App\Models\ListinoAmbulatoriale;
 use App\Models\PrestazioneMedsport;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\OrarioMedicoController;
 use App\Models\PrestazioneAmbulatoriale;
 
 class DatabaseSeeder extends Seeder
@@ -105,13 +106,13 @@ class DatabaseSeeder extends Seeder
         $this->call(NumeratoriSeeder::class);
 
 
-        CalendarController::generaOrariDefault(1 , 1 , now() , now()->addMonths(3) , '09:00:00' , '16:00:00');
-        CalendarController::generaOrariDefault(2 , 2 , now() , now()->addMonths(3) , '10:00:00' , '18:00:00');
-        CalendarController::generaOrariDefault(3 , 3 , now() , now()->addMonths(3) , '10:00:00' , '15:00:00');
+        OrarioMedicoController::generaOrariDefault(1 , 1 , now() , now()->addMonths(3) , '09:00:00' , '16:00:00');
+        OrarioMedicoController::generaOrariDefault(2 , 2 , now() , now()->addMonths(3) , '10:00:00' , '18:00:00');
+        OrarioMedicoController::generaOrariDefault(3 , 3 , now() , now()->addMonths(3) , '10:00:00' , '15:00:00');
         
-        //CalendarController::generaOrariDefault(4 , 4 , now() , now()->addMonths(3) , '10:00:00' , '17:00:00');
-        //CalendarController::generaOrariDefault(5 , 5 , now() , now()->addMonths(3) , '08:00:00' , '14:00:00');
-        //CalendarController::generaOrariDefault(6 , 6 , now() , now()->addMonths(3) , '09:00:00' , '15:00:00');
+        //OrarioMedicoController::generaOrariDefault(4 , 4 , now() , now()->addMonths(3) , '10:00:00' , '17:00:00');
+        //OrarioMedicoController::generaOrariDefault(5 , 5 , now() , now()->addMonths(3) , '08:00:00' , '14:00:00');
+        //OrarioMedicoController::generaOrariDefault(6 , 6 , now() , now()->addMonths(3) , '09:00:00' , '15:00:00');
 
         //assegna gli utenti di default ai primi 2 medici
         $user = User::find(1);

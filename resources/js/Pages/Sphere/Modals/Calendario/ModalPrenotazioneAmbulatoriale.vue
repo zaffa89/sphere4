@@ -490,7 +490,7 @@ const societaDataSource = new DataSource({
 
 export default {
     props: [
-        'appointmentData'
+        'eventData'
     ],
     emits: ['update', 'store', 'close'],
     data() {
@@ -516,7 +516,7 @@ export default {
             return this.prenotazione.accettata || this.saving;
         },
         open() {
-            return this.appointmentData !== null;
+            return this.eventData !== null;
         },
         sezioneVisita() {
             return this.prenotazione.sezione_visita;
@@ -551,9 +551,9 @@ export default {
     },
 
     async created() {
-        if (this.appointmentData.id) {
+        if (this.eventData.id) {
             this.fetching = true;
-            await axios.get(`api/sphere/ambulatoriale/prenotazione/edit/${this.appointmentData.id}`)
+            await axios.get(`api/sphere/ambulatoriale/prenotazione/edit/${this.eventData.id}`)
                 .then(response => {
                     this.prenotazione = response.data.prenotazione;
                     this.prenotazione.durata = dayjs(response.data.prenotazione.data_fine).diff(response.data.prenotazione.data_inizio, 'minute');              
@@ -570,7 +570,7 @@ export default {
         }
         else {
             this.fetching = true;
-            await axios.post('api/sphere/ambulatoriale/prenotazione/create', this.appointmentData)
+            await axios.post('api/sphere/ambulatoriale/prenotazione/create', this.eventData)
                 .then(response => {
                     this.prenotazione = response.data.prenotazione;
                     this.prenotazione.durata = dayjs(response.data.prenotazione.data_fine).diff(response.data.prenotazione.data_inizio, 'minute');
