@@ -3,8 +3,13 @@
 @tailwind utilities;
 
 
+#app {
+    height: 100%
+}
 
-
+.browser-container {
+    height: calc(100vh - 40px) !important;
+}
 /* CALENDARIO */
 /* IMPOSTAZIONI CSS AGENDA */
 #calendario {

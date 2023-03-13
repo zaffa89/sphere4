@@ -10,7 +10,7 @@
             :onBeforeEventEdit="onBeforeEventEdit"
             :onBeforeDragResizeEnd="onBeforeDragResizeEnd"
             :onBeforeDragMoveEnd="onBeforeDragMoveEnd"
-            :onDateChange="onDateChange"
+            
             :onActiveItemChange="onActiveItemChange"
            
             :onEventContextMenu="onEventContextMenu"

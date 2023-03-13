@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-    import AppLayout from '../../Layouts/AppLayout.vue';
+    import AppLayout from '../../Layouts/ElectronLayout.vue';
     import AdminLayout from '../../Layouts/AdminLayout.vue';
 </script>
 
